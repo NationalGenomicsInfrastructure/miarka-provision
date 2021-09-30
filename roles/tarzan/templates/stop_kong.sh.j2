@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "Killing nginx..."
+export NGINXPID=`ps -u $USER -o %p,%c h | grep nginx | head -1 | cut -d, -f1`
+if [ ! -z $NGINXPID ]; then
+	kill $NGINXPID
+fi
+
+
+echo "Killing serf..."
+export SERFPID=`ps -u $USER -o %p,%c h | grep serf | cut -d, -f1`
+if [ ! -z $SERFPID ]; then
+	kill $SERFPID
+fi
+
+echo "Killing dnsmasq..."
+export DNSPID=`ps -u $USER -o %p,%c h | grep dnsmasq | cut -d, -f1`
+if [ ! -z $DNSPID ]; then
+	kill $DNSPID
+fi
+
+echo "Killing supervisord..."
+export SUPERVISPID=`ps -u $USER -o %p,%c h | grep supervisord | cut -d, -f1`
+if [ ! -z $SUPERVISPID ]; then
+	kill $SUPERVISPID
+fi
+
+sleep 5
+echo "Done."

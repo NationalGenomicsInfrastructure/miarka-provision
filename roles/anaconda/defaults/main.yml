@@ -1,0 +1,5 @@
+anaconda_file: Anaconda2-4.1.1-Linux-x86_64.sh
+anaconda_checksum: 9413b1d3ca9498ba6f53913df9c43d685dd973440ff10b7fe0c45b1cbdcb582e
+anaconda_url: "http://repo.continuum.io/archive/{{ anaconda_file }}"
+anaconda_src: "/lupus/ngi/irma3/{{ anaconda_file }}"
+

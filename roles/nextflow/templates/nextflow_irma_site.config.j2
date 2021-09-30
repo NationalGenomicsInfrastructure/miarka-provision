@@ -1,0 +1,15 @@
+params {
+    project = "{{ item.project_id }}"
+    multiqc_config = "{{ ngi_pipeline_conf }}/multiqc_{{ item.site }}_config.yml"
+    sequencing_center = "SciLifeLab National Genomics Infrastructure {% if item.site=='sthlm' %}Stockholm{% else %}Uppsala{% endif %}"
+    seq_center = "SciLifeLab National Genomics Infrastructure {% if item.site=='sthlm' %}Stockholm{% else %}Uppsala{% endif %}"
+}
+
+{% if item.site == "sthlm" %}
+process {
+    withName: 'multiqc|MultiQC|MULTIQC' {
+        container = null
+        executor = 'local'
+    }
+}
+{% endif %}

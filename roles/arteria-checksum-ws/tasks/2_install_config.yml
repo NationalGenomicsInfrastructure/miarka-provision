@@ -1,0 +1,33 @@
+---
+
+- name: ensure arteria-checksum conf dir exists
+  file:
+    state: directory
+    path: "{{ arteria_checksum_config_root }}"
+    mode: g+rwXs
+
+- name: deploy arteria-checksum app config
+  template:
+    src: checksum_app.config.j2
+    dest: "{{ arteria_checksum_config_root }}/app.config"
+
+- name: deploy arteria-checksum logger config
+  template:
+    src: checksum_logger.config.j2
+    dest: "{{ arteria_checksum_config_root }}/logger.config"
+
+- name: modify uppsala's supervisord conf to start arteria-checksum-ws 
+  ini_file: 
+    dest="{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    section="program:arteria-checksum-ws-{{ deployment_environment }}"
+    option=command
+    value="{{ arteria_checksum_env_root }}/bin/checksum-ws --configroot={{ arteria_checksum_config_root }} --port={{ arteria_checksum_port }}"
+    backup=no
+ 
+- name: modify uppsala's supervisord conf to start arteria-checksum-ws
+  ini_file: 
+    dest="{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    section="program:arteria-checksum-ws-{{ deployment_environment }}"
+    option=autorestart
+    value=true
+    backup=no

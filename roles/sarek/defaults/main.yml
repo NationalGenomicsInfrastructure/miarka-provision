@@ -1,0 +1,10 @@
+---
+sarek_containers_repo: "docker://nfcore"
+sarek_genome_specific_containers:
+  - sarekvep
+  - sareksnpeff
+sarek_genomes:
+  - GRCh38
+  - GRCh37
+  - GRCm38
+  - CanFam3.1

@@ -1,0 +1,21 @@
+--- 
+
+# This is an ugly hack that sets the permissions correctly to g+rwX,o+rX
+# for all files that is owned by the current user that is running the playbook.
+#
+# Our roles try to set the permissions correctly as good as they can,
+# but sometimes the files might end up in a limbo state due to e.g. a 
+# canceled playbook run. In those cases the operator can run this playbook 
+# to correct all files owned by him/her. 
+#
+# Note that this by purpose will miss changing the permissions of files
+# owned by an other user, as we do not want to have the playbook cluttered
+# with a lot of errors when the permission change fails.
+
+- name: force file permissions for current user 
+  hosts: 127.0.0.1
+  connection: local
+  tasks: 
+  - name: set correct file permission for everything under root path 
+    shell: "find {{ root_path }} -user `whoami` -exec chmod g+rwX,o+rX {} \\;"
+

@@ -1,0 +1,15 @@
+SHELL=/bin/bash
+@reboot source $HOME/.bash_profile && supervisord -c {{ ngi_pipeline_conf }}/supervisord_upps.conf
+
+# updates charon with locally stored run info for piper and sarek, respectively
+0 * * * * source $HOME/.bashrc &> /dev/null && update_charon_with_local_jobs_status.py -e piper &> /dev/null
+5 * * * * source $HOME/.bashrc &> /dev/null && update_charon_with_local_jobs_status.py -e sarek &> /dev/null
+
+# (SNP&SEQ) dump the size of project directories
+22 7,19 * * *   bash {{ ngi_resources }}/project_sizes.sh &> /dev/null
+
+# restart supervisord if it has died for some reason
+11 * * * *      bash {{ ngi_resources }}/start_supervisord_upps.sh &> /dev/null
+
+# meta crontab: load itself all the time so we do not have to manually load the rules when updated 
+10 * * * * /usr/bin/crontab {{ ngi_pipeline_conf }}/crontab_upps

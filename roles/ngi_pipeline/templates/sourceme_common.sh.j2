@@ -1,0 +1,31 @@
+# This file should be sourced from the sites settings file
+# (which in turn should be sourced from the user's local bash init files)
+
+export CHARON_BASE_URL={{ charon_base_url }}
+
+# Sadly still integral to NGI Pipeline
+# Hopefully possible to remove dependency in a later version
+module load bioinfo-tools piper/{{ piper_module_version }}
+
+# Force English locale as e.g. some downstream scripts depend on the
+# pipeline outputing data with "." as decimal output instead of Swedish ",".
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Append the Bash prompt with the version of the Irma environment/provisioning
+# that we're running.
+IRMA_ENV=`echo $BASH_SOURCE | cut -d/ -f4`
+IRMA_VER=`echo $BASH_SOURCE | cut -d/ -f5`
+
+if [ $IRMA_ENV == "production" ] ; then
+	IRMA_PROMPT="Prod/$IRMA_VER"
+else
+	IRMA_PROMPT="Stage/$IRMA_VER"
+fi
+
+export PS1="$IRMA_PROMPT [\u@\h \w]$ "
+
+# Default SNIC_TMP as /scratch
+export SNIC_TMP="/scratch"
+
+export NXF_SINGULARITY_CACHEDIR="{{ ngi_containers }}/biocontainers/"

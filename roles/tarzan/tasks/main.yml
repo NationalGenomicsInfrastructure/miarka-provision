@@ -1,0 +1,97 @@
+--- 
+
+- name: create tarzan main directory 
+  file: name={{ tarzan_dest }} state=directory mode=g+rwXs
+
+- name: create tarzan conf dir 
+  file: name={{ tarzan_conf }} state=directory mode=g+rwXs
+
+- include: dependencies.yml 
+
+# when installing with luarocks, the startup script is no longer created
+# therefore we install from source. The Makefile uses luarocks for
+# installation, so there is no big difference there, but it also allows us
+# to copy the startup script manually
+- name: get kong sources
+  git:
+    repo: https://github.com/Kong/kong
+    version: "{{ kong_version }}"
+    dest: "{{ kong_dest }}"
+
+- name: install kong via luarocks
+  shell: "export PATH={{ tarzan_env_path }}:$PATH && make install"
+  args:
+    chdir: "{{ kong_dest }}"
+
+- name: copy kong's start script
+  copy:
+    src: "{{ kong_dest }}/bin/kong"
+    dest: "{{ luarocks_dest }}/{{ luarocks_version }}/bin"
+    remote_src: yes
+    mode: 0775
+
+- name: add the kong paths to funk_004's environment via the sourceme_upps script 
+  lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_upps_script }}
+              line='export PATH={{ tarzan_env_path }}:$PATH'
+              backup=no
+
+- name: add the lua_path to funk_004's environment via the sourceme_upps script
+  lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_upps_script }}
+              line='export LUA_PATH="{{ lua_path }}"'
+              backup=no
+
+- name: add the lua_cpath to funk_004's environment via the sourceme_upps script
+  lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_upps_script }}
+              line='export LUA_CPATH="{{ lua_cpath }}"'
+              backup=no
+
+- name: deploy config for kong
+  template: src="kong.conf.j2" dest="{{ tarzan_conf }}/webproxy.conf"
+
+- name: deploy ssl cert for kong
+  copy: src="tarzan_cert.pem" dest="{{ tarzan_conf }}/tarzan_cert.pem"
+
+- name: deploy ssl key for kong 
+  copy: src="tarzan_key.pem" dest="{{ tarzan_conf }}/tarzan_key.pem"
+
+# FIXME: Couldn't get this to work properly with supervisord because 
+# it demands that the program under control doesn't daemonize. 
+# (The kong binary itself spawns nginx and self binaries)
+- name: modify uppsala's crontab to start kong
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
+              line='# restart kong if it has died for some reason'
+              backup=no
+
+- name: modify uppsala's crontab to start kong
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
+              line='@reboot source $HOME/.bash_profile && kong start -c {{ tarzan_conf }}/webproxy.conf'
+              backup=no
+
+- name: modify uppsala's crontab to start kong
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
+              line='38 * * * *      source $HOME/.bash_profile && kill -0 $(cat {{ tarzan_log_dest }}/pids/nginx.pid) 2> /dev/null || kong start -c {{ tarzan_conf }}/webproxy.conf'
+              backup=no
+
+- name: snapshot cassandra once a week, so that normal backups can be taken of a sany copy of files (kb sizes)  
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
+              line='1 1 * * 1 {{ cassandra_dest }}/{{ cassandra_version }}/bin/nodetool -h localhost -p 7199 snapshot kong'
+              backup=no
+
+- name: dump cassandra schema once a week 
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
+              line='0 1 * * 1 export PATH=/usr/bin/:$PATH && {{ cassandra_dest }}/{{ cassandra_version }}/bin/cqlsh -e "DESC KEYSPACE kong" > {{ cassandra_db_dest }}/kong_schema-`date +%Y%m%d`.cql'
+              backup=no
+
+- name: deploy script for easier stoping of kong services
+  template: src="stop_kong.sh.j2" dest="{{ ngi_resources }}/stop_kong.sh" mode=g+rwx
+
+- name: Store tarzan tools version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ item.tool_name }}: {{ item.tool_version }}"
+  with_items:
+    - { tool_name: "Kong", tool_version: "{{ kong_version }}" }
+    - { tool_name: "Luarocks", tool_version: "{{ luarocks_version }}" }
+    - { tool_name: "Cassandra", tool_version: "{{ cassandra_version }}" }
+    - { tool_name: "Openresty", tool_version: "{{ openresty_version }}" }
+    - { tool_name: "Serf", tool_version: "{{ serf_version }}" }

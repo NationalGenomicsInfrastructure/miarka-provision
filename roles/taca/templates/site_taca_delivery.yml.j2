@@ -1,0 +1,123 @@
+log:
+    file: "{{ ngi_pipeline_site_path }}/log/taca.log"
+
+deliver:
+    rootpath: "{{ proj_root }}/{{ ngi_pipeline_site_delivery }}/nobackup/NGI"
+    analysispath: <ROOTPATH>/ANALYSIS/<PROJECTID>
+    datapath: <ROOTPATH>/DATA/<PROJECTID>
+    stagingpath: <ROOTPATH>/DELIVERY/<PROJECTID>
+    stagingpathhard: <ROOTPATH>/DELIVERY_HARD/<PROJECTID>
+    reportpath: <ANALYSISPATH>/piper_ngi
+    logpath: <REPORTPATH>/logs
+    deliverystatuspath: <REPORTPATH>/08_misc
+    operator: "{{ recipient_mail }}"
+    hash_algorithm: md5
+{% if "upps" == site %}
+    deliverypath: "{{ item.proj_path }}/<UPPNEXID>/INBOX/<PROJECTID>"
+    report_aggregate: "ngi_reports ign_aggregate_report -n {{ site_full }}"
+    report_sample: "ngi_reports ign_sample_report -n {{ site_full }}"
+    copy_reports_to_reports_outbox: True
+    reports_outbox: "{{ proj_root }}/{{ ngi_pipeline_site_delivery }}/incoming/reports/"
+{% else %}
+    deliverypath: "{{ item.proj_path }}/<UPPNEXID>/INBOX/<PROJECTNAME>-<PROJECTID>"
+{% endif %}
+    files_to_deliver:
+{% if "upps" == site %}
+#Adds reports files to Uppsala deliveries
+        -
+            - <ANALYSISPATH>/seqreports/reports
+            - <STAGINGPATH>/00-Reports/SequenceQC/seqreports
+        -
+            - {{ ngi_site_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - <STAGINGPATH>
+        -
+            - {{ ngi_site_softlinks }}/DELIVERY.README.txt
+            - <STAGINGPATH>
+{% endif %}
+{% if "/proj/" == item.proj_path or "sthlm" == site %}
+#Adds FASTQ files to Lupus (aka irma) deliveries
+        -
+            - <DATAPATH>/<SAMPLEID>/*/*
+            - <STAGINGPATH>/<SAMPLEID>/02-FASTQ
+            - required: True
+{% endif %}
+        -
+            - <LOGPATH>/version_report.txt
+            - <STAGINGPATH>/00-Reports
+            - required: True
+        -
+            - <REPORTPATH>/delivery/reports/<PROJECTID>_aggregate_report.csv
+            - <STAGINGPATH>/00-Reports
+            - no_digest: True
+{% if "upps" == site %}
+            - required: True
+{% endif %}
+        -
+            - <REPORTPATH>/delivery/reports/<SAMPLEID>_ign_sample_report.html
+            - <STAGINGPATH>/<SAMPLEID>/00-Reports
+            - no_digest_cache: True
+{% if "upps" == site %}
+            - required: True
+{% endif %}
+        -
+            - <ANALYSISPATH>/piper_ngi/07_variant_calls/<SAMPLEID>.*.snpEff.summary.*
+            - <STAGINGPATH>/<SAMPLEID>/00-Reports
+            - required: True
+        -
+            - <ANALYSISPATH>/piper_ngi/06_final_alignment_qc/<SAMPLEID>.clean.dedup.qc
+            - <STAGINGPATH>/<SAMPLEID>/01-QC
+            - required: True
+        -
+            - <ANALYSISPATH>/piper_ngi/05_processed_alignments/<SAMPLEID>.metrics
+            - <STAGINGPATH>/<SAMPLEID>/01-QC
+            - required: True
+        -
+            - <ANALYSISPATH>/piper_ngi/07_variant_calls/<SAMPLEID>.clean.dedup.recal.bam*.eval
+            - <STAGINGPATH>/<SAMPLEID>/01-QC
+            - required: True
+{% if "sthlm" == site %}
+        -
+            - <ANALYSISPATH>/piper_ngi/03_genotype_concordance/<SAMPLEID>.gt_concordance
+            - <STAGINGPATH>/<SAMPLEID>/01-QC
+{% endif %}
+        -
+            - <ANALYSISPATH>/piper_ngi/05_processed_alignments/<SAMPLEID>.clean.dedup.ba[im]
+            - <STAGINGPATH>/<SAMPLEID>/03-BAM
+            - required: True
+        -
+            - <ANALYSISPATH>/piper_ngi/05_processed_alignments/<SAMPLEID>.pre_recal.table
+            - <STAGINGPATH>/<SAMPLEID>/03-BAM
+            - required: True
+        -
+            - <ANALYSISPATH>/piper_ngi/07_variant_calls/<SAMPLEID>.clean.dedup.recal.bam.genomic.vcf.gz
+            - <STAGINGPATH>/<SAMPLEID>/04-VCF
+            - required: True
+        -
+            - <ANALYSISPATH>/piper_ngi/07_variant_calls/<SAMPLEID>.clean.dedup.recal.bam.genomic.vcf.gz.tbi
+            - <STAGINGPATH>/<SAMPLEID>/04-VCF
+        -
+            - <ANALYSISPATH>/piper_ngi/07_variant_calls/<SAMPLEID>.clean.dedup.recal.bam.*.annotated.vcf.gz
+            - <STAGINGPATH>/<SAMPLEID>/04-VCF
+            - required: True
+        -
+            - <ANALYSISPATH>/piper_ngi/07_variant_calls/<SAMPLEID>.clean.dedup.recal.bam.*.annotated.vcf.gz.tbi
+            - <STAGINGPATH>/<SAMPLEID>/04-VCF
+{% if "sthlm" == site %}
+        -
+            - <ANALYSISPATH>/piper_ngi/03_genotype_concordance/*.vcf*
+            - <STAGINGPATH>/05-Genotyping
+    misc_files_to_deliver:
+        -
+            - {{ ngi_site_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - <STAGINGPATH>
+        -
+            - {{ ngi_site_softlinks }}/DELIVERY.README.txt
+            - <STAGINGPATH>
+        -
+            - <ANALYSISPATH>/reports/*
+            - <STAGINGPATH>/00-Reports
+        -
+            - <ANALYSISPATH>/*multiqc_report.html
+            - <STAGINGPATH>/00-Reports
+    save_meta_info: True
+{% endif %}
