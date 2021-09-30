@@ -1,0 +1,140 @@
+# This file should be placed under $HOME/.ngiconfig/ngi_config.yaml
+# or its path exported as the environment variable NGI_CONFIG
+
+# TODO: Deploy the correct version of the database.
+database:
+    record_tracking_db_path: {{ ngi_pipeline_db }}
+
+environment:
+    project_id: {{ ngi_pipeline_slurm_project }}
+    ngi_scripts_dir: {{ ngi_pipeline_dest }}/scripts
+    conda_env: NGI
+    flowcell_inbox:
+            - {{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/incoming
+            - {{ proj_root }}/{{ ngi_pipeline_upps_delivery }}/incoming
+# TODO: This QOS flag is probably not used/needed any longer.
+#       Enable later in the future if required.
+
+{% if deployment_environment in [ "staging", "devel" ] %}
+slurm:
+     queue: testcore
+{% endif %}
+
+piper:
+    #sample:
+    #    required_autosomal_coverage: 28.4
+    load_modules:
+        - bioinfo-tools piper/{{ piper_module_version }}
+    threads: 16
+    job_walltime:
+        merge_process_variantcall: "10-00:00:00"
+    shell_jobrunner: Shell
+    #shell_jobrunner: ParallelShell --super_charge --ways_to_split 4
+    #jobNative:
+    #    - arg1
+    #    - arg2
+    #    - arg3
+    # TODO: Piper module adds setupfilecreator to the path; unsure if this works or if complete path is required.
+    path_to_setupfilecreator: setupfilecreator
+    gatk_key: "{{ ngi_resources }}/piper/{{ gatk_key }}"
+
+sarek:
+    command: {{ sarek_dest }}/workflow/main.nf
+    tag: {{ sarek_tag }}
+    tools:
+      - haplotypecaller
+      - snpeff
+    genomes_base_paths:
+        GRCh37: /sw/data/uppnex/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37/
+        GRCh38: /sw/data/uppnex/ToolBox/hg38bundle/
+    project: {{ ngi_pipeline_slurm_project }}
+    custom_config_base: {{ sarek_dest }}/configs/
+    igenomes_ignore: " "
+    no_gatk_spark: " "
+    sequencing_center: {{ ngi_pipeline_sequencing_center }}
+
+nextflow:
+    command: {{ nextflow_dest }}/nextflow
+    subcommand: run
+    profile: uppmax
+    config:
+        - {{ ngi_pipeline_conf }}/nextflow_irma_{{ site }}.config
+        - {{ ngi_pipeline_conf }}/sarek_irma.config
+    resume: " "
+
+supported_genomes:
+    # GRCh37: Indexed version of "/lupus/data/uppnex/reference/Homo_sapiens/GRCh37/concat/Homo_sapiens.GRCh37.57.dna.concat.fa"
+    "GRCh37": "{{ gatk_bundle_b37 }}/human_g1k_v37.fasta"
+    # GRMc38 is currently not used.
+    #"GRCm38": "/sw/data/uppnex/reference/Mus_musculus/GRCm38/concat/Mus_musculus.GRCm38.69.dna.concat.fa"
+    "rn4": None
+    "saccer2": None
+    "dm3": None
+    "tair9": None
+    "xentro2": None
+    "ws210": None
+    "canfam3": None
+
+analysis:
+    best_practice_analysis:
+        whole_genome_reseq:
+            analysis_engine: ngi_pipeline.engines.piper_ngi
+        IGN:
+            analysis_engine: ngi_pipeline.engines.piper_ngi
+        qc:
+            analysis_engine: ngi_pipeline.engines.qc_ngi
+        RNA-seq:
+            analysis_engine: ngi_pipeline.engines.rna_ngi
+            ngi_nf_path: {{ sw_path }}rnaseq/workflow/
+            sthlm_ngi_conf: {{ sthlm_rna_seq_conf }}
+            upps_ngi_conf: {{ upps_rna_seq_conf }}
+        wgs_germline:
+            analysis_engine: ngi_pipeline.engines.sarek
+        wgs_somatic:
+            analysis_engine: ngi_pipeline.engines.sarek
+        exome_germline:
+            analysis_engine: ngi_pipeline.engines.sarek
+        exome_somatic:
+            analysis_engine: ngi_pipeline.engines.sarek
+    top_dir: nobackup/NGI
+    sthlm_root: {{ ngi_pipeline_sthlm_delivery }}
+    upps_root: {{ ngi_pipeline_upps_delivery }}
+    base_root: {{ proj_root }}
+
+qc:
+    load_modules:
+        - bioinfo-tools
+    fastqc:
+        load_modules:
+            - FastQC/0.11.5
+        threads: 16
+    fastq_screen:
+        config_path: "{{ ngi_pipeline_conf }}/fastq_screen.irma.conf"
+        load_modules:
+            - bowtie2/2.3.4.1
+            - fastq_screen/0.11.1
+        subsample_reads: 200000
+        threads: 1
+        make_md5: True
+
+gt_concordance:
+    XL_FILES_PATH: {{ proj_root }}/{{ ngi_pipeline_slurm_project }}/genotype_data/incoming
+    XL_FILES_ARCHIVED:  {{ proj_root }}/{{ ngi_pipeline_slurm_project }}/genotype_data/archive
+    GATK_PATH: /sw/apps/bioinfo/GATK/3.5.0//GenomeAnalysisTK.jar
+    GATK_REF_FILE: {{ gatk_bundle_b37 }}/human_g1k_v37.fasta
+    GATK_VAR_FILE: {{ gatk_bundle_b37 }}/dbsnp_138.b37.vcf
+    INTERVAL_FILE: {{ ngi_pipeline_dest }}/static/snps.interval_list
+    SNPS_FILE: {{ ngi_pipeline_dest }}/static/maf_snps.txt
+
+logging:
+    log_file: "{{ ngi_pipeline_log }}"
+
+mail:
+    recipient: {{ recipient_mail }}
+
+paths: # Hard code paths here if you are that kind of a person
+    binaries:
+        #bowtie2:
+        #fastqc:
+        #fastq_screen:
+    references:

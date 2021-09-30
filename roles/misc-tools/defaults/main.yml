@@ -1,0 +1,4 @@
+---
+misc_tools_path: "{{ sw_path }}/misc_tools"
+misc_tools_bin_path: "{{ misc_tools_path }}/bin"
+

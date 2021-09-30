@@ -1,0 +1,13 @@
+# Default configuration file for checksum service
+
+---
+
+monitored_directory: "{{ arteria_checksum_monitored_path }}"
+
+# Used when running with localq runner to determine the maximum number of
+# used for running checksums
+number_of_cores: "{{ arteria_checksum_cores_to_use }}"
+
+# Path to the md5sum logs
+md5_log_directory: "{{ arteria_checksum_md5sum_log_dir  }}"
+

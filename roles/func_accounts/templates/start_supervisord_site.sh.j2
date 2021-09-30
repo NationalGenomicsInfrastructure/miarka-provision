@@ -1,0 +1,14 @@
+#! /bin/bash -l
+
+# check if supervisord is already running
+if [ ! -z "`ps -u $USER -o %p,%c h |grep supervisord`" ]
+then
+  # if it is running, we'll just exit politely
+  exit 0
+fi
+
+# otherwise, let's start it up
+source ${HOME}/.bash_profile &> /dev/null
+supervisord -c {{ ngi_pipeline_conf}}/supervisord_{{ site }}.conf &> /dev/null
+exit $?
+

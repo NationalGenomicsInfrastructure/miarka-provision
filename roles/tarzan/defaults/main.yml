@@ -1,0 +1,62 @@
+--- 
+
+tarzan_dest: "{{ sw_path }}/tarzan/"
+tarzan_conf: "{{ ngi_pipeline_conf }}/tarzan/"
+
+## Paths for all sw to download and later build 
+
+kong_dest: "{{ tarzan_dest }}/kong/"
+kong_version: 0.12.3
+# Not needed anymore. 
+#kong_url: https://github.com/Mashape/kong/archive/0.7.0.tar.gz
+#kong_file: 0.7.0.tar.gz
+#kong_dest: "{{ tarzan_dest }}/kong/"
+
+# kong depends on the lua eco system
+luarocks_url: http://luarocks.org/releases/luarocks-2.4.3.tar.gz 
+luarocks_file: luarocks-2.4.3.tar.gz
+luarocks_version: 2.4.3
+luarocks_dest: "{{ tarzan_dest }}/luarocks/"
+
+# kong depends on cassandra as backend 
+cassandra_url: http://archive.apache.org/dist/cassandra/2.2.5/apache-cassandra-2.2.5-bin.tar.gz
+cassandra_file: apache-cassandra-2.2.5-bin.tar.gz
+cassandra_version: 2.2.5
+cassandra_dest: "{{ tarzan_dest }}/cassandra/"
+
+# kong depends on the openresty nginx clone
+openresty_url: https://openresty.org/download/openresty-1.11.2.5.tar.gz
+openresty_file: openresty-1.11.2.5.tar.gz
+openresty_version: 1.11.2.5
+openresty_dest: "{{ tarzan_dest }}/openresty/"
+
+# openresty depends on a newer version of openssl
+openssl_url: https://www.openssl.org/source/old/1.0.2/openssl-1.0.2f.tar.gz
+openssl_file: openssl-1.0.2f.tar.gz
+openssl_version: 1.0.2f
+openssl_dest: "{{ tarzan_dest }}/openssl/"
+
+# kong depends on serf for service/cluster discovery 
+serf_url: https://releases.hashicorp.com/serf/0.7.0/serf_0.7.0_linux_amd64.zip
+serf_file: serf_0.7.0_linux_amd64.zip
+serf_version: 0.7.0
+serf_dest: "{{ tarzan_dest }}/serf"
+
+## Settings for relevant sw
+
+tarzan_env_path: "{{ openresty_dest }}/{{ openresty_version }}/luajit/bin:{{ luarocks_dest }}/{{ luarocks_version }}/bin:{{ openresty_dest }}/{{ openresty_version }}/bin:{{ cassandra_dest }}/{{ cassandra_version }}/bin/:{{ serf_dest }}/:{{ openresty_dest }}/{{ openresty_version }}/nginx/sbin"
+
+tarzan_log_dest: "{{ ngi_pipeline_upps_path }}/log/tarzan/"
+tarzan_db_dest: "{{ ngi_pipeline_upps_path }}/db/tarzan/"
+cassandra_log_dest: "{{ tarzan_log_dest }}/cassandra"
+cassandra_db_dest: "{{ tarzan_db_dest }}/cassandra" 
+
+# To get Tarzan to work lua_path and lua_cpath were generated from a working luarocks 
+# installation on the cluster, and then running the command `luarocks path`, 
+# and then substituting some of the values to respective Ansible variables. 
+# The two last paths in both vars seems to be necessary so that we do not 
+# get warnings the module system lmod which is using lua as well. This 
+# might be a future error source.
+lua_path: "/home/funk_004/.luarocks/share/lua/5.1/?.lua;/home/funk_004/.luarocks/share/lua/5.1/?/init.lua;{{ luarocks_dest }}/{{ luarocks_version }}/share/lua/5.1/?.lua;{{ luarocks_dest }}/{{ luarocks_version }}/share/lua/5.1/?/init.lua;{{ luarocks_dest }}/{{ luarocks_version }}/share/lua/5.1/*/init.lua;;/usr/share/lua/5.1/?.lua;/usr/share/lua/5.1/?/init.lua"
+lua_cpath: "/home/funk_004/.luarocks/lib/lua/5.1/?.so;{{ luarocks_dest }}/{{ luarocks_version }}/lib/lua/5.1/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;{{ openresty_dest }}/{{ openresty_version }}/luajit/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/lib64/lua/5.1/?.so;/usr/lib64/lua/5.1/loadall.so"
+

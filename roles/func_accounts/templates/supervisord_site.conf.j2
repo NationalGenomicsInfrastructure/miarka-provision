@@ -1,0 +1,8 @@
+[supervisord]
+logfile={{ supervisord_log_dest }}/supervisord.log
+pidfile={{ supervisord_log_dest }}/supervisord.pid
+
+[program:nextgen_analysis_server]
+command={{ ngi_pipeline_venv }}/bin/python {{ ngi_pipeline_dest }}/scripts/ngi_pipeline_start.py server --port {{ ngi_pipeline_web_port }}
+autorestart=true
+

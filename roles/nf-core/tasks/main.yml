@@ -1,0 +1,101 @@
+---
+
+- name: install nf-core
+  local_action:
+    module: pip
+    virtualenv_command: /lupus/ngi/irma3/virtualenv-15.0.0/virtualenv.py
+    virtualenv: "{{ nf_core_env }}"
+    name: nf-core
+    state: present
+
+- name: Download NextFlow
+  local_action:
+    get_url url="{{ nextflow_download_url }}" dest="{{ nf_core_env }}/bin" mode="u+rwx,g=rwx"
+
+- name: Install NextFlow
+  local_action:
+    module: command
+    _raw_params: "{{ nf_core_env }}/bin/nextflow"
+  environment:
+    NXF_LAUNCHER: "/scratch"
+    NXF_HOME: "{{ nf_core_env }}/nextflow"
+    NXF_WORK: "/scratch"
+
+- name: Create temp directories for singularity images
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ngi_containers }}/singularity_cache"
+    - "{{ ngi_containers }}/singularity_temp"
+
+- name: nf-core
+  command: "{{ nf_core_env }}/bin/nf-core -v download {{ item.name }}
+   --compress none --outdir {{ sw_path }}{{ item.name }} --release {{ item.release }}"
+  environment:
+    PATH: "{{ nf_core_env }}/bin:{{ ansible_env.PATH }}"
+    SINGULARITY_CACHEDIR: "{{ ngi_containers }}/singularity_cache"
+    SINGULARITY_TMPDIR: "{{ ngi_containers }}/singularity_temp"
+  args:
+    chdir: "{{ sw_path }}"
+  with_items: "{{ pipelines }}"
+
+- name: Create directories for singularity images
+  file:
+    path: "{{ ngi_containers }}/{{ item.name }}"
+    state: directory
+    mode: 02775 #ug=rwx, o=rx, g+s
+  with_items: "{{ pipelines }}"
+
+- name: Pull Singularity images if version has been updated
+  command: "singularity pull --name nf-core-{{ item.name }}-{{ item.release }}.simg docker://nfcore/{{ item.name }}:{{ item.release }}"
+  environment:
+    SINGULARITY_CACHEDIR: "{{ ngi_containers }}/singularity_cache"
+    SINGULARITY_TMPDIR: "{{ ngi_containers }}/singularity_temp"
+  args:
+    chdir: "{{ ngi_containers }}/{{ item.name }}"
+    creates: "{{ ngi_containers }}/{{ item.name }}/nf-core-{{ item.name }}-{{ item.release }}.simg" #creates skips action if file already exists
+  ignore_errors: true
+  with_items: "{{ pipelines }}"
+
+- name: Remove singularity cache directories
+  file: name="{{ item }}" state=absent
+  with_items:
+  - "{{ ngi_containers }}/singularity_cache"
+  - "{{ ngi_containers }}/singularity_temp"
+
+- name: Create nf-core config
+  template:
+    src: "site.config.j2"
+    dest: "{{ ngi_pipeline_conf }}/{{ item.0.name }}_{{ item.1.site }}.config"
+  with_nested:
+  - "{{ pipelines }}"
+  - [ { site: "sthlm", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }, { site: "upps", project_id: "{{ ngi_pipeline_upps_delivery }}" }]
+
+- name: Set alias for pipeline
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ item.1.script }}"
+    line: >
+          alias {{ item.0.name }}='nextflow run {{ sw_path }}{{ item.0.name }}/workflow/ \
+          -profile uppmax \
+          -c {{ ngi_pipeline_conf }}/nextflow_irma_{{ item.1.site }}.config \
+          -c {{ ngi_pipeline_conf }}/{{ item.0.name }}_{{ item.1.site }}.config'
+    backup: no
+  with_nested:
+  - "{{ pipelines }}"
+  - [ { site: "sthlm", script: "{{ bash_env_sthlm_script }}" }, { site: "upps", script: "{{ bash_env_upps_script }}" } ]
+
+- name: Download SILVA classifier data for ampliseq
+  get_url:
+    url: https://www.arb-silva.de/fileadmin/silva_databases/qiime/Silva_132_release.zip
+    dest: "{{ ngi_containers }}/ampliseq/Silva_132_release.zip"
+  when: item.name == "ampliseq"
+  with_items:
+  - "{{ pipelines }}"
+
+- name: Store tool version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ item.name }}: {{ item.release }}"
+  with_items:
+  - "{{ pipelines }}"

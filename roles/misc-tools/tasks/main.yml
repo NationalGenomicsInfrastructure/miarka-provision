@@ -1,0 +1,20 @@
+---
+
+- name: create misc tools bin folder
+  file: path="{{ misc_tools_bin_path }}"
+        state=directory
+
+- name: add misc tools bin folder to path
+  lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_script }}
+              line='export PATH={{ misc_tools_bin_path }}:$PATH'
+              backup=no
+
+- name: download jq
+  get_url: url="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
+           dest="{{ misc_tools_bin_path }}/jq"
+
+- name: make jq executable
+  file: path="{{ misc_tools_bin_path }}/jq"
+        mode=0775
+
+

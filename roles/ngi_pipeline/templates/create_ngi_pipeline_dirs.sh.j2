@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Minimalistic script that initiates project/site specific
+# directories for ngi_pipeline logs and dbs under respective
+# site's project dirs.
+
+# To be run as respective func account:
+#
+# funk_004 -> ngi2016001
+# funk_006 -> ngi2016003
+
+if [ $# -ne 1 ]; then
+        echo "$0: usage: create_ngi_pipeline_dirs.sh <project id>"
+        exit 1
+fi
+
+# Removes old softlinks directory, thus forcing md5 recalculation
+if [ -d "{{ proj_root }}/$1/nobackup/NGI/softlinks" ]; then
+rm -r {{ proj_root }}/$1/nobackup/NGI/softlinks
+fi
+
+mkdir -p {{ proj_root }}/$1/private/log
+mkdir -p {{ proj_root }}/$1/private/db
+mkdir -p {{ proj_root }}/$1/nobackup/NGI/softlinks
+mkdir -p {{ proj_root }}/$1/private/log/supervisord
+#If case since folders are excessive for uppsala
+if [ $1 == "ngi2016003" ]; then
+mkdir -p {{ proj_root }}/$1/genotype_data/incoming
+mkdir -p {{ proj_root }}/$1/genotype_data/archive
+ACKNOWLEDGE_SITE="ACKNOWLEDGEMENTS_S.txt"
+else
+ACKNOWLEDGE_SITE="ACKNOWLEDGEMENTS_U.txt"
+fi
+
+ln -s /lupus/ngi/{{ deployment_environment }}/latest/sw/ngi_pipeline/DELIVERY.README.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.txt
+ln -s /lupus/ngi/{{ deployment_environment }}/latest/sw/ngi_pipeline/$ACKNOWLEDGE_SITE {{ proj_root }}/$1/nobackup/NGI/softlinks/ACKNOWLEDGEMENTS.txt
+
+#if sthlm, source delivery readme script
+if [ $1 == "ngi2016003" ]; then
+. {{ ngi_resources }}/create_delivery_readme_softlinks.sh
+fi
