@@ -14,10 +14,16 @@
     # Depends on that we're standing inside the git repo while running the ansible-playbook command. 
     - shell: echo `whoami`_`git rev-parse --abbrev-ref HEAD` 
       register: devel_version
+    - name: set deployment destination root path for devel
+      set_fact:
+        deployment_target: "{{ deployment_remote_path }}/{{ deployment_environment }}"
+    - name: set path for deployment provision resources
+      set_fact:
+        deployment_provision_path: "{{ deployment_local_path }}/provision"
     - name: set root path and proj root for development 
       set_fact: 
-        root_path: "/lupus/ngi/irma3/devel-root/{{ devel_version.stdout }}"
-        proj_root: "/lupus/ngi/irma3/devel-root/wildwest/"
+        root_path: "{{ deployment_local_path }}/devel-root/{{ devel_version.stdout }}"
+        proj_root: "{{ deployment_local_path }}/devel-root/wildwest/"
     - name: set delivery path for development
       set_fact: 
         milou_delivery_root: "{{ proj_root }}/milou-delivery/"
@@ -30,18 +36,24 @@
     # can be deployed parallel to each other if the deployment_version is explicetly != "default". 
 #    - fail: msg="You must specify a version to deploy for production/staging with '-e deployment_version=<github release tag|commit hash>'"
 #      when: deployment_version == "default"
+    - name: set path for deployment provision resources
+      set_fact:
+        deployment_provision_path: "{{ deployment_local_path }}/provision"
     - shell: git describe --tags
       register: git_tag
       args: 
-        chdir: "/lupus/ngi/irma3/deploy"
+        chdir: "{{ deployment_provision_path }}"
+      when: deployment_version == "default"
+    - name: set deployment destination root path for staging and production
+      set_fact:
+        deployment_target: "{{ deployment_remote_path }}/{{ deployment_environment }}"
+    - name: set root path for staging and production
+      set_fact: 
+        root_path: "{{ deployment_target }}/{{ git_tag.stdout }}"
       when: deployment_version == "default"
     - name: set root path for staging and production
       set_fact: 
-        root_path: "/lupus/ngi/{{ deployment_environment }}/{{ git_tag.stdout }}"
-      when: deployment_version == "default"
-    - name: set root path for staging and production
-      set_fact: 
-        root_path: "/lupus/ngi/{{ deployment_environment }}/{{ deployment_version }}"
+        root_path: "{{ deployment_target }}/{{ deployment_version }}"
       when: deployment_version != "default"
     - stat: path={{ root_path }} 
       register: p
@@ -52,7 +64,7 @@
   - block: 
     - name: set proj root for staging
       set_fact: 
-        proj_root: "/lupus/ngi/staging/wildwest/"
+        proj_root: "{{ deployment_target }}/wildwest/"
     - name: set delivery root for staging 
       set_fact: 
         milou_delivery_root: "{{ proj_root }}/milou-delivery/"
@@ -104,4 +116,3 @@
       set_fact:
         statusdb_creds: statusdb_creds_stage.yml
     when: deployment_environment in [ "staging", "devel" ]
-

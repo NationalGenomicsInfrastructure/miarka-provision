@@ -1,18 +1,12 @@
 ---
 
-- name: Fetch ngi_pipeline from github
-  git: repo={{ ngi_pipeline_repo }}
-       dest={{ ngi_pipeline_dest }}
-       version={{ ngi_pipeline_version }}
-       force=yes
-
 - name: "Check if {{ NGI_venv_name }} virtual env exists"
   shell: "conda env list | awk '{print $1}' | egrep -e ^{{ NGI_venv_name }}$"
   register: "py2_venv_exists"
   ignore_errors: true
 
 - name: Setup virtual env and install dependencies
-  shell: "conda create -n {{ NGI_venv_name }} pip"
+  shell: "conda create -n {{ NGI_venv_name }} pip python=2.7"
   when: "not py2_venv_exists.stdout"
 
 - name: "Check if {{ NGI_venv_py3_name }} virtual env exists"
@@ -23,6 +17,12 @@
 - name: Setup virtual env with python3 and install dependencies
   shell: "conda create -n {{ NGI_venv_py3_name }} -c anaconda python=3.8"
   when: "not py3_venv_exists.stdout"
+
+- name: Fetch ngi_pipeline from github
+  git: repo={{ ngi_pipeline_repo }}
+       dest={{ ngi_pipeline_dest }}
+       version={{ ngi_pipeline_version }}
+       force=yes
 
 - name: (Temporary until everything is updated) Install click7.0 as click7.1 breaks everything
   pip:
@@ -43,15 +43,6 @@
 - name: Create ngi_pipeline conf directory
   file: path="{{ ngi_pipeline_conf }}" state=directory mode=g+s
 
-- name: Create ngi_pipeline staging incoming & archive directories
-  file: path="{{ proj_root }}/{{ item.site }}/{{ item.dir }}" state=directory mode=g+s
-  with_items:
-  - { site: "{{ ngi_pipeline_sthlm_delivery }}", dir: "incoming"}
-  - { site: "{{ ngi_pipeline_upps_delivery }}", dir: "incoming"}
-  - { site: "{{ ngi_pipeline_sthlm_delivery }}", dir: "archive"}
-  - { site: "{{ ngi_pipeline_upps_delivery }}", dir: "archive"}
-  when: deployment_environment in ["staging", "devel"]
-
 - name: Install PyVCF for joint calling
   pip:
     name: "PyVCF"
@@ -70,72 +61,51 @@
 
 - name: Deploy GATK license key
   copy: src="files/{{ gatk_key }}" dest="{{ ngi_resources }}/piper/{{ gatk_key }}"
-
-# Set Uppsala specific variables
-- set_fact:
-    ngi_pipeline_db: "{{ ngi_pipeline_db_upps }}"
-    ngi_pipeline_slurm_project: "{{ ngi_pipeline_upps_delivery }}"
-    ngi_pipeline_sequencing_center: "NGI-U"
-    ngi_pipeline_log: "{{ ngi_pipeline_log_upps }}"
-    recipient_mail: "{{ recipient_mail_upps }}"
-    site: "upps"
-
-- name: Deploy irma ngi_pipeline config for uppsala
-  template: src="irma_ngi_config.yaml.j2" dest="{{ ngi_pipeline_conf }}/{{ upps_config }}"
-
-# Set Stockholm specific variables
-- set_fact:
-    ngi_pipeline_db: "{{ ngi_pipeline_db_sthlm }}"
-    ngi_pipeline_slurm_project: "{{ ngi_pipeline_sthlm_delivery }}"
-    ngi_pipeline_sequencing_center: "NGI-S"
-    ngi_pipeline_log: "{{ ngi_pipeline_log_sthlm }}"
-    recipient_mail: "{{ recipient_mail_sthlm }}"
-    site: "sthlm"
-
-- name: Deploy irma ngi_pipeline config for stockholm
-  template: src="irma_ngi_config.yaml.j2" dest="{{ ngi_pipeline_conf }}/{{ sthlm_config }}"
-
-- name: Deploy common bash environment variables
-  template: src="{{ bash_env_script }}.j2" dest="{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
-
-# Set Uppsala specific variables
-- set_fact:
-    site_config: "{{ upps_config }}"
-    charon_api_token: "{{ charon_api_token_upps }}"
-    tsm_config_file: "{{ tsm_config_file_upps }}"
-    site: "upps"
-
-- name: Deploy uppsala site bash environment variables
-  template: src="{{ bash_env_site_script }}" dest="{{ ngi_pipeline_conf }}/{{ bash_env_upps_script }}"
-
-- name: Deploy uppnex_datadeliver script for Uppsala
-  copy: src="files/uppnex_datadeliver" dest="{{ sw_path }}/uppnex_datadeliver" mode="u=rwx,g=rwx,o=rx"
-
-# Set Stockholm specific variables
-- set_fact:
-    site_config: "{{ sthlm_config }}"
-    charon_api_token: "{{ charon_api_token_sthlm }}"
-    tsm_config_file: "{{ tsm_config_file_sthlm }}"
-    site: "sthlm"
-
-- name: Deploy stockholm site bash environment variables
-  template: src="{{ bash_env_site_script }}" dest="{{ ngi_pipeline_conf }}/{{ bash_env_sthlm_script }}"
+  ignore_errors: true
 
 - name: Deploy fastqc conf for irma
-  copy: src="fastq_screen.irma.conf" dest="{{ ngi_pipeline_conf }}"
+  template: src="fastq_screen.irma.conf.j2" dest="{{ ngi_pipeline_conf }}"
 
 - name: Deploy script for creating site specific ngi_pipeline dirs for logs and db
   template: src=create_ngi_pipeline_dirs.sh.j2 dest={{ ngi_resources }}/create_ngi_pipeline_dirs.sh
+
+- name: Deploy common bash environment variables
+  template: src="{{ bash_env_script }}.j2" dest="{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
 
 - name: Add anaconda path to sourceme script
   lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_script }}
               line='export PATH={{ anaconda_path }}/bin:$PATH'
               backup=no
 
-- name: Add py3 anaconda env path to sthlm sourceme script
-  lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_sthlm_script }}
-              line='export PATH={{ anaconda_path }}/envs/{{ NGI_venv_py3_name }}/bin:$PATH'
-              backup=no
+# Run site-specific tasks for Uppsala
+- import_tasks: site_tasks.yml
+  vars:
+    site: "upps"
+    ngi_pipeline_db: "{{ ngi_pipeline_db_upps }}"
+    ngi_pipeline_slurm_project: "{{ ngi_pipeline_upps_delivery }}"
+    ngi_pipeline_sequencing_center: "NGI-U"
+    ngi_pipeline_log: "{{ ngi_pipeline_log_upps }}"
+    recipient_mail: "{{ recipient_mail_upps }}"
+    site_config: "{{ upps_config }}"
+    charon_api_token: "{{ charon_api_token_upps }}"
+    tsm_config_file: "{{ tsm_config_file_upps }}"
+    ngi_pipeline_delivery: "{{ ngi_pipeline_upps_delivery }}"
+    bash_env_script: "{{ bash_env_upps_script }}"
+
+# Run site-specific tasks for Sthlm
+- import_tasks: site_tasks.yml
+  vars:
+    site: "sthlm"
+    ngi_pipeline_db: "{{ ngi_pipeline_db_sthlm }}"
+    ngi_pipeline_slurm_project: "{{ ngi_pipeline_sthlm_delivery }}"
+    ngi_pipeline_sequencing_center: "NGI-S"
+    ngi_pipeline_log: "{{ ngi_pipeline_log_sthlm }}"
+    recipient_mail: "{{ recipient_mail_sthlm }}"
+    site_config: "{{ sthlm_config }}"
+    charon_api_token: "{{ charon_api_token_sthlm }}"
+    tsm_config_file: "{{ tsm_config_file_sthlm }}"
+    ngi_pipeline_delivery: "{{ ngi_pipeline_sthlm_delivery }}"
+    bash_env_script: "{{ bash_env_sthlm_script }}"
 
 - name: Try getting anaconda version
   shell: "conda --version"

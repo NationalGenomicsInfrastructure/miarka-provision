@@ -3,39 +3,44 @@
 set -x
 set -e
 
-# Minimalistic and hard coded script for bootstrapping the Ansible environment on miarka3
-PROVISIONURL=https://github.com/NationalGenomicsInfrastructure/miarka-provision/archive/refs/heads
-PROVISIONBRANCH=devel
-VIRTUALENVURL=https://pypi.python.org/packages/source/v/virtualenv
-VIRTUALENVVERSION=20.8.1
-REPOPATH="$HOME/vulpes/ngi/miarka3"
+# Use a global environmental variable for the deploy root path
+if [ -z "$DEPLOYROOT" ] ; then
+  echo "The global environment variable DEPLOYROOT needs to be set to the path under which deployments will be made. Aborting"
+  exit 1
+fi
 
-if [ -d  "$REPOPATH/deploy" ] ; then
-        echo "Miarka provisioning repo already exists, so the miarka3 environment is probably already setup properly. Aborting."
-        exit 1
+# Minimalistic and hard coded script for bootstrapping the Ansible environment on miarka3
+PROVISIONREPO="miarka-provision"
+PROVISIONURL="https://github.com/NationalGenomicsInfrastructure/${PROVISIONREPO}.git"
+PROVISIONBRANCH="bootstrap_and_paths"
+PROVISIONROOT="$DEPLOYROOT/provision"
+
+if [ -d  "$PROVISIONROOT" ] ; then
+    echo "Miarka provisioning repo already exists, so the environment is probably already setup properly. Aborting."
+    exit 1
 fi
 
 umask 0002
 
-mkdir -p $REPOPATH/
-chgrp ngi-sw $REPOPATH
-chmod g+rwXs $REPOPATH
+mkdir -p "$PROVISIONROOT"
+chgrp ngi-sw "$PROVISIONROOT"
+chmod g+rwXs "$PROVISIONROOT"
+
+ORIGIN="$(pwd)"
+cd "$PROVISIONROOT"
 
 echo "Cloning the Miarka provisioning repo"
-ZIPNAME="miarka-provision-${PROVISIONBRANCH}"
-curl -L -o "$REPOPATH/${ZIPNAME}.zip" "$PROVISIONURL/${PROVISIONBRANCH}.zip"
-unzip -d $REPOPATH "$REPOPATH/${ZIPNAME}.zip"
-mv "$REPOPATH/${ZIPNAME}" $REPOPATH/deploy
-
-mkdir -p $REPOPATH/devel/
-mkdir -p $REPOPATH/log/
+git clone "$PROVISIONURL"
+cd ${PROVISIONREPO}
+git checkout "$PROVISIONBRANCH"
+cd ..
 
 echo "Copying environment bashrc file"
-cp $REPOPATH/deploy/bootstrap/bashrc $REPOPATH/bashrc
+sed -re "s#__DEPLOYROOT__#$DEPLOYROOT#" "${PROVISIONREPO}/bootstrap/bashrc" > bashrc
 
 echo "Setting up a venv for Ansible"
-/usr/bin/python3 -m venv "$REPOPATH/ansible-env"
-source "$REPOPATH/ansible-env/bin/activate"
+/usr/bin/python3 -m venv "ansible-env"
+source "ansible-env/bin/activate"
 pip install --upgrade pip
 
 echo "Installing Ansible into virtual environment"
@@ -45,6 +50,8 @@ echo "Installing pexpect for syncing functionality into the cluster"
 pip install pexpect
 
 echo "Installing cpanm so we can install Perl packages locally"
-cd $REPOPATH/ansible-env/bin
+cd ansible-env/bin
 curl -L https://cpanmin.us -o cpanm
 chmod +x ./cpanm
+
+cd "$ORIGIN"

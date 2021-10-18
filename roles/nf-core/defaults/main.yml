@@ -1,7 +1,19 @@
-nextflow_java: "/sw/comp/java/x86_64/sun_jdk1.8.0_151"
-nextflow_version_tag: "v20.01.0"
-nextflow_download_url: "https://github.com/nextflow-io/nextflow/releases/download/{{ nextflow_version_tag }}/nextflow"
-nf_core_env: "/lupus/ngi/irma3/nf-core-env"
+nextflow_java: "{{ java_home }}"
+nextflow_version_tag: "20.01.0"
+nextflow_download_url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow"
+nf_core_env_name: nf-core-env
+nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
+nf_core_version: 2.1
+nf_core_vars:
+  NFCORE_NO_VERSION_CHECK: 1
+  SINGULARITY_CACHEDIR: "{{ ngi_containers }}/singularity_cache"
+  SINGULARITY_TMPDIR: "{{ ngi_containers }}/singularity_temp"
+  NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/singularity_cache"
+  NXF_LAUNCHER: "/scratch"
+  NXF_HOME: "{{ nf_core_env }}/nextflow"
+  NXF_WORK: "/scratch"
+  NXF_TEMP: "/scratch"
+  PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 pipelines:
   - name: methylseq
     release: 1.6.1

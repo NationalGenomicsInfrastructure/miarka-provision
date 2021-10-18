@@ -16,10 +16,7 @@
 # Resolved any problems. Run-time files are pushed to scratch
 - name: Install NextFlow
   shell: "./nextflow"
-  environment:
-    NXF_LAUNCHER: "/scratch"
-    NXF_HOME: "{{ nextflow_dest }}/workfiles"
-    NXF_WORK: "/scratch"
+  environment: "{{ nextflow_env }}"
   args:
     chdir: "{{ nextflow_dest }}"
 
@@ -38,8 +35,8 @@
     src: "nextflow_irma_site.config.j2"
     dest: "{{ ngi_pipeline_conf }}/nextflow_irma_{{ item.site }}.config"
   with_items:
-  - { site: "sthlm", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }
-  - { site: "upps", project_id: "{{ ngi_pipeline_upps_delivery }}" }
+    - { site: "sthlm", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }
+    - { site: "upps", project_id: "{{ ngi_pipeline_upps_delivery }}" }
 
 # Change target to {{ ngi_rnaseq_dest }} when using module system
 # NXF_WORK is omitted, which puts them under current directory
@@ -48,14 +45,14 @@
               line="{{ item.envvar }}"
               backup=no
   with_items:
-  - { envvar: "export NXF_OPTS='-Xms1g -Xmx4g'"}
-  - { envvar: "export NXF_VER={{ nextflow_ver.stdout }}"}
-  - { envvar: "export NXF_HOME={{ nextflow_dest }}/workfiles"}
-  - { envvar: "export NXF_LAUNCHBASE=$PWD/work"}
-# Defines where the classpath file ends up
-  - { envvar: "export NXF_LAUNCHER=$PWD/work"}
-# Path to java to be used for nextflow
-  - { envvar: "export NXF_JAVA_HOME={{ nextflow_java }}"}
+    - { envvar: "export NXF_OPTS={{ nextflow_env.NXF_OPTS }}"}
+    - { envvar: "export NXF_VER={{ nextflow_ver.stdout }}"}
+    - { envvar: "export NXF_HOME={{ nextflow_env.NXF_HOME }}"}
+    - { envvar: "export NXF_LAUNCHBASE={{ nextflow_env.NXF_LAUNCHBASE }}"}
+  # Defines where the classpath file ends up
+    - { envvar: "export NXF_LAUNCHER={{ nextflow_env.NXF_LAUNCHER }}"}
+  # Path to java to be used for nextflow
+    - { envvar: "export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}"}
 
 - name: Store nextflow version in deployment
   lineinfile:

@@ -13,7 +13,7 @@ if [ $# -ne 1 ]; then
         exit 1
 fi
 
-ln -s /lupus/ngi/{{ deployment_environment }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.RAW_DATA.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.RAW_DATA.txt
-ln -s /lupus/ngi/{{ deployment_environment }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.MethylSeq.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.MethylSeq.txt
-ln -s /lupus/ngi/{{ deployment_environment }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.RNASeq.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.RNASeq.txt
-ln -s /lupus/ngi/{{ deployment_environment }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.Sarek.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.SAREK.txt
+ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.RAW_DATA.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.RAW_DATA.txt
+ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.MethylSeq.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.MethylSeq.txt
+ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.RNASeq.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.RNASeq.txt
+ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.Sarek.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.SAREK.txt

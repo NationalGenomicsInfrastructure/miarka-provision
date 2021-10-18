@@ -1,15 +1,15 @@
 --- 
 
   - block:
-    - name: Try to get irma_provision latest version
+    - name: Try to get miarka_provision latest version
       command: git rev-parse HEAD
-      register: irma_provision_version
+      register: miarka_provision_version
 
-    - name: Add irma_provision version to deployed tools files
+    - name: Add miarka_provision version to deployed tools files
       lineinfile:
         dest: "{{ deployed_tool_versions }}"
-        line: "-- Deployed at {{ ansible_date_time.iso8601 }} by irma_provision ({{ irma_provision_version.stdout }}) --"
-      when: irma_provision_version.stdout
+        line: "-- Deployed at {{ ansible_date_time.iso8601 }} by miarka_provision ({{ miarka_provision_version.stdout }}) --"
+      when: miarka_provision_version.stdout
 
     # Create an alias to easily get the deployed tools version
     # not using 'blockinline' to avoid ansible markers
@@ -38,7 +38,7 @@
       shell: "find {{ root_path }}/{conf,sw,resources} -user `whoami` -exec chmod g+rwX,o=rX {} \\;"
 
     - name: symlink deployed version to /lupus/ngi/<production|staging>/latest 
-      file: dest="/lupus/ngi/{{ deployment_environment }}/latest" src="{{ root_path }}" state=link
+      file: dest="{{ deployment_target }}/latest" src="{{ root_path }}" state=link
     when: deployment_environment != "devel" 
 
   - block:

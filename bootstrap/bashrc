@@ -1,8 +1,11 @@
 # Group ngi-sw MUST have rw or else all hell breaks loose! 
 umask 0002
 
-# Bootstrap a log directory 
-mkdir -p $HOME/vulpes/ngi/miarka3/log
+# Set the global REPOPATH
+export DEPLOYROOT="__DEPLOYROOT__"
+
+# Bootstrap a log directory
+mkdir -p "$DEPLOYROOT/provision/log"
 
 # These days irma3 mounts home dirs from pica instead so it is 
 # hopefully not needed anymore.

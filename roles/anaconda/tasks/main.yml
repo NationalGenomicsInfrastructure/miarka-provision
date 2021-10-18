@@ -6,3 +6,11 @@
   args: 
     creates: "{{ anaconda_path }}/LICENSE.txt"
 
+- name: "Check if {{ conda_tools_env }} virtual env exists"
+  shell: "{{ anaconda_path }}/bin/conda env list | awk '{print $1}' | egrep -e ^{{ conda_tools_env }}$"
+  register: "tools_venv_exists"
+  ignore_errors: true
+
+- name: Setup virtual env and install dependencies
+  shell: "{{ anaconda_path }}/bin/conda create -n {{ conda_tools_env }} -c conda-forge git perl"
+  when: "not tools_venv_exists.stdout"

@@ -1,41 +1,30 @@
 ---
 
-- name: install nf-core
-  local_action:
-    module: pip
-    virtualenv_command: /lupus/ngi/irma3/virtualenv-15.0.0/virtualenv.py
-    virtualenv: "{{ nf_core_env }}"
-    name: nf-core
-    state: present
+- name: "Check if {{ nf_core_env_name }} virtual env exists"
+  command: "conda env list | awk '{print $1}' | egrep -e ^{{ nf_core_env_name }}$"
+  register: "nfcore_env_exists"
+  ignore_errors: true
 
-- name: Download NextFlow
-  local_action:
-    get_url url="{{ nextflow_download_url }}" dest="{{ nf_core_env }}/bin" mode="u+rwx,g=rwx"
+- name: Setup {{ nf_core_env_name }} virtual env with python3 and install dependencies
+  command: "conda create -n {{ nf_core_env_name }} -c conda-forge -c bioconda python=3.8 nextflow={{ nextflow_version_tag }}"
+  when: "not nfcore_env_exists.stdout"
 
-- name: Install NextFlow
-  local_action:
-    module: command
-    _raw_params: "{{ nf_core_env }}/bin/nextflow"
-  environment:
-    NXF_LAUNCHER: "/scratch"
-    NXF_HOME: "{{ nf_core_env }}/nextflow"
-    NXF_WORK: "/scratch"
+- name: Install nf-core {{ nf_core_version }}
+  command: "conda install -n {{ nf_core_env_name }} -c bioconda -c conda-forge nf-core={{ nf_core_version }}"
+  args:
+    creates: "{{ nf_core_env }}/python-scripts/nf-core"
 
 - name: Create temp directories for singularity images
   file:
     path: "{{ item }}"
     state: directory
   with_items:
-    - "{{ ngi_containers }}/singularity_cache"
-    - "{{ ngi_containers }}/singularity_temp"
+    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
+    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
 
 - name: nf-core
-  command: "{{ nf_core_env }}/bin/nf-core -v download {{ item.name }}
-   --compress none --outdir {{ sw_path }}{{ item.name }} --release {{ item.release }}"
-  environment:
-    PATH: "{{ nf_core_env }}/bin:{{ ansible_env.PATH }}"
-    SINGULARITY_CACHEDIR: "{{ ngi_containers }}/singularity_cache"
-    SINGULARITY_TMPDIR: "{{ ngi_containers }}/singularity_temp"
+  command: "nf-core -v download {{ item.name }} --compress none --outdir {{ sw_path }}{{ item.name }} -r {{ item.release }}"
+  environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ sw_path }}"
   with_items: "{{ pipelines }}"
@@ -49,9 +38,7 @@
 
 - name: Pull Singularity images if version has been updated
   command: "singularity pull --name nf-core-{{ item.name }}-{{ item.release }}.simg docker://nfcore/{{ item.name }}:{{ item.release }}"
-  environment:
-    SINGULARITY_CACHEDIR: "{{ ngi_containers }}/singularity_cache"
-    SINGULARITY_TMPDIR: "{{ ngi_containers }}/singularity_temp"
+  environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ ngi_containers }}/{{ item.name }}"
     creates: "{{ ngi_containers }}/{{ item.name }}/nf-core-{{ item.name }}-{{ item.release }}.simg" #creates skips action if file already exists
@@ -61,16 +48,16 @@
 - name: Remove singularity cache directories
   file: name="{{ item }}" state=absent
   with_items:
-  - "{{ ngi_containers }}/singularity_cache"
-  - "{{ ngi_containers }}/singularity_temp"
+    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
+    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
 
 - name: Create nf-core config
   template:
     src: "site.config.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ item.0.name }}_{{ item.1.site }}.config"
   with_nested:
-  - "{{ pipelines }}"
-  - [ { site: "sthlm", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }, { site: "upps", project_id: "{{ ngi_pipeline_upps_delivery }}" }]
+    - "{{ pipelines }}"
+    - [ { site: "sthlm", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }, { site: "upps", project_id: "{{ ngi_pipeline_upps_delivery }}" }]
 
 - name: Set alias for pipeline
   lineinfile:
@@ -82,8 +69,8 @@
           -c {{ ngi_pipeline_conf }}/{{ item.0.name }}_{{ item.1.site }}.config'
     backup: no
   with_nested:
-  - "{{ pipelines }}"
-  - [ { site: "sthlm", script: "{{ bash_env_sthlm_script }}" }, { site: "upps", script: "{{ bash_env_upps_script }}" } ]
+    - "{{ pipelines }}"
+    - [ { site: "sthlm", script: "{{ bash_env_sthlm_script }}" }, { site: "upps", script: "{{ bash_env_upps_script }}" } ]
 
 - name: Download SILVA classifier data for ampliseq
   get_url:
@@ -91,11 +78,11 @@
     dest: "{{ ngi_containers }}/ampliseq/Silva_132_release.zip"
   when: item.name == "ampliseq"
   with_items:
-  - "{{ pipelines }}"
+    - "{{ pipelines }}"
 
 - name: Store tool version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
     line: "{{ item.name }}: {{ item.release }}"
   with_items:
-  - "{{ pipelines }}"
+    - "{{ pipelines }}"

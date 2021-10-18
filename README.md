@@ -1,7 +1,7 @@
 # Deployment playbooks for NGI-Pipeline and related software (Piper, TACA, Tarzan, etc.)
 
 This repository concerns the creation and maintenance of the NGI python environment; which is a collection of software and solutions utilized by NGI Production on the currently available HPC. The solutions in question are unique for NGI Production and require updates to such a degree that deploying them within the facility is preferred.
-The NGI environment is currently deployed on Irma using Ansible playbooks. Ansible playbooks are scripts written for easily adaptable automated deployment. The Ansible playbooks are stored here.
+The NGI environment is currently deployed on Miarka using Ansible playbooks. Ansible playbooks are scripts written for easily adaptable automated deployment. The Ansible playbooks are stored here.
 
 ## Bootstrap the Ansible environment
 
@@ -9,15 +9,16 @@ Before any deployments can be done we need to setup the Ansible environment. If 
 
 ```
 newgrp ngi-sw
-curl -L https://raw.githubusercontent.com/NationalGenomicsInfrastructure/irma-provision/master/bootstrap/bootstrap.sh -o /tmp/bootstrap.sh
+curl -L https://raw.githubusercontent.com/NationalGenomicsInfrastructure/miarka-provision/bootstrap_and_paths/bootstrap/bootstrap.sh -o /tmp/bootstrap.sh
+export DEPLOYROOT=/path/to/deployment/working/directory
 bash /tmp/bootstrap.sh
 ```
 
 It is recommended that the user adds the following two lines (or something similar) into `~/.bashrc`:
 
 ```
-alias irmaenv='source /lupus/ngi/irma3/bashrc'
-alias ansibleenv='source /lupus/ngi/irma3/ansible-env/bin/activate'
+alias irmaenv='source /path/to/deployment/working/directory/bashrc'
+alias ansibleenv='source "$DEPLOYROOT/ansible-env/bin/activate"'
 ```
 
 ## User prerequisites before developing or deploying

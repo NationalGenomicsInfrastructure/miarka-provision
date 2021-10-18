@@ -1,7 +1,7 @@
 ---
 - name: install nf-core/rnaseq
   command: "{{ nf_core_env }}/bin/nf-core -v download {{ item.name }}
-   --compress none --outdir {{ sw_path }}{{ item.name }} --release {{ item.release }}"
+   --compress none --outdir {{ sw_path }}{{ item.name }} -r {{ item.release }}"
   environment:
     PATH: "{{ nf_core_env }}/bin:{{ ansible_env.PATH }}"
   args:

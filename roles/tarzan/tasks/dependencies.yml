@@ -24,6 +24,9 @@
     creates: "{{ openssl_dest }}/openssl-{{ openssl_version }}/LICENSE"
     mode: g+rwX,o+rX
 
+#- name: deploy openresty with conda
+#  shell: "conda install -n {{ conda_tools_env }} -c anaconda openresty={{ openresty_version }}"
+
 - name: create openresty destination directory
   file: path={{ openresty_dest }} state=directory mode=g+rwXs
 
@@ -33,23 +36,23 @@
     dest: "{{ openresty_dest }}/{{ openresty_file }}"
 
 - name: unpack openresty to destination
-  unarchive: 
-    src: "{{ openresty_dest }}/{{ openresty_file }}" 
+  unarchive:
+    src: "{{ openresty_dest }}/{{ openresty_file }}"
     dest: "{{ openresty_dest }}"
-    copy: no 
+    copy: no
     creates: "{{ openresty_dest }}/{{ openresty_version }}/bin/resty"
     mode: g+rwX,o+rX
 
 - name: configure openresty
-  shell: "./configure --with-pcre-jit --with-ipv6 --with-http_realip_module --with-http_ssl_module --with-http_stub_status_module --with-http_v2_module --prefix={{ openresty_dest }}/{{ openresty_version }} --with-openssl={{ openssl_dest }}/openssl-{{ openssl_version }}/" 
-  args: 
+  shell: "./configure --with-pcre-jit --with-ipv6 --with-http_realip_module --with-http_ssl_module --with-http_stub_status_module --with-http_v2_module --prefix={{ openresty_dest }}/{{ openresty_version }} --with-openssl={{ openssl_dest }}/openssl-{{ openssl_version }}/"
+  args:
     chdir: "{{ openresty_dest }}/openresty-{{ openresty_version }}"
     creates: "{{ openresty_dest }}/{{ openresty_version }}/bin/resty"
 
 - name: compile openresty
   shell: make install
-  args: 
-    chdir: "{{ openresty_dest}}/openresty-{{ openresty_version }}" 
+  args:
+    chdir: "{{ openresty_dest}}/openresty-{{ openresty_version }}"
     creates: "{{ openresty_dest }}/{{ openresty_version }}/bin/resty"
 
 - name: create luarocks destination directory
