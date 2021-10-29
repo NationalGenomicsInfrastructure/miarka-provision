@@ -36,7 +36,7 @@ git checkout "$PROVISIONBRANCH"
 cd ..
 
 echo "Copying environment bashrc file"
-sed -re "s#__DEPLOYROOT__#$DEPLOYROOT#" "${PROVISIONREPO}/bootstrap/bashrc" > bashrc
+sed -re "s#__DEPLOYROOT__#$DEPLOYROOT#" "${PROVISIONREPO}/bootstrap/bashrc" > "$DEPLOYROOT/bashrc"
 
 echo "Setting up a venv for Ansible"
 /usr/bin/python3 -m venv "ansible-env"

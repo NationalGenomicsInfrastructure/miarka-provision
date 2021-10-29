@@ -2,7 +2,6 @@ nextflow_java: "{{ java_home }}"
 nextflow_version_tag: "v20.11.0-edge"
 nextflow_download_url: "https://github.com/nextflow-io/nextflow/releases/download/{{ nextflow_version_tag }}/nextflow"
 nextflow_env:
-  NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/singularity_cache"
   NXF_LAUNCHER: '$PWD/work'
   NXF_LAUNCHBASE: '$PWD/work'
   NXF_HOME: "{{ nextflow_dest }}/workfiles"

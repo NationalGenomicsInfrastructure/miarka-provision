@@ -17,7 +17,7 @@ bash /tmp/bootstrap.sh
 It is recommended that the user adds the following two lines (or something similar) into `~/.bashrc`:
 
 ```
-alias irmaenv='source /path/to/deployment/working/directory/bashrc'
+alias miarkaenv='source /path/to/deployment/working/directory/bashrc'
 alias ansibleenv='source "$DEPLOYROOT/ansible-env/bin/activate"'
 ```
 

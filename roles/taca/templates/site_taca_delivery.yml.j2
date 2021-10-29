@@ -12,14 +12,12 @@ deliver:
     deliverystatuspath: <REPORTPATH>/08_misc
     operator: "{{ recipient_mail }}"
     hash_algorithm: md5
+    deliverypath:
 {% if "upps" == site %}
-    deliverypath: "{{ item.proj_path }}/<UPPNEXID>/INBOX/<PROJECTID>"
     report_aggregate: "ngi_reports ign_aggregate_report -n {{ site_full }}"
     report_sample: "ngi_reports ign_sample_report -n {{ site_full }}"
     copy_reports_to_reports_outbox: True
     reports_outbox: "{{ proj_root }}/{{ ngi_pipeline_site_delivery }}/incoming/reports/"
-{% else %}
-    deliverypath: "{{ item.proj_path }}/<UPPNEXID>/INBOX/<PROJECTNAME>-<PROJECTID>"
 {% endif %}
     files_to_deliver:
 {% if "upps" == site %}
@@ -34,9 +32,8 @@ deliver:
             - {{ ngi_site_softlinks }}/DELIVERY.README.txt
             - <STAGINGPATH>
 {% endif %}
-{% if "/proj/" == item.proj_path or "sthlm" == site %}
+{% if "sthlm" == site %}
 #Adds FASTQ files to Lupus (aka irma) deliveries
-        -
             - <DATAPATH>/<SAMPLEID>/*/*
             - <STAGINGPATH>/<SAMPLEID>/02-FASTQ
             - required: True

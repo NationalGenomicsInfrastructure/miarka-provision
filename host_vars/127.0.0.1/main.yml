@@ -5,7 +5,7 @@ deployment_local_path:
 deployment_provision_path:
 
 sw_path: "{{ root_path }}/sw/"
-ngi_containers: "{{ deployment_local_path }}/containers/"
+ngi_containers: "{{ deployment_remote_path }}/containers/"
 
 anaconda_path: "{{ sw_path }}/anaconda"
 ansible_path: "{{ deployment_provision_path }}/ansible-env/"
