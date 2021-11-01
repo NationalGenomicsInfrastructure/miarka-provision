@@ -1,38 +1,47 @@
 #!/bin/bash
 
-set -x 
+set -x
+set -e
 
-# Minimalistic and hard coded script for bootstrapping the Ansible environment on irma3
+# Use a global environmental variable for the deploy root path
+if [ -z "$DEPLOYROOT" ] ; then
+  echo "The global environment variable DEPLOYROOT needs to be set to the path under which deployments will be made. Aborting"
+  exit 1
+fi
 
-if [ -d /lupus/ngi/irma3/deploy ] ; then
-	echo "Irma provisioning repo already exists, so the irma3 environment is probably already setup properly. Aborting."
-	exit 1
+# Minimalistic and hard coded script for bootstrapping the Ansible environment on miarka3
+PROVISIONREPO="miarka-provision"
+PROVISIONURL="https://github.com/NationalGenomicsInfrastructure/${PROVISIONREPO}.git"
+PROVISIONBRANCH="bootstrap_and_paths"
+PROVISIONROOT="$DEPLOYROOT/provision"
+
+if [ -d  "$PROVISIONROOT" ] ; then
+    echo "Miarka provisioning repo already exists, so the environment is probably already setup properly. Aborting."
+    exit 1
 fi
 
 umask 0002
 
-mkdir -p /lupus/ngi/irma3/
-chgrp ngi-sw /lupus/ngi/irma3
-chmod g+rwXs /lupus/ngi/irma3
+mkdir -p "$PROVISIONROOT"
+chgrp ngi-sw "$PROVISIONROOT"
+chmod g+rwXs "$PROVISIONROOT"
 
-echo "Cloning the Irma provisioning repo" 
-git clone https://github.com/NationalGenomicsInfrastructure/irma-provision /lupus/ngi/irma3/deploy
+ORIGIN="$(pwd)"
+cd "$PROVISIONROOT"
 
-mkdir -p /lupus/ngi/irma3/devel/
-mkdir -p /lupus/ngi/irma3/log/
+echo "Cloning the Miarka provisioning repo"
+git clone "$PROVISIONURL"
+cd ${PROVISIONREPO}
+git checkout "$PROVISIONBRANCH"
+cd ..
 
-echo "Copying environment bashrc file" 
-cp /lupus/ngi/irma3/deploy/bootstrap/bashrc /lupus/ngi/irma3/bashrc
+echo "Copying environment bashrc file"
+sed -re "s#__DEPLOYROOT__#$DEPLOYROOT#" "${PROVISIONREPO}/bootstrap/bashrc" > "$DEPLOYROOT/bashrc"
 
-echo "Downloading Python virtualenv" 
-curl -o /lupus/ngi/irma3/virtualenv-15.0.0.tar.gz https://pypi.python.org/packages/source/v/virtualenv/virtualenv-15.0.0.tar.gz 
-
-cd /lupus/ngi/irma3 && tar xfz virtualenv-15.0.0.tar.gz
-
-echo "Setting up a virtual environment for Ansible"
-/lupus/ngi/irma3/virtualenv-15.0.0/virtualenv.py -p /usr/bin/python2.7 /lupus/ngi/irma3/ansible-env
-
-/lupus/ngi/irma3/ansible-env/bin/activate
+echo "Setting up a venv for Ansible"
+/usr/bin/python3 -m venv "ansible-env"
+source "ansible-env/bin/activate"
+pip install --upgrade pip
 
 echo "Installing Ansible into virtual environment"
 pip install ansible
@@ -41,6 +50,8 @@ echo "Installing pexpect for syncing functionality into the cluster"
 pip install pexpect
 
 echo "Installing cpanm so we can install Perl packages locally"
-cd /lupus/ngi/irma3/ansible-env/bin
+cd ansible-env/bin
 curl -L https://cpanmin.us -o cpanm
 chmod +x ./cpanm
+
+cd "$ORIGIN"

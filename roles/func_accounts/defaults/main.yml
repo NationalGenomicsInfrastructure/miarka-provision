@@ -1,6 +1,6 @@
 ---
 
-ngi_resources: /lupus/ngi/resources/
+ngi_resources: "{{ root_path }}/resources/"
 
 supervisord_log_dest_upps: "{{ ngi_pipeline_upps_path }}/log/supervisord/"
 supervisord_log_dest_sthlm: "{{ ngi_pipeline_sthlm_path }}/log/supervisord/"

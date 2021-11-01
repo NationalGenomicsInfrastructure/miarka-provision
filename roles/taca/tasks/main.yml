@@ -36,14 +36,11 @@
     ngi_pipeline_site_delivery: "{{ ngi_pipeline_upps_delivery }}"
     recipient_mail: "{{ recipient_mail_upps }}"
 
-- name: Deploy uppsala piper config
-  template: src="site_taca_delivery.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.name }}_delivery.yml"
+- name: Deploy {{ site }} TACA site configs
+  template: src="site_{{ item.config_tpl }}.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.config_dst }}.yml"
   with_items:
-  - { proj_path: "{{ proj_root }}", name: "lupus" }
-  - { proj_path: "{{ milou_delivery_root }}", name: "taca" }
-
-- name: Deploy uppsala sarek config
-  template: src="site_taca_sarek_delivery.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_taca_sarek_delivery.yml"
+    - { config_tpl: "taca_delivery", config_dst: "taca_delivery" }
+    - { config_tpl: "taca_sarek_delivery", config_dst: "taca_sarek_delivery" }
 
 - set_fact:
     site: "sthlm"
@@ -53,28 +50,17 @@
     ngi_pipeline_site_delivery: "{{ ngi_pipeline_sthlm_delivery }}"
     recipient_mail: "{{ recipient_mail_sthlm }}"
 
-- name: Deploy sthlm_taca_cleanup.yml config
-  template: src="site_taca_cleanup.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_taca_cleanup.yml"
-
-- name: Deploy sthlm_fastq_taca_delivery.yml config
-  template: src="site_fastq_delivery.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.name }}_fastq_delivery.yml"
+- name: Deploy {{ site }} TACA site configs
+  template: src="site_{{ item.config_tpl }}.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.config_dst }}.yml"
   with_items:
-  - { proj_path: "{{ milou_delivery_root }}", name: "taca" }
+    - { config_tpl: "taca_cleanup", config_dst: "taca_cleanup" }
+    - { config_tpl: "fastq_delivery", config_dst: "taca_fastq_delivery" }
+    - { config_tpl: "taca_delivery", config_dst: "taca_wgs_delivery" }
+    - { config_tpl: "taca_sarek_delivery", config_dst: "taca_sarek_delivery" }
+    - { config_tpl: "taca_runfolder_delivery", config_dst: "taca_runfolder_delivery" }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_rna_delivery" }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_denovo_delivery" }
 
-- name: Deploy WGS standard stockholm configs
-  template: src="site_taca_delivery.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.name }}_wgs_delivery.yml"
-  with_items:
-  - { proj_path: "{{ milou_delivery_root }}", name: "taca" }
-
-- name: Deploy sthlm sarek config
-  template: src="site_taca_sarek_delivery.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_taca_sarek_delivery.yml"
-
-- name: Deploy application specific stockholm configs
-  template: src="site_app_specific_delivery.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_taca_{{ item }}_delivery.yml"
-  with_items: ['rna', 'denovo']
-
-- name: Deploy runfolder delivery stockholm config
-  template: src="site_taca_runfolder_delivery.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_taca_runfolder_delivery.yml"
 
 - name: Deploy script for softlinking sthlm delivery Readmes
   template: src="create_delivery_readme_softlinks.sh.j2" dest="{{ ngi_resources }}/create_delivery_readme_softlinks.sh"

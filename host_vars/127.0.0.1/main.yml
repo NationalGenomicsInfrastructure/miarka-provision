@@ -1,12 +1,20 @@
 ---
+# Empty placeholder that gets filled by tasks/pre-install.yml
+root_path:
+deployment_local_path:
+deployment_provision_path:
+
 sw_path: "{{ root_path }}/sw/"
-ngi_containers: "/lupus/ngi/containers/"
+ngi_containers: "{{ deployment_remote_path }}/containers/"
 
 anaconda_path: "{{ sw_path }}/anaconda"
-ansible_path: "/lupus/ngi/irma3/ansible-env/"
+ansible_path: "{{ deployment_provision_path }}/ansible-env/"
 default_env: "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sw/uppmax/bin"
 anaconda_env:
   PATH: "{{ anaconda_path }}/bin:{{ ansible_path }}/bin:{{ default_env }}" # this hopefully gets updated by anaconda role
+conda_tools_env: tools
+tools_path:
+  PATH: "{{ anaconda_path }}/envs/{{ conda_tools_env }}/bin:{{ anaconda_env['PATH'] }}"
 
 #Nextflow defauts
 nextflow_dest: "{{ sw_path }}/nextflow"
@@ -43,6 +51,8 @@ ngi_pipeline_db_sthlm: "{{ ngi_pipeline_sthlm_path }}/db/records_db_sthlm.sql"
 
 piper_module_version: 1.5.1
 gatk_bundle_b37: "/sw/data/uppnex/piper_references/2016-04-07/gatk_bundle/2.8/b37/"
+igenomes_path: /sw/data/uppnex/igenomes
+java_home: "/sw/comp/java/x86_64/sun_jdk1.8.0_151"
 
 sarek_tag: "2.7"
 sarek_dest: "{{ sw_path }}/sarek"
@@ -55,7 +65,7 @@ orderportal_creds: orderportal_credentials.yaml
 recipient_mail_sthlm: ngi_pipeline_operators@scilifelab.se
 recipient_mail_upps: medsci-molmed-bioinfo@googlegroups.com
 
-validation_data_root: "/lupus/ngi/validation_data/"
+validation_data_root: "{{ deployment_remote_path }}/validation_data/"
 validation_data:
  - "160915_ST-1234_0123_ATESTFCCXX"
  - "160915_ST-1234_0124_BCHR22CCXX"
@@ -63,5 +73,10 @@ validation_data:
 # File with tools/software version in the deployed env
 deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"
 
-# Empty placeholder that gets filled by tasks/pre-install.yml
-root_path:
+# Empty placeholders for undefined variables (not used?) but not sure so let's keep them
+charon_base_url_prod:
+charon_api_token_sthlm_prod:
+charon_api_token_upps_prod:
+charon_base_url_stage:
+charon_api_token_sthlm_stage:
+charon_api_token_upps_stage:
