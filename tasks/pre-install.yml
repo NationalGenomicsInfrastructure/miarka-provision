@@ -22,7 +22,7 @@
     register: repo_branch
 
   - name: get repo hash
-    shell: echo `git rev-parse HEAD`
+    shell: echo `git rev-parse --short HEAD`
     register: repo_hash
 
   - name: get git tags
@@ -42,7 +42,7 @@
       register: playbook_user
     - name: set root path and proj root for {{ deployment_environment }}
       set_fact: 
-        root_path: "{{ deployment_local_path }}/{{ deployment_environment }}-{{ playbook_user.stdout }}/{{ repo_branch.stdout }}.{{ current_date.stdout }}.{{ repo_hash.stdout | regex_replace('^(.{7}).*', '\\1') }}"
+        root_path: "{{ deployment_local_path }}/{{ deployment_environment }}-{{ playbook_user.stdout }}/{{ repo_branch.stdout }}.{{ current_date.stdout }}.{{ repo_hash.stdout }}"
         proj_root: "{{ deployment_local_path }}/{{ deployment_environment }}-{{ playbook_user.stdout }}/wildwest/"
     - name: set charon envs for {{ deployment_environment }}
       set_fact:
@@ -60,7 +60,7 @@
         # Fetching the version from git instead. This means though that several copies of the same tag
         # can be deployed parallel to each other if the deployment_version is explicitly != "default".
         set_fact:
-          deployment_version: "{{ current_date.stdout }}.{{ repo_hash.stdout | regex_replace('^(.{7}).*', '\\1') }}"
+          deployment_version: "{{ current_date.stdout }}.{{ repo_hash.stdout }}"
       when: deployment_version == "default"
     - name: set root path for {{ deployment_environment }}
       set_fact:
