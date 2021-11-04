@@ -34,10 +34,10 @@ alias ansibleenv='source "$DEPLOYROOT/provision/ansible-env/bin/activate"'
 
 Before a user starts developing new Ansible playbooks/roles or deploy them, the current umask and GID needs to be set, 
 and the Ansible virtual environment needs to be loaded. This can be accomplished by *manually* running the two bash 
-aliases defined above: `irmaenv` followed by `ansibleenv`.  
+aliases defined above: `miarkaenv` followed by `ansibleenv`.  
 
 Note that the order is important, and that they should not be run automatically at login, because that will cause an 
-infinite loop that will lock out the user from `irma3`.
+infinite loop that will lock out the user from `miarka3`.
 
 ## Deployment of the NGI pipeline
 
@@ -90,16 +90,16 @@ bimonthly branch would generally be pulled to the monthly branch and deployed to
 cycle once all validations are complete.
 
 Do the following once the feature has been approved. The deployment version should be constructed automatically by the
-playbook according to `$(date +%y%m%d).$(git rev-parse --short HEAD)`. In case of a bimonthly deployment, you need to
-specify it on the command line with a `-bimonthly` suffix. 
+playbook according to `$(date +%y%m%d).$(git rev-parse --short HEAD)`. In case of a bimonthly deployment, a `-bimonthly`
+suffix will be added. If needed, you can override the deployment_version by passing `-e deployment_version=VERSION` to the
+playbook.
 
 ```
     cd $DEPLOYROOT/provision/miarka-provision
     git checkout [monthly/bimonthly]
     git pull origin [monthly/bimonthly]
     ansible-playbook install.yml \
-      -e deployment_environment=staging \
-      [-e deployment_version=$(date +%y%m%d).$(git rev-parse --short HEAD)-bimonthly]
+      -e deployment_environment=staging
     python sync.py -e staging -d deployment_version
 ```
 

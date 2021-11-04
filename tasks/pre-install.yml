@@ -61,6 +61,10 @@
         # can be deployed parallel to each other if the deployment_version is explicitly != "default".
         set_fact:
           deployment_version: "{{ current_date.stdout }}.{{ repo_hash.stdout }}"
+      - name: append branch name to deployment version
+        set_fact:
+          deployment_version: "{{ deployment_version }}-{{ repo_branch.stdout }}"
+        when: "{{ repo_branch.stdout }}" == "bimonthly"
       when: deployment_version == "default"
     - name: set root path for {{ deployment_environment }}
       set_fact:
