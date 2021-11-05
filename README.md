@@ -154,7 +154,7 @@ If running Ansible under the bootstrapped local environment, use the commands:
 
 If using a singularity container for deployment, use the command:
 ```
-    singularity run --bind /vulpes,/sw,/scratch \
+    singularity run --bind /vulpes,/sw,/scratch /path/to/miarka-ansible.sif \
       ansible-playbook install.yml \
         -e deployment_environment=staging
 
