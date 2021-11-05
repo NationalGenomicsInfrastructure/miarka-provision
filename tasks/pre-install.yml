@@ -11,7 +11,7 @@
 
   - name: set path for local deployment provision resources
     set_fact:
-      deployment_provision_path: "{{ deployment_local_path }}/provision"
+      deployment_provision_path: "{{ deployment_local_path }}"
 
   - name: set deployment target root path
     set_fact:
