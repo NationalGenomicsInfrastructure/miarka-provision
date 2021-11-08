@@ -1,11 +1,10 @@
 ---
 
 - name: Fetch sarek configs from nf-core
-  command: "{{ nf_core_env }}/bin/nf-core -v download sarek --compress none --outdir {{ sarek_dest }} --release {{ sarek_tag }}"
-  environment:
-    PATH: "{{ nf_core_env }}/bin:{{ ansible_env.PATH }}"
+  command: "{{ nf_core_env }}/bin/nf-core -v download sarek -c none --compress none --outdir {{ sarek_dest }} -r {{ sarek_tag }}"
   args:
     chdir: "{{ sw_path }}"
+    creates: "{{ sarek_dest }}"
 
 - name: Create sarek containers folder and temp/cache for images
   file: name="{{ item }}" state=directory mode=g+s

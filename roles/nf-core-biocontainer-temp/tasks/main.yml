@@ -1,55 +1,64 @@
 ---
 - name: install nf-core/rnaseq
   command: "{{ nf_core_env }}/bin/nf-core -v download {{ item.name }}
-   --compress none --outdir {{ sw_path }}{{ item.name }} -r {{ item.release }}"
-  environment:
-    PATH: "{{ nf_core_env }}/bin:{{ ansible_env.PATH }}"
+   -c none --compress none --outdir {{ sw_path }}{{ item.name }} -r {{ item.release }}"
   args:
     chdir: "{{ sw_path }}"
+    creates: "{{ sw_path }}{{ item.name }}"
   with_items: "{{ pipelines }}"
 
-- name: Create directory for rnaseq biocontainers
-  file:
+- name: check if rnaseq biocontainer exists
+  stat:
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
     path: "{{ ngi_containers }}/biocontainers"
-    state: directory
-    mode: 02775 #ug=rwx, o=rx, g+s
+  register: target_stat
 
-- name: Create temp directories for download
-  file:
-    path: "{{ ngi_containers }}/download/biocontainers"
-    state: directory
+- name: download rnaseq biocontainers
+  block:
+    - name: Create directory for rnaseq biocontainers
+      file:
+        path: "{{ ngi_containers }}/biocontainers"
+        state: directory
+        mode: 02775 #ug=rwx, o=rx, g+s
+
+    - name: Create temp directories for download
+      file:
+        path: "{{ ngi_containers }}/download/biocontainers"
+        state: directory
 
 #Download these for rnaseq 3 containers until nf-core dowload is updated
 #wget -L https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp/nf-core-rnaseq_v3.0.tar.gz
 
-- name: Download containers
-  get_url:
-    url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp/nf-core-rnaseq_v3.0.tar.gz
-    dest: "{{ ngi_containers }}/download/nf-core-rnaseq_v3.0.tar.gz"
-    remote_src: yes
+    - name: Download containers
+      get_url:
+        url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp/nf-core-rnaseq_v3.0.tar.gz
+        dest: "{{ ngi_containers }}/download/nf-core-{{ pipelines[0].name }}_v{{ pipelines[0].release }}.tar.gz"
 
-- name: Unarchive downloaded file
-  unarchive:
-    src: "{{ ngi_containers }}/download/nf-core-rnaseq_v3.0.tar.gz"
-    dest: "{{ ngi_containers }}/download/biocontainers"
-    remote_src: yes
+    - name: Unarchive downloaded file
+      unarchive:
+        src: "{{ ngi_containers }}/download/{{ pipelines[0].name }}_v{{ pipelines[0].release }}.tar.gz"
+        dest: "{{ ngi_containers }}/download/biocontainers"
+        remote_src: yes
 
-- name: Move unarchived files to biocontainers
-  synchronize:
-    src: "{{ ngi_containers }}/download/biocontainers/nf-core-rnaseq_v3.0/"
-    dest: "{{ ngi_containers }}/biocontainers/"
-    archive: no
-    group: yes
-    recursive: true
+    - name: Move unarchived files to biocontainers
+      synchronize:
+        src: "{{ ngi_containers }}/download/biocontainers/{{ pipelines[0].name }}_v{{ pipelines[0].release }}/"
+        dest: "{{ ngi_containers }}/biocontainers/"
+        archive: no
+        group: yes
+        recursive: true
 
-- name: Clean download
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ ngi_containers }}/download/biocontainers/"
-    - "{{ ngi_containers }}/download/nf-core-rnaseq_v3.0.tar.gz"
-    - "{{ ngi_containers }}/download"
+    - name: Clean download
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ ngi_containers }}/download/biocontainers/"
+        - "{{ ngi_containers }}/download/{{ pipelines[0].name }}_v{{ pipelines[0].release }}"
+        - "{{ ngi_containers }}/download"
+  when: not target_stat.stat.exists
 
 - name: Create nf-core config
   template:
