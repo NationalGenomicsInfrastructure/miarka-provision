@@ -1,22 +1,16 @@
 ---
 
-- name: "Check if {{ NGI_venv_name }} virtual env exists"
-  shell: "conda env list | awk '{print $1}' | egrep -e ^{{ NGI_venv_name }}$"
-  register: "py2_venv_exists"
-  ignore_errors: true
+- name: "Get list of conda environments"
+  shell: "conda env list"
+  register: py_venv_exists
 
 - name: Setup virtual env and install dependencies
   shell: "conda create -n {{ NGI_venv_name }} pip python=2.7"
-  when: "not py2_venv_exists.stdout"
-
-- name: "Check if {{ NGI_venv_py3_name }} virtual env exists"
-  shell: "conda env list | awk '{print $1}' | egrep -e ^{{ NGI_venv_py3_name }}$"
-  register: "py3_venv_exists"
-  ignore_errors: true
+  when: not NGI_venv_name in py_venv_exists.stdout|split
 
 - name: Setup virtual env with python3 and install dependencies
   shell: "conda create -n {{ NGI_venv_py3_name }} -c anaconda python=3.8"
-  when: "not py3_venv_exists.stdout"
+  when: not NGI_venv_py3_name in py_venv_exists.stdout|split
 
 - name: Fetch ngi_pipeline from github
   git: repo={{ ngi_pipeline_repo }}
@@ -28,17 +22,17 @@
   pip:
     name: click
     version: "7.0"
-    virtualenv: "{{ ngi_pipeline_venv }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Install ngi_pipeline requirements
   pip:
     requirements: "{{ ngi_pipeline_dest }}/requirements.txt"
-    virtualenv: "{{ ngi_pipeline_venv }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Install ngi_pipeline
   pip:
     name: "file:{{ ngi_pipeline_dest }}"
-    virtualenv: "{{ ngi_pipeline_venv }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Create ngi_pipeline conf directory
   file: path="{{ ngi_pipeline_conf }}" state=directory mode=g+s
@@ -46,7 +40,7 @@
 - name: Install PyVCF for joint calling
   pip:
     name: "PyVCF"
-    virtualenv: "{{ ngi_pipeline_venv }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Create ngi_resources folder
   file: name="{{ ngi_resources }}" state=directory mode=g+s
