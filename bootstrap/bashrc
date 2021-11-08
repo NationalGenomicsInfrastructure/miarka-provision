@@ -5,7 +5,7 @@ umask 0002
 export DEPLOYROOT="__DEPLOYROOT__"
 
 # Bootstrap a log directory
-mkdir -p "$DEPLOYROOT/provision/log"
+mkdir -p "$DEPLOYROOT/log"
 
 # These days irma3 mounts home dirs from pica instead so it is 
 # hopefully not needed anymore.

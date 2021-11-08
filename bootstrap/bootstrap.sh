@@ -3,31 +3,30 @@
 set -x
 set -e
 
+# Minimalistic and hard coded script for bootstrapping the Ansible environment on miarka3
+PROVISIONREPO="miarka-provision"
+PROVISIONURL="https://github.com/NationalGenomicsInfrastructure/${PROVISIONREPO}.git"
+PROVISIONBRANCH="devel"
+
 # Use a global environmental variable for the deploy root path
 if [ -z "$DEPLOYROOT" ] ; then
   echo "The global environment variable DEPLOYROOT needs to be set to the path under which deployments will be made. Aborting"
   exit 1
 fi
 
-# Minimalistic and hard coded script for bootstrapping the Ansible environment on miarka3
-PROVISIONREPO="miarka-provision"
-PROVISIONURL="https://github.com/NationalGenomicsInfrastructure/${PROVISIONREPO}.git"
-PROVISIONBRANCH="bootstrap_and_paths"
-PROVISIONROOT="$DEPLOYROOT/provision"
-
-if [ -d  "$PROVISIONROOT" ] ; then
+if [ -d  "$DEPLOYROOT/$PROVISIONREPO" ] ; then
     echo "Miarka provisioning repo already exists, so the environment is probably already setup properly. Aborting."
     exit 1
 fi
 
 umask 0002
 
-mkdir -p "$PROVISIONROOT"
-chgrp ngi-sw "$PROVISIONROOT"
-chmod g+rwXs "$PROVISIONROOT"
+mkdir -p "$DEPLOYROOT"
+chgrp ngi-sw "$DEPLOYROOT"
+chmod g+rwXs "$DEPLOYROOT"
 
 ORIGIN="$(pwd)"
-cd "$PROVISIONROOT"
+cd "$DEPLOYROOT"
 
 echo "Cloning the Miarka provisioning repo"
 git clone "$PROVISIONURL"

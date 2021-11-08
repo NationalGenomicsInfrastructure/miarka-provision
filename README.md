@@ -7,7 +7,14 @@ Production and require updates to such a degree that deploying them within the f
 The NGI environment is currently deployed on Miarka using Ansible playbooks. Ansible playbooks are scripts written for 
 easily adaptable automated deployment. The Ansible playbooks are stored here.
 
-## Bootstrap the Ansible environment
+## Deployments with ansible
+
+Ansible can either be run from the local environment on Miarka3 or from a Singularity container. 
+
+For the first option, follow the bootstrap instructions below to set up the local environment. For the second option, 
+skip down to the Singularity section below.
+
+### Bootstrap the Ansible environment
 
 Before any deployments can be done we need to setup the Ansible environment. If we've got a clean environment then this 
 can be done by running the bootstrap script:
@@ -27,14 +34,52 @@ It is recommended that the user adds the following two lines (or something simil
 
 ```
 alias miarkaenv='source /path/to/deployment/working/directory/bashrc'
-alias ansibleenv='source "$DEPLOYROOT/provision/ansible-env/bin/activate"'
+alias ansibleenv='source "$DEPLOYROOT/ansible-env/bin/activate"'
+```
+
+### Building a singularity image
+
+Instead of bootstrapping the local environment, Ansible can also be run from a Singularity container. Currently, the 
+container is not hosted anywhere, so you would need to build it yourself in an environment where you can have 
+sufficient privileges.
+
+Note also that at this point, deployments done with Singularity have not been tested or validated so there could be 
+downstream complications that are yet unknown.
+
+The singularity image is built from a Docker image whose definition file is available at `docker/Dockerfile`. The image 
+has been built and tested with Docker v20.10.7 and Singularity v3.7.1. 
+
+To build the singularity image, clone this repository and run `docker/build_singularity.sh`. This will create a 
+singularity image, `miarka-ansible.sif` in the working directory. This image can be uploaded to `miarka3`.
+
+If there is already a singularity image available on `miarka3`, e.g. under `/vulpes/ngi/`, you can probably use it for 
+deployments. The image itself is not dependent on changes to the miarka-provision repo, with the exception to changes
+in the `docker` folder. For reference, the image should be tagged with the git commit hash of the repo that the image
+was built from.
+
+### Setting up the environment for using the singularity image
+
+On `miarka3`, clone the provision repo by running:
+
+```
+cd /path/to/deployment/working/directory
+singularity run /path/to/miarka-ansible.sif
+```
+
+This will clone the devel branch of this repo under the current working directory and copy the `bootsrap/bashrc` file
+here with the `DEPLOYROOT` environment variable pointing this way.
+
+It is recommended that the user adds the following line (or something similar) into `~/.bashrc`:
+
+```
+alias miarkaenv='source /path/to/deployment/working/directory/bashrc'
 ```
 
 ## User prerequisites before developing or deploying
 
 Before a user starts developing new Ansible playbooks/roles or deploy them, the current umask and GID needs to be set, 
 and the Ansible virtual environment needs to be loaded. This can be accomplished by *manually* running the two bash 
-aliases defined above: `miarkaenv` followed by `ansibleenv`.  
+aliases defined above: `miarkaenv` followed by `ansibleenv` (or just `miarkaenv` if using singularity).  
 
 Note that the order is important, and that they should not be run automatically at login, because that will cause an 
 infinite loop that will lock out the user from `miarka3`.
@@ -42,7 +87,7 @@ infinite loop that will lock out the user from `miarka3`.
 ## Deployment of the NGI pipeline
 
 ### Requirements
-The following files need to be present on miarka3:
+The following files need to be present on miarka3 under the cloned `miarka-provision` repo:
 
 - A valid GATK key placed under `files/`. The filename must be specified in the `gatk_key` variable in 
 `host_vars/127.0.0.1/main.yml`.
@@ -95,12 +140,28 @@ suffix will be added. If needed, you can override the deployment_version by pass
 playbook.
 
 ```
-    cd $DEPLOYROOT/provision/miarka-provision
+    cd $DEPLOYROOT/miarka-provision
     git checkout [monthly/bimonthly]
     git pull origin [monthly/bimonthly]
+```
+
+If running Ansible under the bootstrapped local environment, use the commands:
+```
     ansible-playbook install.yml \
       -e deployment_environment=staging
     python sync.py -e staging -d deployment_version
+```
+
+If using a singularity container for deployment, use the command:
+```
+    singularity run --bind /vulpes,/sw,/scratch /path/to/miarka-ansible.sif \
+      ansible-playbook install.yml \
+        -e deployment_environment=staging
+
+    singularity run --bind /vulpes,/sw,/scratch \
+      python3 sync.py \
+        -e staging \
+        -d deployment_version
 ```
 
 This will install your run under `/vulpes/ngi/staging/deployment_version` and symlink `/vulpes/ngi/staging/latest` 

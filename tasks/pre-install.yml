@@ -11,7 +11,7 @@
 
   - name: set path for local deployment provision resources
     set_fact:
-      deployment_provision_path: "{{ deployment_local_path }}/provision"
+      deployment_provision_path: "{{ deployment_local_path }}"
 
   - name: set deployment target root path
     set_fact:
@@ -64,7 +64,7 @@
       - name: append branch name to deployment version
         set_fact:
           deployment_version: "{{ deployment_version }}-{{ repo_branch.stdout }}"
-        when: "{{ repo_branch.stdout }}" == "bimonthly"
+        when: "{{ repo_branch.stdout == 'bimonthly' }}"
       when: deployment_version == "default"
     - name: set root path for {{ deployment_environment }}
       set_fact:
