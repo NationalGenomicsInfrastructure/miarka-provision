@@ -36,7 +36,7 @@
     line: >
           alias {{ pipeline }}='nextflow run {{ sw_path }}{{ pipeline }}/workflow/ \
           -profile uppmax \
-          -c {{ ngi_pipeline_conf }}/nextflow_irma_{{ cfg.site }}.config \
+          -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ cfg.site }}.config \
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ cfg.site }}.config'
     backup: no
   with_items:

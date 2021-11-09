@@ -7,7 +7,7 @@ export DEPLOYROOT="__DEPLOYROOT__"
 # Bootstrap a log directory
 mkdir -p "$DEPLOYROOT/log"
 
-# These days irma3 mounts home dirs from pica instead so it is 
+# These days miarka3 mounts home dirs from pica instead so it is
 # hopefully not needed anymore.
 #
 # We need a writeable place when running Ansible for tmp files
@@ -19,13 +19,13 @@ mkdir -p "$DEPLOYROOT/log"
 # newgrp command in the end of the file. 
 #
 # We need the Ansible env for running ansible commands 
-#alias ansibleenv='source /lupus/ngi/irma3/ansible-env/bin/activate'
+#alias ansibleenv='source /vulpes/ngi/miarka3/ansible-env/bin/activate'
 
 # We're using Anaconda when setting up the NGI pipeline environment. 
 # Perhaps not necessary.
 # TODO: Remove this when we know that Anaconda install/env works
 # properly from within Ansible playbooks.
-#export PATH="/lupus/ngi/sw/anaconda/bin:$PATH"
+#export PATH="/vulpes/ngi/sw/anaconda/bin:$PATH"
 
 # Force the user to have ngi-sw as gid (inherits the parent environment)
 # This needs to be the last thing to run 

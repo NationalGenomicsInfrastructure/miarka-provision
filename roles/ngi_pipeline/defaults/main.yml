@@ -1,6 +1,6 @@
 --- 
-upps_config: irma_ngi_config_upps.yaml
-sthlm_config: irma_ngi_config_sthlm.yaml
+upps_config: miarka_ngi_config_upps.yaml
+sthlm_config: miarka_ngi_config_sthlm.yaml
 
 bash_env_site_script: sourceme_site.sh.j2
 bash_env_upps_script: sourceme_upps.sh

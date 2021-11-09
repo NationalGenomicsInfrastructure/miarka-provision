@@ -202,16 +202,16 @@ Launch the Arteria staging services by running the command `start-arteria-stagin
 
 ### Typical production deployments
 
-A typical deployment of a production environment to Irma consists of the following steps
+A typical deployment of a production environment to Miarka consists of the following steps
 
-- Running through the Ansible playbook for a production release, which will install all the software under `/lupus/ngi/production/<version>` (and create a symlink `/lupus/ngi/production/latest` pointing to it)
-- Syncing everything under `/lupus/ngi/production` to the cluster
+- Running through the Ansible playbook for a production release, which will install all the software under `/vulpes/ngi/production/<version>` (and create a symlink `/vulpes/ngi/production/latest` pointing to it)
+- Syncing everything under `/vulpes/ngi/production` to the cluster
 - Reload *each site's* crontabs and services
 
 To install software and sync to the cluster, run the following commands:
 
 ```
-   cd /lupus/ngi/irma3/deploy
+   cd /vulpes/ngi/miarka3/deploy
    git checkout master
    git fetch --tags
    git checkout tags/vX.Y
@@ -219,28 +219,28 @@ To install software and sync to the cluster, run the following commands:
    python sync.py -e production -d vX.Y
 ```
 
-This will install and sync over the Irma environment version `vX.Y`.
+This will install and sync over the Miarka environment version `vX.Y`.
 
-To see all available production releases go to https://github.com/NationalGenomicsInfrastructure/irma-provision/releases
+To see all available production releases go to https://github.com/NationalGenomicsInfrastructure/miarka-provision/releases
 
 #### Reload crontabs and services
 
-Remember that you will probably have to restart services manually after a new production release have been rolled out. This must be done for *each site*. First re-load the crontab as the func user on `irma1` with a `crontab /lupus/ngi/production/latest/conf/crontab_SITE`. Then, depending on what software your func user is running, continue with manually shutting down the old versions and re-start the new versions of the software. In the case of Uppsala one should then do a `/lupus/ngi/production/latest/resources/stop_kong.sh` followed by starting `supervisord` and `kong` (see the crontab).  
+Remember that you will probably have to restart services manually after a new production release have been rolled out. This must be done for *each site*. First re-load the crontab as the func user on `miarka1` with a `crontab /vulpes/ngi/production/latest/conf/crontab_SITE`. Then, depending on what software your func user is running, continue with manually shutting down the old versions and re-start the new versions of the software. In the case of Uppsala one should then do a `/vulpes/ngi/production/latest/resources/stop_kong.sh` followed by starting `supervisord` and `kong` (see the crontab).  
 
 
-## Manual initializations on irma1
+## Manual initializations on miarka1
 
-Run `crontab /lupus/ngi/<instance>/<version>/conf/crontab_<site>` once per user to initialize the first instance of cron for the user. As mentioned above, this has to be done for each new production release.
+Run `crontab /vulpes/ngi/<instance>/<version>/conf/crontab_<site>` once per user to initialize the first instance of cron for the user. As mentioned above, this has to be done for each new production release.
 
-Run `/lupus/ngi/<instance>/<version>/resources/create_ngi_pipeline_dirs.sh <project_name>` once per project (i.e. ngi2016003) to create the log, db and softlink directories for NGI pipeline (and generate the softlinks).
+Run `/vulpes/ngi/<instance>/<version>/resources/create_ngi_pipeline_dirs.sh <project_name>` once per project (i.e. ngi2016003) to create the log, db and softlink directories for NGI pipeline (and generate the softlinks).
 
-Add `source /lupus/ngi/<instance>/<version>/conf/sourcme_<site>.sh && source activate NGI`, where `site` can be `upps` or `sthlm`, to each functional account's bash init file `~/.bashrc`.
+Add `source /vulpes/ngi/<instance>/<version>/conf/sourcme_<site>.sh && source activate NGI`, where `site` can be `upps` or `sthlm`, to each functional account's bash init file `~/.bashrc`.
 
 ## Simple environment integrity verification
 
 Once the ansible-playbook has successfully been executed, log onto the target machine.
 
-Run `source /lupus/ngi/conf/sourceme_<SITE>.sh` where `<SITE>` is `upps` to initialize `funk_004` variables, or `sthlm` to initialize `funk_006` variables.
+Run `source /vulpes/ngi/conf/sourceme_<SITE>.sh` where `<SITE>` is `upps` to initialize `funk_004` variables, or `sthlm` to initialize `funk_006` variables.
 
 Run `source activate NGI` to start the environment.
 
@@ -250,14 +250,14 @@ Run `ngi_pipeline_start.py` with the commands `organize flowcell`, `analyze proj
 
 ## Other worthwhile information
 
-Deploying requires the deployer to be in both the `ngi-sw` and the `ngi` groups. Everything under `/lupus/ngi/` is owned by `ngi-sw`.
+Deploying requires the deployer to be in both the `ngi-sw` and the `ngi` groups. Everything under `/vulpes/ngi/` is owned by `ngi-sw`.
 
 Only deployers can write new programs and configs, but all NGI functional accounts (`funk_004`, `funk_006` etc) can write log files, to the SQL databases, etc.
 
 Global configuration values are set in the repository under `host_vars/127.0.0.1/main.yml`, and each respective role's in the `<role>/defaults/main.yml` file.
 
-The log `/lupus/ngi/irma3/log/ansible.log` logs the files installed by Ansible.
+The log `/vulpes/ngi/miarka3/log/ansible.log` logs the files installed by Ansible.
 
-The log `/lupus/ngi/irma3/log/rsync.log` logs the rsync history.
+The log `/vulpes/ngi/miarka3/log/rsync.log` logs the rsync history.
 
-When developing roles deployed directories must have the setgid flag `g+s`, and be created while the deployer had his gid set to `ngi-sw`. This ensures the files in the dirs recieve the correct group owner when they are created. This will be taken care of the user always sources the file `/lupus/ngi/irma3/bashrc` before doing any work.
+When developing roles deployed directories must have the setgid flag `g+s`, and be created while the deployer had his gid set to `ngi-sw`. This ensures the files in the dirs recieve the correct group owner when they are created. This will be taken care of the user always sources the file `/vulpes/ngi/miarka3/bashrc` before doing any work.

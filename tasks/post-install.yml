@@ -37,12 +37,12 @@
     - name: set correct file permission for everything owned by current user 
       shell: "find {{ root_path }}/{conf,sw,resources} -user `whoami` -exec chmod g+rwX,o=rX {} \\;"
 
-    - name: symlink deployed version to /lupus/ngi/<production|staging>/latest 
+    - name: symlink deployed version to /vulpes/ngi/<production|staging>/latest
       file: dest="{{ deployment_target }}/latest" src="{{ root_path }}" state=link
     when: deployment_environment != "devel" 
 
   - block:
-    - name: Make wildwest directory editable by anyone that can access irma
+    - name: Make wildwest directory editable by anyone that can access miarka
       shell: "find {{ proj_root }} -user `whoami` -exec chmod g+rwXs,o=rwX {} \\;"
     when: deployment_environment == "staging"
 
