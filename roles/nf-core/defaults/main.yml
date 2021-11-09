@@ -15,6 +15,7 @@ nf_core_vars:
 pipelines:
   - name: rnaseq
     release: 3.0
+    biocontainer_base_url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp
   - name: methylseq
     release: 1.6.1
   - name: ampliseq

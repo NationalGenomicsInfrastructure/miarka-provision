@@ -1,0 +1,50 @@
+
+- name: check if biocontainers exists
+  stat:
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
+    path: "{{ ngi_containers }}/biocontainers"
+  register: target_stat
+
+- set_fact:
+    biocontainer_filename: "nf-core-{{ pipeline }}_v{{ release }}.tar.gz"
+
+- name: download biocontainers
+  block:
+    - name: create directory for biocontainers
+      file:
+        path: "{{ ngi_containers }}/biocontainers"
+        state: directory
+        mode: 02775 #ug=rwx, o=rx, g+s
+
+    - name: Create temp directories for download
+      file:
+        path: "{{ ngi_containers }}/biocontainers/download"
+        state: directory
+
+    - name: download containers
+      get_url:
+        url: "{{ biocontainer_base_url }}/{{ biocontainer_filename }}"
+        dest: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}"
+
+    - name: Unarchive downloaded file
+      unarchive:
+        src: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}"
+        dest: "{{ ngi_containers }}/biocontainers/download"
+        remote_src: yes
+
+    - name: Move unarchived files to biocontainers
+      synchronize:
+        src: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}/"
+        dest: "{{ ngi_containers }}/biocontainers"
+        archive: no
+        group: yes
+        recursive: true
+
+    - name: Clean download
+      file:
+        path: "{{ ngi_containers }}/biocontainers/download"
+        state: absent
+
+  when: not target_stat.stat.exists

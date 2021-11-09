@@ -16,9 +16,14 @@
     - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
 
 # Setup pipelines
-- import_tasks: pipeline.yml
+- name: setup nf-core pipelines
+  include_tasks: pipeline.yml
   vars:
-    pipeline: "{{ item }}"
+    pipeline: "{{ item.name }}"
+    release: "{{ item.release }}"
+    biocontainer_base_url: "{{ item.biocontainer_base_url | default('') }}"
+    silva_base_url: "{{ item.silva_base_url | default('') }}"
+    silva_zip: "{{ item.silva_zip | default('') }}"
   with_items: "{{ pipelines }}"
 
 - name: Remove singularity cache directories
