@@ -1,6 +1,9 @@
 process {
+
   container = '{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ pipeline }}-{{ release }}.simg'
+
   {% if pipeline=='methylseq' %}
+
   memory = { 15.GB * task.attempt }
   time = { 6.h * task.attempt }
 
@@ -10,7 +13,9 @@ process {
         time = { 2.d * task.attempt }
   }
   {% endif %}
+
   {% if pipeline=='ampliseq' %}
+
   withName:classifier {
         cpus = 20
         memory = 120.GB
@@ -18,10 +23,17 @@ process {
   }
   {% endif %}
 }
+{% if pipeline=='sarek' %}
+
+singularity.cacheDir = '{{ ngi_containers }}/{{ pipeline }}'
+{% endif %}
 {% if pipeline=='rnaseq' %}
+
 params.reverseStranded = true
 {% endif %}
 {% if pipeline=='ampliseq' %}
-params.reference_database = '{{ ngi_containers }}/ampliseq/{{ silva_zip }}'
+
+params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
 {% endif %}
+
 params.seq_center = "SciLifeLab National Genomics Infrastructure {% if cfg.site=='sthlm' %}Stockholm{% else %}Uppsala{% endif %}"

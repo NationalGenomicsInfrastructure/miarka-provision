@@ -53,7 +53,7 @@ then
 fi
 
 BAMOUT="$SNIC_TMP/`basename ${BAMIN/.bam/.recal.bam}`"
-CONTAINER="/sw/data/ToolBox/nf-core/nfcore-sarek-{{ sarek_tag }}.img"
+CONTAINER="/sw/data/ToolBox/nf-core/nfcore-sarek-{{ release }}.img"
 GATKCMD="gatk --java-options -Xmx14g ApplyBQSR -R $FASTAREF --input $BAMIN --output $BAMOUT --bqsr-recal-file $RECALTABLE"
 
 singularity exec $CONTAINER $GATKCMD

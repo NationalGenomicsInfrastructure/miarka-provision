@@ -21,6 +21,8 @@
   vars:
     pipeline: "{{ item.name }}"
     release: "{{ item.release }}"
+    pipeline_specific_containers: "{{ item.pipeline_specific_containers | default('') }}"
+    pipeline_genomes: "{{ item.pipeline_genomes | default('') }}"
     biocontainer_base_url: "{{ item.biocontainer_base_url | default('') }}"
     silva_base_url: "{{ item.silva_base_url | default('') }}"
     silva_zip: "{{ item.silva_zip | default('') }}"

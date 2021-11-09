@@ -35,7 +35,7 @@ ProjectID -> 00-Reports
 |--ProjectID
    |--00-Reports
       |--ProjectID_multiqc_report.html
-{% if "upps" == item.site %}
+{% if site == "upps" %}
       |--ProjectID_multiqc_report_data.zip
       |--SequenceQC
 {% endif %}
@@ -43,7 +43,7 @@ ProjectID -> 00-Reports
 --ProjectID_multiqc_report.html
 A project report summarizing the included samples and results from the sequencing and analysis.
 
-{% if "upps" == item.site %}
+{% if site == "upps" %}
 --ProjectID_multiqc_report_data.zip
 Source data for the project report.
 
@@ -86,7 +86,7 @@ Each sample will contain a results folder:
          |--PipelineToolN
 
 This folder contains output from the sarek pipeline. Refer to
-https://github.com/nf-core/sarek/blob/{{ sarek_tag }}/docs/output.md for output description.
+https://github.com/nf-core/sarek/blob/{{ release }}/docs/output.md for output description.
 
 ====================================================================
 FASTQS

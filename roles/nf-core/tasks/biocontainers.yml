@@ -1,14 +1,14 @@
 
+- set_fact:
+    biocontainer_filename: "nf-core-{{ pipeline }}_v{{ release }}"
+
 - name: check if biocontainers exists
   stat:
     get_attributes: no
     get_checksum: no
     get_mime: no
-    path: "{{ ngi_containers }}/biocontainers"
+    path: "{{ ngi_containers }}/biocontainers/{{ biocontainer_filename }}"
   register: target_stat
-
-- set_fact:
-    biocontainer_filename: "nf-core-{{ pipeline }}_v{{ release }}.tar.gz"
 
 - name: download biocontainers
   block:
@@ -25,22 +25,28 @@
 
     - name: download containers
       get_url:
-        url: "{{ biocontainer_base_url }}/{{ biocontainer_filename }}"
-        dest: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}"
+        url: "{{ biocontainer_base_url }}/{{ biocontainer_filename }}.tar.gz"
+        dest: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}.tar.gz"
 
     - name: Unarchive downloaded file
       unarchive:
-        src: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}"
-        dest: "{{ ngi_containers }}/biocontainers/download"
+        src: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}.tar.gz"
+        dest: "{{ ngi_containers }}/biocontainers/"
         remote_src: yes
 
-    - name: Move unarchived files to biocontainers
-      synchronize:
-        src: "{{ ngi_containers }}/biocontainers/download/{{ biocontainer_filename }}/"
-        dest: "{{ ngi_containers }}/biocontainers"
-        archive: no
-        group: yes
-        recursive: true
+    - name: Find all unarchived files
+      find:
+        paths: "{{ ngi_containers }}/biocontainers/{{ biocontainer_filename }}"
+      register: find
+
+    - name: Create symlinks to images
+      file:
+        src: "{{ pth.path }}"
+        dest: "{{ ngi_containers }}/biocontainers/{{ pth.path | basename }}"
+        state: link
+      with_items: "{{ find.files }}"
+      loop_control:
+        loop_var: pth
 
     - name: Clean download
       file:

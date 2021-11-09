@@ -13,14 +13,14 @@
     mode: 02775 #ug=rwx, o=rx, g+s
 
 - name: pull singularity images for {{ pipeline }} v{{ release }}
-  command: "singularity pull --name nf-core-{{ pipeline }}-{{ release }}.simg docker://nfcore/{{ pipeline }}:{{ release }}"
+  command: "singularity pull --name nf-core-{{ pipeline }}-{{ release }}.simg {{ nf_core_container_repo }}/{{ pipeline }}:{{ release }}"
   environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ ngi_containers }}/{{ pipeline }}"
     creates: "{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ pipeline }}-{{ release }}.simg"
   ignore_errors: true
 
-- name: create nf-core config
+- name: create nf-core {{ pipeline }} v{{ release }} config
   template:
     src: "site.config.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ cfg.site }}.config"
@@ -30,7 +30,7 @@
   loop_control:
     loop_var: cfg
 
-- name: set alias for pipeline
+- name: set alias for pipeline {{ pipeline }} v{{ release }}
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ cfg.script }}"
     line: >
@@ -48,6 +48,10 @@
 - name: download biocontainers
   import_tasks: biocontainers.yml
   when: pipeline == "rnaseq"
+
+- name: download sarek additional images
+  import_tasks: sarek_specific.yml
+  when: pipeline == "sarek"
 
 - name: download ampliseq requirements
   block:
