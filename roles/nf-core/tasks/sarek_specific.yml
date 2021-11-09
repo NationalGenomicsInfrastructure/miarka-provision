@@ -34,8 +34,8 @@
 - name: Create Delivery READMEs and add to TACA resources
   template:
     src: "DELIVERY.README.SAREK.txt.j2"
-    dest: "{{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.txt"
+    dest: "{{ ngi_resources }}/TACA/{{ sarek_site }}/DELIVERY.README.SAREK.txt"
   with_items:
     - upps
   loop_control:
-    loop_var: site
+    loop_var: sarek_site
