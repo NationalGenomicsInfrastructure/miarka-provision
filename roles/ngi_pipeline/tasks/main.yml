@@ -57,8 +57,8 @@
   copy: src="files/{{ gatk_key }}" dest="{{ ngi_resources }}/piper/{{ gatk_key }}"
   ignore_errors: true
 
-- name: Deploy fastqc conf for irma
-  template: src="fastq_screen.irma.conf.j2" dest="{{ ngi_pipeline_conf }}"
+- name: Deploy fastqc conf for miarka
+  template: src="fastq_screen.miarka.conf.j2" dest="{{ ngi_pipeline_conf }}"
 
 - name: Deploy script for creating site specific ngi_pipeline dirs for logs and db
   template: src=create_ngi_pipeline_dirs.sh.j2 dest={{ ngi_resources }}/create_ngi_pipeline_dirs.sh

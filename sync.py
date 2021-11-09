@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# Script to sync data from irma3 into the cluster.
+# Script to sync data from miarka3 into the cluster.
 #
-# Will sync everything under /lupus/ngi on irma3 (except the irma3
-# subdir) to /lupus/ngi on irma1. An other dest path can be given as arg1.
+# Will sync everything under /vulpes/ngi on miarka3 (except the miarka3
+# subdir) to /vulpes/ngi on miarka1. An other dest path can be given as arg1.
 #
 # Note that:
 #
@@ -30,7 +30,7 @@ parser.add_argument('--destination', help='the non-standard destination path on 
 parser.add_argument('--dryrun', action='store_true', dest='dryrun', default=False, help='do a dry run first before the actual sync')
 args = parser.parse_args()
 
-ngi_root = '/lupus/ngi/'
+ngi_root = '/vulpes/ngi/'
 src_root_path = os.path.join(ngi_root, '.', args.environment) #break url for relative path
 src_path_link = ''
 
@@ -45,8 +45,8 @@ else:
 
 src_containers_path = os.path.join(ngi_root, '.', 'containers') #break url for relative path
 
-host = 'irma2'
-rsync_log_path = os.path.join(ngi_root, 'irma3/log/rsync.log')
+host = 'miarka2'
+rsync_log_path = os.path.join(ngi_root, 'miarka3/log/rsync.log')
 
 user = getpass.getuser()
 password = getpass.getpass('Enter your UPPMAX password: ')
@@ -92,7 +92,7 @@ elif recv == 1:
 #         - readable by world
 # Prompt the user if (s)he wants to continue anyway.
 print('Searching for files that are 1) not owned by group ngi-sw, 2) group readable/writable, 3) world readable')
-find_cmd = "/bin/bash -c 'find {0} ! -perm -g+rw -ls -or ! -perm -o+r -ls -or ! -group ngi-sw -ls -or ! -name wildwest -d | egrep -v \"\.swp|/lupus/ngi/irma3/\"'".format(src_root_path)
+find_cmd = "/bin/bash -c 'find {0} ! -perm -g+rw -ls -or ! -perm -o+r -ls -or ! -group ngi-sw -ls -or ! -name wildwest -d | egrep -v \"\.swp|/vulpes/ngi/miarka3/\"'".format(src_root_path)
 
 def yes_or_no(question):
 	reply = str(input(question+' (y/n): ')).lower().strip()
@@ -139,7 +139,7 @@ else:
 # Step 5. Sync our designated folders.
 print('Syncing directories:\n{}\n{}'.format(src_root_path, src_containers_path))
 
-excludes = '--exclude=*.swp --exclude=irma3/'
+excludes = '--exclude=*.swp --exclude=miarka3/'
 rsync_cmd = '/bin/rsync -avzP --relative --omit-dir-times {0} --log-file={1} {2} {3} {4} {5}@{6}:{7}'.format(excludes,
                                                                                                rsync_log_path,
                                                                                                src_root_path,

@@ -1,0 +1,76 @@
+
+- name: nf-core download {{ pipeline }} v{{ release }}
+  command: "nf-core -v download {{ pipeline }} --compress none -c none --outdir {{ sw_path }}{{ pipeline }} -r {{ release }}"
+  environment: "{{ nf_core_vars }}"
+  args:
+    chdir: "{{ sw_path }}"
+    creates: "{{ sw_path }}{{ pipeline }}"
+
+- name: create directories for {{ pipeline }} singularity images
+  file:
+    path: "{{ ngi_containers }}/{{ pipeline }}"
+    state: directory
+    mode: 02775 #ug=rwx, o=rx, g+s
+
+- name: pull singularity images for {{ pipeline }} v{{ release }}
+  command: "singularity pull --name nf-core-{{ pipeline }}-{{ release }}.simg {{ nf_core_container_repo }}/{{ pipeline }}:{{ release }}"
+  environment: "{{ nf_core_vars }}"
+  args:
+    chdir: "{{ ngi_containers }}/{{ pipeline }}"
+    creates: "{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ pipeline }}-{{ release }}.simg"
+  ignore_errors: true
+
+- name: create nf-core {{ pipeline }} v{{ release }} config
+  template:
+    src: "site.config.j2"
+    dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ cfg.site }}.config"
+  with_items:
+    - { site: 'sthlm', project_id: "{{ ngi_pipeline_sthlm_delivery }}" }
+    - { site: 'upps', project_id: "{{ ngi_pipeline_upps_delivery }}" }
+  loop_control:
+    loop_var: cfg
+
+- name: set alias for pipeline {{ pipeline }} v{{ release }}
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ cfg.script }}"
+    line: >
+          alias {{ pipeline }}='nextflow run {{ sw_path }}{{ pipeline }}/workflow/ \
+          -profile uppmax \
+          -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ cfg.site }}.config \
+          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ cfg.site }}.config'
+    backup: no
+  with_items:
+    - { site: 'sthlm', script: "{{ bash_env_sthlm_script }}" }
+    - { site: 'upps', script: "{{ bash_env_upps_script }}" }
+  loop_control:
+    loop_var: cfg
+
+- name: download biocontainers
+  import_tasks: biocontainers.yml
+  when: pipeline == "rnaseq"
+
+- name: download sarek additional images
+  import_tasks: sarek_specific.yml
+  when: pipeline == "sarek"
+
+- name: download ampliseq requirements
+  block:
+  - name: check if SILVA zip exists
+    stat:
+      get_attributes: no
+      get_checksum: no
+      get_mime: no
+      path: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
+    register: silva_stat
+
+  - name: download SILVA classifier data
+    get_url:
+      url: "{{ silva_base_url }}/{{ silva_zip }}"
+      dest: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
+    when: not silva_stat.stat.exists
+  when: pipeline == "ampliseq"
+
+- name: store {{ pipeline }} version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ pipeline }}: {{ release }}"

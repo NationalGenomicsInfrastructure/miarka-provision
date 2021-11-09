@@ -30,10 +30,10 @@
               backup=no
 ###
 
-- name: Create irma config
+- name: Create miarka config
   template:
-    src: "nextflow_irma_site.config.j2"
-    dest: "{{ ngi_pipeline_conf }}/nextflow_irma_{{ item.site }}.config"
+    src: "nextflow_miarka_site.config.j2"
+    dest: "{{ ngi_pipeline_conf }}/nextflow_miarka_{{ item.site }}.config"
   with_items:
     - { site: "sthlm", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }
     - { site: "upps", project_id: "{{ ngi_pipeline_upps_delivery }}" }

@@ -58,12 +58,12 @@ nextflow:
     subcommand: run
     profile: uppmax
     config:
-        - {{ ngi_pipeline_conf }}/nextflow_irma_{{ site }}.config
-        - {{ ngi_pipeline_conf }}/sarek_irma.config
+        - {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config
+        - {{ ngi_pipeline_conf }}/sarek_{{ site }}.config
     resume: " "
 
 supported_genomes:
-    # GRCh37: Indexed version of "/lupus/data/uppnex/reference/Homo_sapiens/GRCh37/concat/Homo_sapiens.GRCh37.57.dna.concat.fa"
+    # GRCh37: Indexed version of "/vulpes/data/uppnex/reference/Homo_sapiens/GRCh37/concat/Homo_sapiens.GRCh37.57.dna.concat.fa"
     "GRCh37": "{{ gatk_bundle_b37 }}/human_g1k_v37.fasta"
     # GRMc38 is currently not used.
     #"GRCm38": "/sw/data/uppnex/reference/Mus_musculus/GRCm38/concat/Mus_musculus.GRCm38.69.dna.concat.fa"
@@ -109,7 +109,7 @@ qc:
             - FastQC/0.11.5
         threads: 16
     fastq_screen:
-        config_path: "{{ ngi_pipeline_conf }}/fastq_screen.irma.conf"
+        config_path: "{{ ngi_pipeline_conf }}/fastq_screen.miarka.conf"
         load_modules:
             - bowtie2/2.3.4.1
             - fastq_screen/0.11.1

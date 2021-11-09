@@ -1,0 +1,2 @@
+dependencies:
+  - { role: nextflow, tags: nextflow, environment: "{{ tools_path }}" }

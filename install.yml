@@ -1,6 +1,6 @@
 ---
 
-- name: Deploy irma software
+- name: Deploy miarka software
   hosts: 127.0.0.1
   connection: local
 
@@ -12,9 +12,9 @@
   # I.e. the user will then manually have to remove the directory, OR add "-e deployment_override=true"
   # to deploy into an already existing folder.
   #
-  # /lupus/ngi/production/<latest|current> will link to /lupus/ngi/production/<github release>
-  # /lupus/ngi/staging/ will contain a folder wild-wild-west which will be world writeable ON THE RECIEVING end. I.e. the
-  # sync script will change the permissions? This is to make sure that not everyone that is able to login to irma3 can
+  # /vulpes/ngi/production/<latest|current> will link to /vulpes/ngi/production/<github release>
+  # /vulpes/ngi/staging/ will contain a folder wild-wild-west which will be world writeable ON THE RECIEVING end. I.e. the
+  # sync script will change the permissions? This is to make sure that not everyone that is able to login to miarka3 can
   # upload data into the cluster.
   vars:
     deployment_environment: devel # should be: 1) production, 2) staging, 3) devel
@@ -46,8 +46,6 @@
     - { role: misc-tools, tags: misc-tools }
     - { role: archive-upload-ws, tags: archive-upload }
     - { role: nf-core, tags: nf-core }
-    - { role: nf-core-biocontainer-temp, tags: nf-core-biocontainer-temp }
-    - { role: sarek, tags: sarek }
 
   post_tasks:
     - include: tasks/post-install.yml

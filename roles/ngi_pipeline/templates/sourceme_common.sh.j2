@@ -12,18 +12,18 @@ module load bioinfo-tools piper/{{ piper_module_version }}
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# Append the Bash prompt with the version of the Irma environment/provisioning
+# Append the Bash prompt with the version of the Miarka environment/provisioning
 # that we're running.
-IRMA_ENV=`echo $BASH_SOURCE | cut -d/ -f4`
-IRMA_VER=`echo $BASH_SOURCE | cut -d/ -f5`
+MIARKA_ENV=`echo $BASH_SOURCE | cut -d/ -f4`
+MIARKA_VER=`echo $BASH_SOURCE | cut -d/ -f5`
 
-if [ $IRMA_ENV == "production" ] ; then
-	IRMA_PROMPT="Prod/$IRMA_VER"
+if [ $MIARKA_ENV == "production" ] ; then
+	MIARKA_PROMPT="Prod/$MIARKA_VER"
 else
-	IRMA_PROMPT="Stage/$IRMA_VER"
+	MIARKA_PROMPT="Stage/$MIARKA_VER"
 fi
 
-export PS1="$IRMA_PROMPT [\u@\h \w]$ "
+export PS1="$MIARKA_PROMPT [\u@\h \w]$ "
 
 # Default SNIC_TMP as /scratch
 export SNIC_TMP="/scratch"
