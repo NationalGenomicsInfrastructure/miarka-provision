@@ -1,0 +1,56 @@
+--
+
+- name: nf-core download {{ pipeline.name }} v{{ pipeline.release }}
+  command: "nf-core -v download {{ pipeline.name }} --compress none -c none --outdir {{ sw_path }}{{ pipeline.name }} -r {{ pipeline.release }}"
+  environment: "{{ nf_core_vars }}"
+  args:
+    chdir: "{{ sw_path }}"
+    creates: "{{ sw_path }}{{ pipeline.name }}"
+
+- name: create directories for {{ pipeline.name }} singularity images
+  file:
+    path: "{{ ngi_containers }}/{{ pipeline.name }}"
+    state: directory
+    mode: 02775 #ug=rwx, o=rx, g+s
+
+- name: pull singularity images for {{ pipeline.name }} v{{ pipeline.release }}
+  command: "singularity pull --name nf-core-{{ pipeline.name }}-{{ pipeline.release }}.simg docker://nfcore/{{ pipeline.name }}:{{ pipeline.release }}"
+  environment: "{{ nf_core_vars }}"
+  args:
+    chdir: "{{ ngi_containers }}/{{ pipeline.name }}"
+    creates: "{{ ngi_containers }}/{{ pipeline.name }}/nf-core-{{ pipeline.name }}-{{ pipeline.release }}.simg"
+  ignore_errors: true
+
+- name: create nf-core config
+  template:
+    src: "site.config.j2"
+    dest: "{{ ngi_pipeline_conf }}/{{ pipeline.name }}_{{ item.site }}.config"
+  with_items:
+    - "{{ site: "sthlm", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }}
+    - "{{ site: "upps", project_id: "{{ ngi_pipeline_upps_delivery }}" }}
+
+- name: set alias for pipeline
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ item.script }}"
+    line: >
+          alias {{ pipeline.name }}='nextflow run {{ sw_path }}{{ pipeline.name }}/workflow/ \
+          -profile uppmax \
+          -c {{ ngi_pipeline_conf }}/nextflow_irma_{{ item.site }}.config \
+          -c {{ ngi_pipeline_conf }}/{{ pipeline.name }}_{{ item.site }}.config'
+    backup: no
+  with_items:
+    - "{{ site: "sthlm", script: "{{ bash_env_sthlm_script }}" }}
+    - "{{ site: "upps", script: "{{ bash_env_upps_script }}" }}
+
+- name: download SILVA classifier data
+  get_url:
+    url: "{{ pipeline.silva_base_url }}/{{ silva_zip }}"
+    dest: "{{ ngi_containers }}/{{ pipeline.name }}/{{ silva_zip }}"
+  args:
+    creates: "{{ ngi_containers }}/{{ pipeline.name }}/{{ silva_zip }}"
+  when: pipeline.name == "ampliseq"
+
+- name: store {{ pipeline.name }} version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ pipeline.name }}: {{ pipeline.release }}"
