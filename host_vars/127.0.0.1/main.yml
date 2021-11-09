@@ -53,7 +53,7 @@ gatk_bundle_b37: "/sw/data/uppnex/piper_references/2016-04-07/gatk_bundle/2.8/b3
 igenomes_path: /sw/data/uppnex/igenomes
 java_home: "/sw/comp/java/x86_64/sun_jdk1.8.0_151"
 
-sarek_tag: "2.7"
+sarek_tag: "2.7.1"
 sarek_dest: "{{ sw_path }}/sarek"
 sarek_containers: "{{ ngi_containers }}/sarek"
 

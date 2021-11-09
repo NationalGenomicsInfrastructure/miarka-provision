@@ -18,7 +18,7 @@ pipelines:
     release: 3.0
     biocontainer_base_url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp
   - name: sarek
-    release: 2.7
+    release: "{{ sarek_tag }}"
     pipeline_specific_containers:
       - sarekvep
       - sareksnpeff
