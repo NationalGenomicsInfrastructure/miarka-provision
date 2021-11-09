@@ -1,18 +1,11 @@
 ---
-
 - name: "Check if {{ nf_core_env_name }} virtual env exists"
-  command: "conda env list | awk '{print $1}' | egrep -e ^{{ nf_core_env_name }}$"
-  register: "nfcore_env_exists"
-  ignore_errors: true
+  shell: "conda env list"
+  register: "nfcore_envs"
 
-- name: Setup {{ nf_core_env_name }} virtual env with python3 and install dependencies
-  command: "conda create -n {{ nf_core_env_name }} -c conda-forge -c bioconda python=3.8 nextflow={{ nextflow_version_tag }}"
-  when: "not nfcore_env_exists.stdout"
-
-- name: Install nf-core {{ nf_core_version }}
-  command: "conda install -n {{ nf_core_env_name }} -c bioconda -c conda-forge nf-core={{ nf_core_version }}"
-  args:
-    creates: "{{ nf_core_env }}/python-scripts/nf-core"
+- name: Setup {{ nf_core_env_name }} virtual env with python3, nextflow v{{ nextflow_version_tag }} and nf-core v{{ nf_core_version }}
+  command: "conda create -n {{ nf_core_env_name }} -c conda-forge -c bioconda -c anaconda python=3.7 nextflow={{ nextflow_version_tag }} nf-core={{ nf_core_version }}"
+  when: not nf_core_env_name in nfcore_envs.stdout|split
 
 - name: Create temp directories for singularity images
   file:
@@ -23,10 +16,11 @@
     - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
 
 - name: nf-core
-  command: "nf-core -v download {{ item.name }} --compress none --outdir {{ sw_path }}{{ item.name }} -r {{ item.release }}"
+  command: "nf-core -v download {{ item.name }} --compress none -c none --outdir {{ sw_path }}{{ item.name }} -r {{ item.release }}"
   environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ sw_path }}"
+    creates: "{{ sw_path }}{{ item.name }}"
   with_items: "{{ pipelines }}"
 
 - name: Create directories for singularity images
@@ -76,6 +70,8 @@
   get_url:
     url: https://www.arb-silva.de/fileadmin/silva_databases/qiime/Silva_132_release.zip
     dest: "{{ ngi_containers }}/ampliseq/Silva_132_release.zip"
+  args:
+    creates: "{{ ngi_containers }}/ampliseq/Silva_132_release.zip"
   when: item.name == "ampliseq"
   with_items:
     - "{{ pipelines }}"

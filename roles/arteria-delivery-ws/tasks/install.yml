@@ -14,7 +14,7 @@
   pip:
       requirements: "{{ arteria_delivery_sources_path }}/requirements/dev"
       chdir: "{{ arteria_delivery_sources_path }}"
-      virtualenv: "{{ arteria_delivery_env_root }}"
+      executable: "{{ arteria_delivery_env_root }}/bin/pip"
       state: present
       extra_args: "-U"
 
@@ -22,7 +22,7 @@
   pip:
       name: .
       chdir: "{{ arteria_delivery_sources_path }}"
-      virtualenv: "{{ arteria_delivery_env_root }}"
+      executable: "{{ arteria_delivery_env_root }}/bin/pip"
       state: present
       extra_args: "-U"
 

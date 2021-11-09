@@ -11,7 +11,7 @@
 - name: Install ngi_reports
   pip:
     name: "file:{{ ngi_reports_dest }}"
-    virtualenv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py3_name }}"
+    executable: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py3_name }}/bin/pip"
     editable: yes
 
 - name: Create ngi_reports conf file

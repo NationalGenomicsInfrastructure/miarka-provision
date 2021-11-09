@@ -11,7 +11,7 @@
 
 - name: install ugc delivery requirements
   pip:
-    virtualenv: "{{ ugc_delivery_env_path }}"
+    executable: "{{ ugc_delivery_env_path }}/bin/pip"
     requirements: "{{ delivery_src }}/requirements.txt"
     extra_args: "-U"
     state: present

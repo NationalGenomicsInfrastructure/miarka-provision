@@ -2,15 +2,17 @@
   get_url: url={{ anaconda_url }} dest={{ anaconda_src }} mode=ug+rwx checksum="sha256:{{ anaconda_checksum }}"
 
 - name: Install anaconda
-  shell: "{{ anaconda_src }} -b -p {{ anaconda_path }}"  
-  args: 
+  shell: "{{ anaconda_src }} -b -p {{ anaconda_path }}"
+  args:
     creates: "{{ anaconda_path }}/LICENSE.txt"
 
+- name: Update anaconda
+  shell: "{{ anaconda_path }}/bin/conda update -n base -c defaults conda"
+
 - name: "Check if {{ conda_tools_env }} virtual env exists"
-  shell: "{{ anaconda_path }}/bin/conda env list | awk '{print $1}' | egrep -e ^{{ conda_tools_env }}$"
-  register: "tools_venv_exists"
-  ignore_errors: true
+  shell: "{{ anaconda_path }}/bin/conda env list"
+  register: tools_venv_exists
 
 - name: Setup virtual env and install dependencies
   shell: "{{ anaconda_path }}/bin/conda create -n {{ conda_tools_env }} -c conda-forge git perl"
-  when: "not tools_venv_exists.stdout"
+  when: not conda_tools_env in tools_venv_exists.stdout|split
