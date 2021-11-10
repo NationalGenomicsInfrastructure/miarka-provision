@@ -15,7 +15,7 @@ nf_core_vars:
   PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 pipelines:
   - name: rnaseq
-    release: 3.0
+    release: 3.3
     biocontainer_base_url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp
   - name: sarek
     release: "{{ sarek_tag }}"
@@ -30,13 +30,13 @@ pipelines:
   - name: methylseq
     release: 1.6.1
   - name: ampliseq
-    release: 1.2.0
+    release: 2.0.0
     silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
     silva_zip: Silva_132_release.zip
   - name: atacseq
     release: 1.2.1
   - name: viralrecon
-    release: 1.1.0
+    release: 2.2
   - name: rnafusion
     release: 1.2.0
   - name: nanoseq
