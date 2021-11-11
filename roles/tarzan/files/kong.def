@@ -1,0 +1,3 @@
+Bootstrap: docker
+From: kong:2.6.0-centos
+Includecmd: no

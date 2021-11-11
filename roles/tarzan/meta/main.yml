@@ -1,2 +1,0 @@
-dependencies:
-  - { role: anaconda, tags: anaconda }

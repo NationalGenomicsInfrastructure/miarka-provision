@@ -1,0 +1,15 @@
+#!/bin/bash
+
+singularity instance stop -F {{ tarzan_singularity_container_name }} 2>/dev/null
+
+singularity instance start \
+--bind "{{ tarzan_server_conf_file }}:{{ tarzan_singularity_container_server_conf_file }}" \
+--bind "{{ tarzan_entity_conf_file }}:{{ tarzan_singularity_container_entity_conf_file }}" \
+--bind "{{ tarzan_cert_file }}:{{ tarzan_singularity_container_cert_file }}" \
+--bind "{{ tarzan_key_file }}:{{ tarzan_singularity_container_key_file }}" \
+--bind "{{ tarzan_log_dir }}:{{ tarzan_singularity_container_log_dir }}" \
+--network-args "portmap={{ tarzan_http_port }}:{{ tarzan_singularity_container_http_port }}/tcp" \
+--network-args "portmap={{ tarzan_https_port }}:{{ tarzan_singularity_container_https_port }}/tcp" \
+{{ tarzan_singularity_image_file_dest }} {{ tarzan_singularity_container_name }}
+
+singularity exec instance://{{ tarzan_singularity_container_name }} kong start --conf {{ tarzan_singularity_container_server_conf_file }}
