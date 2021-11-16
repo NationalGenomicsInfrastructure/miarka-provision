@@ -3,120 +3,63 @@
   # These tasks need to run before any other roles, to setup proper 
   # environment variables depending on we're deploying to production, 
   # staging, or development/test purposes. 
-  
-  # TODO: Perhaps this logic can be made more pretty somehow. 
-
-  - fail: msg="You must specify '-e deployment_environment=<production|staging|devel>'"
-    when: deployment_environment not in [ "production", "staging", "devel" ]
-
-  - name: set path for local deployment provision resources
-    set_fact:
-      deployment_provision_path: "{{ deployment_local_path }}"
-
-  - name: set deployment target root path
-    set_fact:
-      deployment_target: "{{ deployment_remote_path }}/{{ deployment_environment }}"
-
-  - name: get repo branch
-    shell: echo `git rev-parse --abbrev-ref HEAD`
-    register: repo_branch
-
-  - name: get repo hash
-    shell: echo `git rev-parse --short HEAD`
-    register: repo_hash
-
-  - name: get git tags
-    shell: echo `git describe --tags`
-    register: git_tag
-    ignore_errors: true
-
-  - name: get current date
-    shell: echo `date +'%y%m%d'`
-    register: current_date
 
   - block:
-    # Generate a semi-unique root folder for devel deployment. 
-    # Depends on that we're standing inside the git repo while running the ansible-playbook command.
-    - name: get current user
-      shell: echo `whoami`
-      register: playbook_user
-    - name: set root path and proj root for {{ deployment_environment }}
-      set_fact: 
-        root_path: "{{ deployment_local_path }}/{{ deployment_environment }}-{{ playbook_user.stdout }}/{{ repo_branch.stdout }}.{{ current_date.stdout }}.{{ repo_hash.stdout }}"
-        proj_root: "{{ deployment_local_path }}/{{ deployment_environment }}-{{ playbook_user.stdout }}/wildwest/"
+
     - name: set charon envs for {{ deployment_environment }}
       set_fact:
         charon_base_url: "{{ charon_base_url_stage }}"
         charon_api_token_sthlm: "{{ charon_api_token_sthlm_stage }}"
         charon_api_token_upps: "{{ charon_api_token_upps_stage }}"
+
     - name: set statusdb config file for {{ deployment_environment }}
       set_fact:
         statusdb_creds: statusdb_creds_stage.yml
+
     when: deployment_environment == "devel"
 
   - block:
-    - block:
-      - name: set deployment_version for {{ deployment_environment }}
-        # Fetching the version from git instead. This means though that several copies of the same tag
-        # can be deployed parallel to each other if the deployment_version is explicitly != "default".
-        set_fact:
-          deployment_version: "{{ current_date.stdout }}.{{ repo_hash.stdout }}"
-      - name: append branch name to deployment version
-        set_fact:
-          deployment_version: "{{ deployment_version }}-{{ repo_branch.stdout }}"
-        when: "{{ repo_branch.stdout == 'bimonthly' }}"
-      when: deployment_version == "default"
-    - name: set root path for {{ deployment_environment }}
-      set_fact:
-        root_path: "{{ deployment_target }}/{{ deployment_version }}"
-    - name: set proj root for {{ deployment_environment }}
-      set_fact:
-        proj_root: "{{ deployment_target }}/wildwest/"
+
     - name: set path to staging incoming dir
       set_fact:
         incoming_dir_upps: "{{ proj_root }}/{{ ngi_pipeline_upps_delivery }}/incoming/"
         incoming_dir_sthlm: "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/incoming/"
+
     - name: create staging proj root dir (wildwest) and incoming dirs
       file: path={{ item }} state=directory mode="g+rwxs,u+rwx"
       with_items:
         - "{{ proj_root }}"
         - "{{ incoming_dir_upps }}"
         - "{{ incoming_dir_sthlm }}"
+
     - name: set charon envs for {{ deployment_environment }}
       set_fact:
         charon_base_url: "{{ charon_base_url_stage }}"
         charon_api_token_sthlm: "{{ charon_api_token_sthlm_stage }}"
         charon_api_token_upps: "{{ charon_api_token_upps_stage }}"
+
     - name: set statusdb config file for {{ deployment_environment }}
       set_fact:
         statusdb_creds: statusdb_creds_stage.yml
+
     when: deployment_environment == "staging"
 
   - block:
-    - block:
-      - name: set deployment_version for {{ deployment_environment }}
-      # Fetching the version from git instead. This means though that several copies of the same tag
-      # can be deployed parallel to each other if the deployment_version is explicitly != "default".
-        set_fact:
-          deployment_version: "{{ git_tag.stdout }}"
-      when: deployment_version == "default"
-    - name: set root path for {{ deployment_environment }}
-      set_fact:
-        root_path: "{{ deployment_target }}/{{ deployment_version }}"
-    - name: set proj root for {{ deployment_environment }}
-      set_fact:
-        proj_root: "/proj/"
+
     - name: set charon envs for {{ deployment_environment }}
       set_fact:
         charon_base_url: "{{ charon_base_url_prod }}"
         charon_api_token_sthlm: "{{ charon_api_token_sthlm_prod }}"
         charon_api_token_upps: "{{ charon_api_token_upps_prod }}"
+
     - name: set statusdb config file for {{ deployment_environment }}
       set_fact:
         statusdb_creds: statusdb_creds_prod.yml
+
     when: deployment_environment == "production"
 
   - stat: path={{ root_path }}
     register: p
+
   - fail: msg="Aborting! Directory {{ root_path }} already exists. Remove the dir or call playbook with '-e deployment_override=true' if you want to deploy anyway."
     when: deployment_override == false and p.stat.isdir is defined and p.stat.isdir
