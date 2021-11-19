@@ -17,6 +17,7 @@
         find:
           paths:
             - "{{ root_path }}"
+            - "{{ ngi_containers }}"
           recurse: yes
           excludes: "{{ exclude_pattern }}"
           file_type: any
@@ -54,18 +55,14 @@
   hosts: target
   connection: ssh
 
-  pre_tasks:
-    - include: tasks/set-paths.yml
-      tags: always
-
   tasks:
     - name: set the rsync log file path
       set_fact:
-        rsync_log_file: "{{ deployment_target }}/{{ deployment_version }}.rsync.log"
+        rsync_log_file: "{{ hostvars['deploy']['deployment_target'] }}/{{ hostvars['deploy']['deployment_version'] }}.rsync.log"
 
     - name: sync the deployment to the target host
       synchronize:
-        src: "{{ root_path }}"
+        src: "{{ item }}"
         dest: "{{ deployment_remote_path }}"
         archive: yes
         compress: yes
@@ -80,3 +77,13 @@
           - "--log-file={{ rsync_log_file }}"
           - "{{ exclude_pattern | map('regex_replace', '^(.*)$', '--exclude=\"\\1\"') | join(' ') }}"
           - "{{ '--dry-run' if (deployment_environment == 'devel') else '' }}"
+      with_items:
+        - "{{ hostvars['deploy']['root_path'] }}"
+        - "{{ hostvars['deploy']['ngi_containers'] }}"
+
+    - name: create or move the latest symlink to {{ deployment_version }}
+      file:
+        src: "{{ hostvars['deploy']['root_path'] }}"
+        dest: "{{ hostvars['deploy']['root_path'] | dirname | regex_replace('^(.*)/?$', '\\1/latest') }}"
+        state: link
+      when: not deployment_environment == 'devel'

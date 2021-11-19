@@ -1,9 +1,9 @@
 ---
 # Empty placeholder that gets filled by tasks/pre-install.yml
 root_path:
+ngi_containers:
 
 sw_path: "{{ root_path }}/sw/"
-ngi_containers: "{{ deployment_remote_path }}/containers/"
 
 anaconda_path: "{{ sw_path }}/anaconda"
 default_env: "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sw/uppmax/bin"
