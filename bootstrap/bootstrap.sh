@@ -1,6 +1,5 @@
 #! /bin/bash
 
-set -x
 set -e
 
 # Minimalistic and hard coded script for bootstrapping the Ansible environment on miarka3

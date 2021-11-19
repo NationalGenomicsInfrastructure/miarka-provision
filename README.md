@@ -157,12 +157,12 @@ deploying without running into Ansible errors because of missing files or variab
 For reference, the required files are:
 
 - A valid GATK key placed under `files/`. The filename must be specified in the `gatk_key` variable in 
-`host_vars/127.0.0.1/main.yml`.
+`host_vars/deploy/main.yml`.
 
-- A `charon_credentials.yml` file placed under `host_vars/127.0.0.1/` listing the variables 
+- A `charon_credentials.yml` file placed under `host_vars/deploy/` listing the variables 
 `charon_base_url_{stage,prod}`, `charon_api_token_upps_{stage,prod}` and `charon_api_token_sthlm_{stage,prod}`
 
-- A `megaqc_token.yml` file placed under `host_vars/127.0.0.1/` listing the variables `megaqc_token_upps` and 
+- A `megaqc_token.yml` file placed under `host_vars/deploy/` listing the variables `megaqc_token_upps` and 
 `megaqc_token_sthlm_stage`
 
 - A valid `statusdb_creds_{stage,prod}.yml` access file placed under `files/`. Necessary layout is described at 

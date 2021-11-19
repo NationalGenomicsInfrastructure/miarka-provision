@@ -44,7 +44,11 @@
     - name: set root path and proj root for {{ deployment_environment }}
       set_fact:
         root_path: "{{ deployment_target }}/{{ deployment_version }}"
-        proj_root: "{{ deployment_target }}/wildwest/"
+        proj_root: "{{ deployment_target }}/wildwest"
+
+    - name: override containers path for {{ deployment_environment }}
+      set_fact:
+        ngi_containers: "{{ proj_root }}/containers"
 
     when: deployment_environment == "devel"
 

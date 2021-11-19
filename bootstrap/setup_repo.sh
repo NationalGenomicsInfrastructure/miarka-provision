@@ -4,7 +4,6 @@
 # This script will clone this repo and setup some necessary files and paths
 #
 
-set -x
 set -e
 
 REPO_PATH="$1"

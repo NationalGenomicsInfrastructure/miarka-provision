@@ -5,7 +5,6 @@
 # from. If the file does not exist in the designated central location (which can be empty), a dummy file will be
 # created instead. This is useful for testing when you don't want the playbook to choke because of missing files.
 
-set -x
 set -e
 
 PATH_TO_REPO="$1"
@@ -28,14 +27,14 @@ function setup_file {
   else
     for var in $@
     do
-      echo "$var: " >> "$d/$f"
-    done
+      echo "$var: "
+    done > "$d/$f"
   fi
 }
 
 TACA_ROLE_PATH="$PATH_TO_REPO/roles/taca/files"
 NGI_PIPELINE_ROLE_PATH="$PATH_TO_REPO/roles/ngi_pipeline/files"
-HOST_VARS_PATH="$PATH_TO_REPO/host_vars/127.0.0.1"
+HOST_VARS_PATH="$PATH_TO_REPO/host_vars/deploy"
 TARZAN_ROLE_PATH="$PATH_TO_REPO/roles/tarzan/files"
 
 setup_file "pontus.larsson_medsci.uu.se.key" "$NGI_PIPELINE_ROLE_PATH"
