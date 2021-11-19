@@ -7,10 +7,6 @@
   - fail: msg="You must specify '-e deployment_environment=<production|staging|devel>'"
     when: deployment_environment not in [ "production", "staging", "devel" ]
 
-  - name: set path for local deployment provision resources
-    set_fact:
-      deployment_provision_path: "{{ deployment_local_path }}"
-
   - name: set deployment target root path
     set_fact:
       deployment_target: "{{ deployment_remote_path }}/{{ deployment_environment }}"

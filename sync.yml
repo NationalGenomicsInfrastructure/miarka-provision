@@ -16,7 +16,7 @@
       - name: list files in deployment to check permissions
         find:
           paths:
-            - "/vulpes/ngi/staging/211109.e0192db/conf"
+            - "{{ root_path }}"
           recurse: yes
           excludes: "{{ exclude_pattern }}"
           file_type: any
@@ -50,7 +50,7 @@
 
       when: not skip_permission_check
 
-- name: prepare syncing deployment to target host
+- name: sync deployment to target host
   hosts: target
   connection: ssh
 
@@ -61,11 +61,11 @@
   tasks:
     - name: set the rsync log file path
       set_fact:
-        rsync_log_file: "{{ deployment_target }}/rsync.log"
+        rsync_log_file: "{{ deployment_target }}/{{ deployment_version }}.rsync.log"
 
     - name: sync the deployment to the target host
       synchronize:
-        src: /vulpes/ngi/staging/211109.e0192db/conf
+        src: "{{ root_path }}"
         dest: "{{ deployment_remote_path }}"
         archive: yes
         compress: yes
@@ -76,5 +76,7 @@
           - --omit-dir-times
           - --relative
           - --progress
+          - --verbose
           - "--log-file={{ rsync_log_file }}"
           - "{{ exclude_pattern | map('regex_replace', '^(.*)$', '--exclude=\"\\1\"') | join(' ') }}"
+          - "{{ '--dry-run' if (deployment_environment == 'devel') else '' }}"

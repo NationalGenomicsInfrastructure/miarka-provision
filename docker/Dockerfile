@@ -12,5 +12,4 @@ RUN \
 
 ENV PROVISIONURL=https://github.com/NationalGenomicsInfrastructure/miarka-provision.git
 
-CMD git clone -b devel "$PROVISIONURL" && \
-    sed -re "s!__DEPLOYROOT__!$PWD!" miarka-provision/bootstrap/bashrc > bashrc
+CMD git clone -b devel "$PROVISIONURL" && miarka-provision/bootstrap/setup_repo.sh "$(pwd)/miarka-provision"

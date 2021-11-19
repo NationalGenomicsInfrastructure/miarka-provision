@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 set -x
 set -e
@@ -8,10 +8,12 @@ PROVISIONREPO="miarka-provision"
 PROVISIONURL="https://github.com/NationalGenomicsInfrastructure/${PROVISIONREPO}.git"
 PROVISIONBRANCH="devel"
 
-# Use a global environmental variable for the deploy root path
+# Use a specified root folder for bootstrapping, or default to /vulpes/ngi/deploy
+DEFAULTROOT="/vulpes/ngi/deploy"
+DEPLOYROOT="$1"
 if [ -z "$DEPLOYROOT" ] ; then
-  echo "The global environment variable DEPLOYROOT needs to be set to the path under which deployments will be made. Aborting"
-  exit 1
+  DEPLOYROOT="$DEFAULTROOT"
+  echo "A root folder for deployment was not specified, will use $DEPLOYROOT"
 fi
 
 if [ -d  "$DEPLOYROOT/$PROVISIONREPO" ] ; then
@@ -29,13 +31,10 @@ ORIGIN="$(pwd)"
 cd "$DEPLOYROOT"
 
 echo "Cloning the Miarka provisioning repo"
-git clone "$PROVISIONURL"
-cd ${PROVISIONREPO}
-git checkout "$PROVISIONBRANCH"
-cd ..
+git clone -b "$PROVISIONBRANCH" "$PROVISIONURL"
 
-echo "Copying environment bashrc file"
-sed -re "s#__DEPLOYROOT__#$DEPLOYROOT#" "${PROVISIONREPO}/bootstrap/bashrc" > "$DEPLOYROOT/bashrc"
+echo "Set up the repo"
+bash "${PROVISIONREPO}/bootstrap/setup_repo.sh" ${DEPLOYROOT}/${PROVISIONREPO}"
 
 echo "Setting up a venv for Ansible"
 /usr/bin/python3 -m venv "ansible-env"
