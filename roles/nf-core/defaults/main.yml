@@ -15,7 +15,7 @@ nf_core_vars:
   PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 pipelines:
   - name: rnaseq
-    release: 3.3
+    release: 3.0
     biocontainer_base_url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp
   - name: sarek
     release: "{{ sarek_tag }}"

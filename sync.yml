@@ -1,14 +1,20 @@
 
-- name: prepare syncing deployment to target host
+- name: set paths for syncing deployment to target host
   hosts: deploy
   connection: local
-
-  vars:
-    skip_permission_check: false
 
   pre_tasks:
     - include: tasks/set-paths.yml
       tags: always
+
+
+- name: prepare syncing deployment to target host
+  hosts: deploy
+  connection: local
+  tags: permissions
+
+  vars:
+    skip_permission_check: false
 
   tasks:
 
@@ -54,6 +60,7 @@
 - name: sync deployment to target host
   hosts: target
   connection: ssh
+  tags: transfer
 
   tasks:
     - name: set the rsync log file path
