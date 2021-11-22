@@ -1,11 +1,9 @@
 ---
 # Empty placeholder that gets filled by tasks/pre-install.yml
 root_path:
-deployment_local_path:
-deployment_provision_path:
+ngi_containers:
 
 sw_path: "{{ root_path }}/sw/"
-ngi_containers: "{{ deployment_remote_path }}/containers/"
 
 anaconda_path: "{{ sw_path }}/anaconda"
 default_env: "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sw/uppmax/bin"
@@ -58,8 +56,8 @@ sarek_dest: "{{ sw_path }}/sarek"
 sarek_containers: "{{ ngi_containers }}/sarek"
 
 gatk_key: pontus.larsson_medsci.uu.se.key
-snic_sthlm_creds: snic_credentials_sthlm.yaml
-orderportal_creds: orderportal_credentials.yaml
+snic_sthlm_creds: snic_credentials_sthlm.yml
+orderportal_creds: orderportal_credentials.yml
 
 recipient_mail_sthlm: ngi_pipeline_operators@scilifelab.se
 recipient_mail_upps: medsci-molmed-bioinfo@googlegroups.com
@@ -71,11 +69,3 @@ validation_data:
 
 # File with tools/software version in the deployed env
 deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"
-
-# Empty placeholders for undefined variables (not used?) but not sure so let's keep them
-charon_base_url_prod:
-charon_api_token_sthlm_prod:
-charon_api_token_upps_prod:
-charon_base_url_stage:
-charon_api_token_sthlm_stage:
-charon_api_token_upps_stage:
