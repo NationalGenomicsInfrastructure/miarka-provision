@@ -1,13 +1,45 @@
 # Deployment playbooks for NGI-Pipeline and related software (Piper, TACA, Tarzan, etc.)
 
 This repository concerns the creation and maintenance of the NGI python environment; which is a collection of software 
-and solutions utilized by NGI Production on the currently available HPC. The solutions in question are unique for NGI 
-Production and require updates to such a degree that deploying them within the facility is preferred.
+and solutions utilized by NGI Production on the currently available HPC.
 
 The NGI environment is currently deployed on Miarka using Ansible playbooks. Ansible playbooks are scripts written for 
 easily adaptable automated deployment. The Ansible playbooks are stored here.
 
-## Deployments with ansible
+The deployment is intended to be performed in three stages:
+- deployment to a local disk on the deployment node (miarka3)
+- synchronize the deployment to the shared file system on the cluster
+- create directories and re-initialize services on the cluster
+
+## Repo layout
+
+### Ansible-specific content
+
+`inventory.yml` defines the host addresses where tasks will be run
+
+The main playbooks are `install.yml`, for deploying to the local disk and `sync.yml` for syncing the deployment to the
+shared filesystem. 
+
+Variables specific for a host and accessible throughout the playbooks are specified under `host_vars/`. Most variables 
+used in the playbook for doing the deployments are defined here.
+
+Variables specific for a group are defined under `group_vars/`. Currently, this only includes `all` which means that the
+variables are accessible to all hosts and throughout the playbooks. This includes variables specifying the deployment 
+environment (i.e. `devel`, `staging`, `production`), version, paths etc.
+
+Common tasks used e.g. for setting up variables and paths required for deployment or syncing are defined under `tasks/`.
+
+Typically, each software or function has its own role for deployment and these are defined under `roles/`.
+ 
+### Other
+
+The `docker/` directory contains files used for building a Singularity (and Docker) image that can be used for running
+Ansible.
+
+The `bootstrap/` directory contains files and scripts used for setting up and configuring the environment on the 
+deployment node (primarily if the Singularity image is not used for deployment). 
+
+## Setting up Ansible for deployments
 
 Ansible can either be run from the local environment on Miarka3 or from a Singularity container. 
 
@@ -23,18 +55,20 @@ can be done by running the bootstrap script:
 newgrp ngi-sw
 
 curl -L \
-https://raw.githubusercontent.com/NationalGenomicsInfrastructure/miarka-provision/bootstrap_and_paths/bootstrap/bootstrap.sh \
+https://raw.githubusercontent.com/NationalGenomicsInfrastructure/miarka-provision/devel/bootstrap/bootstrap.sh \
 -o /tmp/bootstrap.sh
 
-export DEPLOYROOT=/path/to/deployment/working/directory
-bash /tmp/bootstrap.sh
+bash /tmp/bootstrap.sh [/path/to/deployment/resources]
 ```
 
-It is recommended that the user adds the following two lines (or something similar) into `~/.bashrc`:
+If a path is supplied to the bootstrap script, the resources will be set up under that path. Otherwise, the default
+location, `/vulpes/ngi/deploy`, will be used.
+
+For convenience, it is recommended that the user adds the following two lines (or something similar) into `~/.bashrc`:
 
 ```
-alias miarkaenv='source /path/to/deployment/working/directory/bashrc'
-alias ansibleenv='source "$DEPLOYROOT/ansible-env/bin/activate"'
+alias miarkaenv='source /path/to/deployment/resources/bashrc'
+alias ansibleenv='source /path/to/deployment/resources/ansible-env/bin/activate'
 ```
 
 ### Building a singularity image
@@ -52,74 +86,43 @@ has been built and tested with Docker v20.10.7 and Singularity v3.7.1.
 To build the singularity image, clone this repository and run `docker/build_singularity.sh`. This will create a 
 singularity image, `miarka-ansible.sif` in the working directory. This image can be uploaded to `miarka3`.
 
-If there is already a singularity image available on `miarka3`, e.g. under `/vulpes/ngi/`, you can probably use it for 
-deployments. The image itself is not dependent on changes to the miarka-provision repo, with the exception to changes
-in the `docker` folder. For reference, the image should be tagged with the git commit hash of the repo that the image
-was built from.
+If there is already a singularity image available on `miarka3`, e.g. under `/vulpes/ngi/deploy`, you can probably use 
+it for deployments. The image itself is not dependent on changes to the miarka-provision repo, with the exception to 
+changes in the `docker` folder. For reference, the image should be tagged with the git commit hash of the repo that the 
+image was built from.
 
 ### Setting up the environment for using the singularity image
 
 On `miarka3`, clone the provision repo by running:
 
 ```
-cd /path/to/deployment/working/directory
+cd /path/to/deployment/resources
 singularity run /path/to/miarka-ansible.sif
 ```
 
 This will clone the devel branch of this repo under the current working directory and copy the `bootsrap/bashrc` file
-here with the `DEPLOYROOT` environment variable pointing this way.
+here.
 
-It is recommended that the user adds the following line (or something similar) into `~/.bashrc`:
+For convenience, it is recommended that the user adds the following line (or something similar) into `~/.bashrc`:
 
 ```
-alias miarkaenv='source /path/to/deployment/working/directory/bashrc'
+alias miarkaenv='source /path/to/deployment/resources/bashrc'
+alias ansible-playbook='singularity run --bind /vulpes,/sw,/scratch /path/to/miarka-ansible.sif ansible-playbook'
 ```
+
+Note that this will add an alias for `ansible-playbook` that refers to the singularity container. If this is not 
+suitable for your specific use case, you can skip this. The instructions commands below will assume the alias exist.
 
 ## User prerequisites before developing or deploying
 
 Before a user starts developing new Ansible playbooks/roles or deploy them, the current umask and GID needs to be set, 
 and the Ansible virtual environment needs to be loaded. This can be accomplished by *manually* running the two bash 
-aliases defined above: `miarkaenv` followed by `ansibleenv` (or just `miarkaenv` if using singularity).  
+aliases defined above: `miarkaenv` followed by `ansibleenv` (or just `miarkaenv` if using Singularity).  
 
 Note that the order is important, and that they should not be run automatically at login, because that will cause an 
-infinite loop that will lock out the user from `miarka3`.
+infinite loop that will lock the user out.
 
-## Deployment of the NGI pipeline
-
-### Requirements
-The following files need to be present on miarka3 under the cloned `miarka-provision` repo:
-
-- A valid GATK key placed under `files/`. The filename must be specified in the `gatk_key` variable in 
-`host_vars/127.0.0.1/main.yml`.
-
-- A `charon_credentials.yml` file placed under `host_vars/127.0.0.1/` listing the variables 
-`charon_base_url_{stage,prod}`, `charon_api_token_upps_{stage,prod}` and `charon_api_token_sthlm_{stage,prod}`
-
-- A `megaqc_token.yml` file placed under `host_vars/127.0.0.1/` listing the variables `megaqc_token_upps` and 
-`megaqc_token_sthlm_stage`
-
-- A valid `statusdb_creds_{stage,prod}.yml` access file placed under `files/`. Necessary layout is described at 
-https://github.com/SciLifeLab/statusdb
-
-- A valid `orderportal_credentials.yml` access file placed under `files/`.
-
-- Valid SSL certificates for the web proxy under `files/` (see `roles/tarzan/README.md` for details)
-
-### Typical development and staging deployments
-
-Typically roles are developed (or at least tested) locally on `miarka3`.
-
-Start by forking the repository https://github.com/NationalGenomicsInfrastructure/miarka-provision to your private 
-Github repo. Then clone this private repository to a suitable location (i.e. NOT from where the stage and production 
-deployments are performed) on miarka3. Inside there you can develop your own Ansible roles in your private feature 
-branch. Note that the git repository does not include the required `files` subdirectory (see above). This directory can 
-be created manually or copied from an existing setup.
-
-If you want to test your roles/playbook run `ansible-playbook install.yml`. This will install your development run in 
-`/vulpes/ngi/miarka3/devel-<username>/<branch_name>.<date>.<commit hash>`
-
-When you are satisfied with your changes you need to test it in staging. To do this, you must create a pull request to 
-one of the two staging branches of miarka-provision.
+## Deployment of the Miarka software
 
 There are two staging branches in the repository, one called monthly and the other bimonthly. The changes that do not 
 need extensive testing and validation on stage should be pushed to the monthly branch, which is used to make stage and 
@@ -134,130 +137,219 @@ Stage deployments from the bimonthly branch can be made outside of the monthly r
 bimonthly branch would generally be pulled to the monthly branch and deployed to production in the monthly release 
 cycle once all validations are complete.
 
-Do the following once the feature has been approved. The deployment version should be constructed automatically by the
-playbook according to `$(date +%y%m%d).$(git rev-parse --short HEAD)`. In case of a bimonthly deployment, a `-bimonthly`
-suffix will be added. If needed, you can override the deployment_version by passing `-e deployment_version=VERSION` to the
-playbook.
+### Requirements
+
+When deploying the Miarka software, some credentials files are required to be present under the cloned 
+`miarka-provision` repo but they are not distributed with git and therefore need to be added explicitly. For this 
+purpose, the script `bootstrap/setup_required_files.sh` can be run:
 
 ```
-    cd $DEPLOYROOT/miarka-provision
+bash /path/to/deployment/resources/miarka-provision/bootstrap/setup_required_files.sh \
+  /path/to/deployment/resources/miarka-provision \
+  /path/to/required/files
+```
+
+This will symlink the required files under the specified path to the correct location under the specified repo. Note 
+that if the required files are not found at the specified location, dummy files will be created instead (in fact, this
+is what happens when running the bootstrap script above). This is useful in order to be able to develop and test 
+deploying without running into Ansible errors because of missing files or variables.  
+
+For reference, the required files are:
+
+- A valid GATK key placed under `files/`. The filename must be specified in the `gatk_key` variable in 
+`host_vars/deploy/main.yml`.
+
+- A `charon_credentials.yml` file placed under `host_vars/deploy/` listing the variables 
+`charon_base_url_{stage,prod}`, `charon_api_token_upps_{stage,prod}` and `charon_api_token_sthlm_{stage,prod}`
+
+- A `megaqc_token.yml` file placed under `host_vars/deploy/` listing the variables `megaqc_token_upps` and 
+`megaqc_token_sthlm_stage`
+
+- A valid `statusdb_creds_{stage,prod}.yml` access file placed under `files/`. Necessary layout is described at 
+https://github.com/SciLifeLab/statusdb
+
+- A valid `orderportal_credentials.yml` access file placed under `files/`.
+
+- Valid SSL certificates for the web proxy under `files/` (see `roles/tarzan/README.md` for details)
+
+Note that these files should never be commited with git (they are also included in `.gitignore`).
+
+### Development deployment
+
+Typically roles are developed (or at least tested) locally on `miarka3`.
+
+Start by forking the repository https://github.com/NationalGenomicsInfrastructure/miarka-provision to your private 
+Github repo. Clone this repository to a suitable location (i.e. NOT from where the stage and production 
+deployments are performed) on miarka3. 
+
+There you can develop your own Ansible roles in your private feature branch.
+
+If you want to test your roles/playbook, run:
+```
+    cd /path/to/development/resources/miarka-provision
+    ansible-playbook -i inventory.yml install.yml
+```
+This will install your development under `/vulpes/ngi/devel-<username>/<branch_name>.<date>.<commit hash>`
+
+You can also run the sync playbook to test this functionality but in the devel environment, the rsync command will 
+always run in `--dry-run` mode, so no data will be transferred:
+```
+    ansible-playbook -i inventory.yml sync.yml
+```
+
+When you are satisfied with your changes you need to test it in staging. To do this, you must create a pull request to 
+one of the two staging branches of miarka-provision and, once the feature has been approved, do a staging deployment. 
+
+### Staging deployment
+
+To perform a deployment from one of the staging branches (monthly or bimonthly), navigate to the location of the repo
+and make sure that the desired branch is checked out and updated:
+```
+    cd /path/to/deployment/resources/miarka-provision
     git checkout [monthly/bimonthly]
     git pull origin [monthly/bimonthly]
 ```
-
-If running Ansible under the bootstrapped local environment, use the commands:
+Do the staging deployment to the local disk by running the `install.yml` playbook and specify the 
+`deployment_environment` argument:
 ```
-    ansible-playbook install.yml \
+    ansible-playbook -i inventory.yml install.yml \
       -e deployment_environment=staging
-    python sync.py -e staging -d deployment_version
+```
+This will install your deployment under `/vulpes/ngi/staging/<deployment_version>`, where `deployment_version` is 
+automatically constructed by the playbook according to `<date>.<commit hash>[-bimonthly]` (the `-bimonthly` suffix is 
+added in case of a bimonthly deployment). If needed, you can override the deployment_version by passing 
+`-e deployment_version=VERSION` to the playbook.
+
+The `sync.yml` playbook can be used to sync the deployment to the cluster and shared filesystem, using the same 
+arguments as for the `install.yml` playbook:
+```
+    ansible-playbook -i inventory.yml sync.yml \
+      -e deployment_environment=staging
 ```
 
-If using a singularity container for deployment, use the command:
+When everything is synced properly then login to the cluster as your personal user and source the new environment and
+activate the NGI conda environment (where `site` is `upps` or `sthlm` depending on location): 
 ```
-    singularity run --bind /vulpes,/sw,/scratch /path/to/miarka-ansible.sif \
-      ansible-playbook install.yml \
-        -e deployment_environment=staging
-
-    singularity run --bind /vulpes,/sw,/scratch \
-      python3 sync.py \
-        -e staging \
-        -d deployment_version
+    source /vulpes/ngi/staging/latest/conf/sourceme_<site>.sh && source activate NGI
 ```
-
-This will install your run under `/vulpes/ngi/staging/deployment_version` and symlink `/vulpes/ngi/staging/latest` 
-to it, for easier access. The `sync.py` script also has an option to perform a dry run of the files that will be synced 
-before the actual sync takes place.
-
-If you want to stage test many feature branches at the same time then an alternative is to create a pre-release of the 
-master branch at Github (https://github.com/NationalGenomicsInfrastructure/miarka-provision/releases/new), and then 
-running the `ansible-playbook` command after having checkout the corresponding pre-release tag (similar to how it is 
-done for production deployments). Make sure to write a good release note so it is clear what significant things are 
-included.
-
-When everything is synced over to Miarka properly then login to e.g. `miarka1` as your personal user and run 
-`source /vulpes/ngi/staging/latest/conf/sourceme_<site>.sh && source activate NGI` (where `site` is `upps` or `sthlm` 
-depending on location). For convenience add this to your personal file bash init file `~/.bashrc`. This will load the 
+For convenience, add this to your personal bash init file `~/.bashrc`. This will load the 
 staging environment for your user with the appropriate staging variables set.
 
-When the staged environment has been verified to work OK (TODO: add test protocol, manual or automated sanity checks) 
-proceed with making a pull request from the staging branch to the master branch of the repository. Once your pull 
-request is approved and merged, create a production release at 
+When the staged environment has been verified to work OK, proceed with making a pull request from the staging branch to 
+the master branch of the repository. 
+
+### Production deployment
+
+Once all pull requests to master are approved and merged, create a production release at 
 https://github.com/NationalGenomicsInfrastructure/miarka-provision/releases/new. Make sure to write a good release note 
 that summarizes all the significant changes that are included since the last production release.
 
-##### Arteria staging
+To see all available production releases go to 
+https://github.com/NationalGenomicsInfrastructure/miarka-provision/releases
 
-The Arteria roles will pick up on whether we're running in `deployment_environment` equal to `production` or `staging` and then use different ports, runfolders, log files, etc.
-
-So in essence it should work almost as usual. You run something similar to:
-
-```
-ansible-playbook install.yml -e deployment_environment=staging -e deployment_version=arteria-staging-FOO -e arteria_checksum_version=660a8ff
-python sync.py -e staging
-```
-
-if you want to stage test a specific commit hash of `arteria-checksum` and the default versions of the other arteria services.
-
-Launch the Arteria staging services by running the command `start-arteria-staging` as the `funk_004` user. That will spawn a detached screen session named `arteria-staging` with one window for each Arteria web service. If a service has crashed then one can (after debugging the stacktrace) respawn the process by hitting the `r` key  for the relevant window. If one want to manually force a restart of the process one can first abort the process with a normal `^C`, followed by the `r` key as mentioned previously. To kill all Arteria services the whole screen session can be closed down with the command `stop-arteria-staging`.  
-
-### Typical production deployments
-
-A typical deployment of a production environment to Miarka consists of the following steps
-
-- Running through the Ansible playbook for a production release, which will install all the software under `/vulpes/ngi/production/<version>` (and create a symlink `/vulpes/ngi/production/latest` pointing to it)
-- Syncing everything under `/vulpes/ngi/production` to the cluster
-- Reload *each site's* crontabs and services
-
-To install software and sync to the cluster, run the following commands:
+To perform the production deployment, use a similar approach as for the staging deployment (see above for details):
 
 ```
-   cd /vulpes/ngi/miarka3/deploy
-   git checkout master
-   git fetch --tags
-   git checkout tags/vX.Y
-   ansible-playbook install.yml -e deployment_environment=production
-   python sync.py -e production -d vX.Y
+    cd /path/to/deployment/resources/miarka-provision
+    git checkout master && git fetch --tags && git checkout tags/vX.Y
+```
+, where "vX.Y" is the production release to deploy.
+
+Deploy and sync the deployment using the playbooks similarly to above:
+
+```
+    ansible-playbook -i inventory.yml install.yml -e deployment_environment=production
+    ansible-playbook -i inventory.yml sync.yml -e deployment_environment=production
+```
+This will install your deployment under `/vulpes/ngi/production/<deployment_version>`, where `deployment_version` is 
+the git production release tag.
+
+#### Reload services
+
+After the deployment has been synced, each facility need to update the crontab and reload any running services in order
+to run these from the new deployment.
+
+On the node (e.g. `miarka1`) where the crontab and services are running and as the user currently having the crontab 
+installed, run:
+```
+    crontab /vulpes/ngi/production/latest/conf/crontab_<site>
 ```
 
-This will install and sync over the Miarka environment version `vX.Y`.
+As the user running the services needing a reboot, shut down the running instances of the services and re-start the new 
+versions of the software.
 
-To see all available production releases go to https://github.com/NationalGenomicsInfrastructure/miarka-provision/releases
+##### Uppsala
 
-#### Reload crontabs and services
+In the case of Uppsala one should then do: 
+```
+    /vulpes/ngi/production/latest/resources/stop_kong.sh
+```
+, followed by starting `supervisord` and `kong` (see the commands in the crontab).  
 
-Remember that you will probably have to restart services manually after a new production release have been rolled out. This must be done for *each site*. First re-load the crontab as the func user on `miarka1` with a `crontab /vulpes/ngi/production/latest/conf/crontab_SITE`. Then, depending on what software your func user is running, continue with manually shutting down the old versions and re-start the new versions of the software. In the case of Uppsala one should then do a `/vulpes/ngi/production/latest/resources/stop_kong.sh` followed by starting `supervisord` and `kong` (see the crontab).  
+#### First deployment
 
+The first time a deployment is made to the cluster, or when modifications to the project directory structure have been 
+made, each site needs to run:
 
-## Manual initializations on miarka1
+```
+    /vulpes/ngi/production/latest/resources/create_ngi_pipeline_dirs.sh <project_name>
+    crontab /vulpes/ngi/production/latest/conf/crontab_<site>
+```
 
-Run `crontab /vulpes/ngi/<instance>/<version>/conf/crontab_<site>` once per user to initialize the first instance of cron for the user. As mentioned above, this has to be done for each new production release.
+, once per project (i.e. ngi2016003) to create the log, db and softlink directories for NGI pipeline (and generate the 
+softlinks) and initialize the crontab.
 
-Run `/vulpes/ngi/<instance>/<version>/resources/create_ngi_pipeline_dirs.sh <project_name>` once per project (i.e. ngi2016003) to create the log, db and softlink directories for NGI pipeline (and generate the softlinks).
+## Miarka user
 
-Add `source /vulpes/ngi/<instance>/<version>/conf/sourcme_<site>.sh && source activate NGI`, where `site` can be `upps` or `sthlm`, to each functional account's bash init file `~/.bashrc`.
+In order to automatically have the latest production environment activated upon login, a regular Miarka user should 
+make sure to add the following lines to the bash init file `~/.bashrc`:
+```
+    source /vulpes/ngi/production/latest/conf/sourcme_<site>.sh
+    source activate NGI
+```
+, where `<site>` can be `upps` or `sthlm`, 
 
-## Simple environment integrity verification
+## Other
 
-Once the ansible-playbook has successfully been executed, log onto the target machine.
+- Always run the `miarkaenv` alias before doing development or deployments in order to assert correct permissions
+- Deploying requires the user to be in both the `ngi-sw` and the `ngi` groups
+- Everything under `/vulpes/ngi/` is owned by `ngi-sw` and only this group has write access
+- The Ansible log file is found at `/path/to/deployment/resources/log/ansible.log`
+- The rsync log file is found at `/vulpes/ngi/<deployment_environment>/<deployment_version>.rsync.log`
 
-Run `source /vulpes/ngi/conf/sourceme_<SITE>.sh` where `<SITE>` is `upps` to initialize `funk_004` variables, or `sthlm` to initialize `funk_006` variables.
+### Environment integrity verification
 
-Run `source activate NGI` to start the environment.
+Once the ansible-playbook has successfully been executed, log onto the target machine and create a simulated flowcell:
+```
+    python NGI_pipeline_test.py create --fastq1 <R1.fastq.gz> --fastq2 <R2.fastq.gz> --FC 1
+```  
+Run `ngi_pipeline_start.py` with the commands `organize flowcell`, `analyze project` and `qc project` to organize, 
+analyze and qc the generated data respectively.
 
-`python NGI_pipeline_test.py create --fastq1 <R1.fastq.gz> --fastq2 <R2.fastq.gz> --FC 1` creates a simulated flowcell.
+### Arteria staging
 
-Run `ngi_pipeline_start.py` with the commands `organize flowcell`, `analyze project` and `qc project` to organize, analyze and qc the generated data respectively.
+The Arteria roles will pick up on whether we're running in `deployment_environment` equal to `production` or `staging` 
+and then use different ports, runfolders, log files, etc.
 
-## Other worthwhile information
+So in essence it should work almost as usual. If you, for example, want to stage test a specific commit hash of 
+`arteria-checksum` and the default versions of the other arteria services, you run something similar to:
 
-Deploying requires the deployer to be in both the `ngi-sw` and the `ngi` groups. Everything under `/vulpes/ngi/` is owned by `ngi-sw`.
+```
+    ansible-playbook -i inventory.yml install.yml \
+        -e deployment_environment=staging \
+        -e deployment_version=arteria-staging-FOO \
+        -e arteria_checksum_version=660a8ff
 
-Only deployers can write new programs and configs, but all NGI functional accounts (`funk_004`, `funk_006` etc) can write log files, to the SQL databases, etc.
+    ansible-playbook -i inventory.yml sync.yml \
+        -e deployment_environment=staging \
+        -e deployment_version=arteria-staging-FOO
+```
 
-Global configuration values are set in the repository under `host_vars/127.0.0.1/main.yml`, and each respective role's in the `<role>/defaults/main.yml` file.
+Launch the Arteria staging services by running the command `start-arteria-staging`. This will spawn a detached screen 
+session named `arteria-staging` with one window for each Arteria web service. 
 
-The log `/vulpes/ngi/miarka3/log/ansible.log` logs the files installed by Ansible.
+If a service has crashed then one can (after debugging the stacktrace) respawn the process by hitting the `r` key  for 
+the relevant window. If one want to manually force a restart of the process one can first abort the process with a 
+normal `^C`, followed by the `r` key as mentioned previously. 
 
-The log `/vulpes/ngi/miarka3/log/rsync.log` logs the rsync history.
-
-When developing roles deployed directories must have the setgid flag `g+s`, and be created while the deployer had his gid set to `ngi-sw`. This ensures the files in the dirs recieve the correct group owner when they are created. This will be taken care of the user always sources the file `/vulpes/ngi/miarka3/bashrc` before doing any work.
+To kill all Arteria services the whole screen session can be closed down with the command `stop-arteria-staging`.  

@@ -1,0 +1,96 @@
+
+- name: set paths for syncing deployment to target host
+  hosts: deploy
+  connection: local
+
+  pre_tasks:
+    - include: tasks/set-paths.yml
+      tags: always
+
+
+- name: prepare syncing deployment to target host
+  hosts: deploy
+  connection: local
+  tags: permissions
+
+  vars:
+    skip_permission_check: false
+
+  tasks:
+
+    - block:
+      - name: list files in deployment to check permissions
+        find:
+          paths:
+            - "{{ root_path }}"
+            - "{{ ngi_containers }}"
+          recurse: yes
+          excludes: "{{ exclude_pattern }}"
+          file_type: any
+        register: find
+
+      - name: test if all files have correct permissions
+        pause:
+          prompt: Some files are not {{ item }}, continue anyway? Hit return to continue or Ctrl+C and 'A' to abort!
+        when: find.files | rejectattr(item) | list | length > 0
+        with_items:
+          - rgrp
+          - wgrp
+          - roth
+        register: cont_p
+
+      - name: test if all files have correct group ownership
+        pause:
+          prompt: Some files are not owned by {{ item }}, continue anyway? Hit return to continue or Ctrl+C and 'A' to abort!
+        when: find.files | rejectattr('gr_name', '==', item) | list | length > 0
+        with_items:
+          - "{{ ngi_group }}"
+        register: cont_g
+
+      - name: log a warning that permissions are wrong
+        debug:
+          msg: "!! WARNING !! Sync was initiated although some files had wrong permissions or ownership"
+        when: item.results | rejectattr('skipped', 'defined') | list | length > 0 or item.results | selectattr('skipped', 'defined') | rejectattr('skipped') | list | length > 0
+        with_items:
+          - "{{ cont_p }}"
+          - "{{ cont_g }}"
+
+      when: not skip_permission_check
+
+- name: sync deployment to target host
+  hosts: target
+  connection: ssh
+  tags: transfer
+
+  tasks:
+    - name: set the rsync log file path
+      set_fact:
+        rsync_log_file: "{{ hostvars['deploy']['deployment_target'] }}/{{ hostvars['deploy']['deployment_version'] }}.rsync.log"
+
+    - name: sync the deployment to the target host
+      synchronize:
+        src: "{{ item }}"
+        dest: "{{ deployment_remote_path }}"
+        archive: yes
+        compress: yes
+        use_ssh_args: yes
+        ssh_connection_multiplexing: yes
+        rsync_timeout: 60
+        rsync_opts:
+          - --omit-dir-times
+          - --relative
+          - --progress
+          - --verbose
+          - "--log-file={{ rsync_log_file }}"
+          - "{{ exclude_pattern | map('regex_replace', '^(.*)$', '--exclude=\"\\1\"') | join(' ') }}"
+          - "{{ '--dry-run' if (deployment_environment == 'devel') else '' }}"
+      with_items:
+        - "{{ hostvars['deploy']['root_path'] }}"
+        - "{{ hostvars['deploy']['ngi_containers'] }}"
+
+    - name: create or move the latest symlink to {{ deployment_version }}
+      file:
+        src: "{{ hostvars['deploy']['root_path'] }}"
+        dest: "{{ hostvars['deploy']['root_path'] | dirname | regex_replace('^(.*)/?$', '\\1/latest') }}"
+        state: link
+      when: not deployment_environment == 'devel'
