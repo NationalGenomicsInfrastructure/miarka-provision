@@ -1,0 +1,75 @@
+
+- name: set paths for post-sync tasks
+  hosts: deploy
+  connection: local
+
+  tasks:
+    include: tasks/set-paths.yml
+    tags: always
+
+- name: perform post-sync tasks for {{ project }}
+  hosts: target
+  connection: ssh
+  tags: post-sync
+
+  pre_tasks:
+    - fail:
+        msg=You must specify '-e site=[upps | sthlm] -e project=[ngi2016001 | ... ]'
+      when: not site is defined or not project is defined 
+
+    - name: set project path for {{ project }}
+      set_fact:
+        project_path: "{{ proj_root }}/{{ project }}"
+
+  tasks:
+    - name: remove existing softlinks directory
+      file:
+        path: "{{ project_path }}/nobackup/NGI/softlinks"
+        state: absent
+
+    - name: create directories for {{ project }}
+      file:
+        path: "{{ project_path }}/{{ item }}"
+        state: directory
+        recurse: yes
+        owner: "{{ ansible_user }}"
+        group: "{{ ngi_group }}"
+      with_items:
+        - private/log/supervisord
+        - private/db
+        - nobackup/NGI/softlinks
+
+    - name: symlink ngi_pipeline files to softlinks
+      file:
+        path: "{{ project_path }}/nobackup/NGI/softlinks/{{ item.dst }}"
+        src: "{{ ngi_pipeline_dest }}/{{ item.src }}"
+        state: link
+      with_items:
+        - { src: DELIVERY.README.txt, dst: DELIVERY.README.txt }
+        - { src: ACKNOWLEDGEMENTS_{{ "U" if site == "upps" else "S" }}.txt, dst: ACKNOWLEDGEMENTS.txt }
+
+    - block:
+      # some sthlm-specific links
+      - name: symlink taca files to softlinks
+        file:
+          path: "{{ project_path }}/nobackup/NGI/softlinks/{{ item }}"
+          src: "{{ taca_ngi_dest }}/delivery_readmes/{{ item }}"
+          state: link
+        with_items:
+          - DELIVERY.README.RAW_DATA.txt
+          - DELIVERY.README.MethylSeq.txt
+          - DELIVERY.README.RNASeq.txt
+          - DELIVERY.README.SAREK.txt
+
+      - name: create genotype directories for {{ project }}
+        file:
+          path: "{{ project_path }}/{{ item }}"
+          state: directory
+          recurse: yes
+          owner: "{{ ansible_user }}"
+          group: "{{ ngi_group }}"
+        with_items:
+          - genotype_data/incoming
+          - genotype_data/archive
+
+      when: site == "sthlm"
