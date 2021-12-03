@@ -1,7 +1,6 @@
 *.DS_store
 *.swp
 *.retry
-files/
 pontus.larsson_medsci.uu.se.key
 charon_credentials.yml
 orderportal_credentials.yml
