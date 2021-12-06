@@ -24,7 +24,7 @@ tarzan_start_script: "{{ tarzan_conf_dir }}/start_kong.sh"
 tarzan_singularity_image_file: "kong-{{ tarzan_kong_version }}-centos.sif"
 tarzan_singularity_image_file_src: "{{ ngi_containers }}/kong/{{ tarzan_singularity_image_file }}"
 tarzan_singularity_image_file_dest: "{{ tarzan_root_dir }}/{{ tarzan_singularity_image_file }}"
-tarzan_singularity_image_sha1: "fc7fa567e50adfecbd823d8520272693871bbf12"
+tarzan_singularity_image_sha1: "0a6ff9026711cbd5662af0c37dcdfab0611c5741"
 
 # Singularity container
 tarzan_singularity_container_name: "kong-{{ deployment_environment }}"
