@@ -32,20 +32,6 @@ ngi_pipeline_venv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_name }}"
 ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"
 
-ngi_pipeline_sthlm_delivery: ngi2016003
-ngi_pipeline_upps_delivery: ngi2016001
-ngi_sthlm_softlinks: "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/nobackup/NGI/softlinks"
-ngi_upps_softlinks: "{{ proj_root }}/{{ ngi_pipeline_upps_delivery }}/nobackup/NGI/softlinks"
-
-ngi_pipeline_sthlm_path: "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/private/"
-ngi_pipeline_upps_path: "{{ proj_root }}/{{ ngi_pipeline_upps_delivery }}/private/"
-
-ngi_pipeline_log_sthlm: "{{ ngi_pipeline_sthlm_path }}/log/ngi_pipeline.log"
-ngi_pipeline_log_upps: "{{ ngi_pipeline_upps_path }}/log/ngi_pipeline.log"
-
-ngi_pipeline_db_upps: "{{ ngi_pipeline_upps_path }}/db/records_db_upps.sql"
-ngi_pipeline_db_sthlm: "{{ ngi_pipeline_sthlm_path }}/db/records_db_sthlm.sql"
-
 piper_module_version: 1.5.1
 gatk_bundle_b37: "/sw/data/uppnex/piper_references/2016-04-07/gatk_bundle/2.8/b37/"
 igenomes_path: /sw/data/uppnex/igenomes
@@ -58,9 +44,6 @@ sarek_containers: "{{ ngi_containers }}/sarek"
 gatk_key: pontus.larsson_medsci.uu.se.key
 snic_sthlm_creds: snic_credentials_sthlm.yml
 orderportal_creds: orderportal_credentials.yml
-
-recipient_mail_sthlm: ngi_pipeline_operators@scilifelab.se
-recipient_mail_upps: medsci-molmed-bioinfo@googlegroups.com
 
 validation_data_root: "{{ deployment_remote_path }}/validation_data/"
 validation_data:

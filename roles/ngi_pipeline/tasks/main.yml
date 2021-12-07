@@ -71,35 +71,24 @@
               line='export PATH={{ anaconda_path }}/bin:$PATH'
               backup=no
 
-# Run site-specific tasks for Uppsala
-- import_tasks: site_tasks.yml
-  vars:
-    site: "upps"
-    ngi_pipeline_db: "{{ ngi_pipeline_db_upps }}"
-    ngi_pipeline_slurm_project: "{{ ngi_pipeline_upps_delivery }}"
-    ngi_pipeline_sequencing_center: "NGI-U"
-    ngi_pipeline_log: "{{ ngi_pipeline_log_upps }}"
-    recipient_mail: "{{ recipient_mail_upps }}"
-    site_config: "{{ upps_config }}"
-    charon_api_token: "{{ charon_api_token_upps }}"
-    tsm_config_file: "{{ tsm_config_file_upps }}"
-    ngi_pipeline_delivery: "{{ ngi_pipeline_upps_delivery }}"
-    bash_env_script: "{{ bash_env_upps_script }}"
+- name: Create ngi_pipeline staging incoming & archive directories for {{ site }}
+  file: path="{{ proj_root }}/{{ uppmax_project }}/{{ item }}" state=directory mode=g+s
+  with_items:
+    - "incoming"
+    - "archive"
+  when: deployment_environment in ["staging", "devel"]
 
-# Run site-specific tasks for Sthlm
-- import_tasks: site_tasks.yml
-  vars:
-    site: "sthlm"
-    ngi_pipeline_db: "{{ ngi_pipeline_db_sthlm }}"
-    ngi_pipeline_slurm_project: "{{ ngi_pipeline_sthlm_delivery }}"
-    ngi_pipeline_sequencing_center: "NGI-S"
-    ngi_pipeline_log: "{{ ngi_pipeline_log_sthlm }}"
-    recipient_mail: "{{ recipient_mail_sthlm }}"
-    site_config: "{{ sthlm_config }}"
-    charon_api_token: "{{ charon_api_token_sthlm }}"
-    tsm_config_file: "{{ tsm_config_file_sthlm }}"
-    ngi_pipeline_delivery: "{{ ngi_pipeline_sthlm_delivery }}"
-    bash_env_script: "{{ bash_env_sthlm_script }}"
+- name: Deploy miarka ngi_pipeline config for {{ site }}
+  template: src="miarka_ngi_config.yaml.j2" dest="{{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}"
+
+- name: Deploy bash environment variables for {{ site }}
+  template: src="{{ bash_env_site_script }}.j2" dest="{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+
+- name: Add py3 anaconda env path to sourceme script for {{ site }}
+  lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_script }}
+              line='export PATH={{ anaconda_path }}/envs/{{ NGI_venv_py3_name }}/bin:$PATH'
+              backup=no
+  when: site == "sthlm"
 
 - name: Try getting anaconda version
   shell: "conda --version"

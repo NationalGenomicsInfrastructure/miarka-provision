@@ -6,19 +6,13 @@ database:
     record_tracking_db_path: {{ ngi_pipeline_db }}
 
 environment:
-    project_id: {{ ngi_pipeline_slurm_project }}
+    project_id: {{ uppmax_project }}
     ngi_scripts_dir: {{ ngi_pipeline_dest }}/scripts
     conda_env: NGI
     flowcell_inbox:
-            - {{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/incoming
-            - {{ proj_root }}/{{ ngi_pipeline_upps_delivery }}/incoming
+            - {{ proj_root }}/{{ uppmax_project }}/incoming
 # TODO: This QOS flag is probably not used/needed any longer.
 #       Enable later in the future if required.
-
-{% if deployment_environment in [ "staging", "devel" ] %}
-slurm:
-     queue: testcore
-{% endif %}
 
 piper:
     #sample:
@@ -47,7 +41,7 @@ sarek:
     genomes_base_paths:
         GRCh37: /sw/data/uppnex/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37/
         GRCh38: /sw/data/uppnex/ToolBox/hg38bundle/
-    project: {{ ngi_pipeline_slurm_project }}
+    project: {{ uppmax_project }}
     custom_config_base: {{ sarek_dest }}/configs/
     igenomes_ignore: " "
     no_gatk_spark: " "
@@ -86,8 +80,8 @@ analysis:
         RNA-seq:
             analysis_engine: ngi_pipeline.engines.rna_ngi
             ngi_nf_path: {{ sw_path }}rnaseq/workflow/
-            sthlm_ngi_conf: {{ sthlm_rna_seq_conf }}
-            upps_ngi_conf: {{ upps_rna_seq_conf }}
+            sthlm_ngi_conf: {{ rna_seq_conf }}
+            upps_ngi_conf: {{ rna_seq_conf }}
         wgs_germline:
             analysis_engine: ngi_pipeline.engines.sarek
         wgs_somatic:
@@ -97,8 +91,8 @@ analysis:
         exome_somatic:
             analysis_engine: ngi_pipeline.engines.sarek
     top_dir: nobackup/NGI
-    sthlm_root: {{ ngi_pipeline_sthlm_delivery }}
-    upps_root: {{ ngi_pipeline_upps_delivery }}
+    sthlm_root: {{ uppmax_project }}
+    upps_root: {{ uppmax_project }}
     base_root: {{ proj_root }}
 
 qc:
@@ -118,8 +112,8 @@ qc:
         make_md5: True
 
 gt_concordance:
-    XL_FILES_PATH: {{ proj_root }}/{{ ngi_pipeline_slurm_project }}/genotype_data/incoming
-    XL_FILES_ARCHIVED:  {{ proj_root }}/{{ ngi_pipeline_slurm_project }}/genotype_data/archive
+    XL_FILES_PATH: {{ proj_root }}/{{ uppmax_project }}/genotype_data/incoming
+    XL_FILES_ARCHIVED:  {{ proj_root }}/{{ uppmax_project }}/genotype_data/archive
     GATK_PATH: /sw/apps/bioinfo/GATK/3.5.0//GenomeAnalysisTK.jar
     GATK_REF_FILE: {{ gatk_bundle_b37 }}/human_g1k_v37.fasta
     GATK_VAR_FILE: {{ gatk_bundle_b37 }}/dbsnp_138.b37.vcf
