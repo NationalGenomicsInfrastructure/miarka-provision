@@ -27,7 +27,12 @@
     "{{ tools_path }}"
 
   vars_files:
-    - env_vars/{{ deployment_environment }}/tarzan.yml
+    - env_vars/site_all_env_{{ deployment_environment }}.yml
+    - env_vars/site_{{ site }}_env_all.yml
+    - env_vars/site_{{ site }}_env_{{ deployment_environment }}.yml
+    - env_secrets/site_all_env_{{ deployment_environment }}.yml
+    - env_secrets/site_{{ site }}_env_all.yml
+    - env_secrets/site_{{ site }}_env_{{ deployment_environment }}.yml
 
   roles:
     - { role: ngi_pipeline, tags: ngi_pipeline }
