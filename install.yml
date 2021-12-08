@@ -20,8 +20,6 @@
   pre_tasks:
     - include: tasks/set-paths.yml
       tags: always
-    - include: tasks/pre-install.yml
-      tags: always
 
   environment:
     "{{ tools_path }}"
@@ -51,6 +49,33 @@
     - { role: archive-upload-ws, tags: archive-upload }
     - { role: nf-core, tags: nf-core }
 
+  tasks:
+
+    - name: Add miarka_provision version to deployed tools files
+      lineinfile:
+        dest: "{{ deployed_tool_versions }}"
+        line: "-- Deployed at {{ ansible_date_time.iso8601 }}, miarka_provision ({{ (branch_name, branch_tag, branch_hash) | join('.') }}), by {{ deploy_user }} --"
+
+    - name: set correct file permission for everything in the deployment
+      file:
+        path: "{{ root_path }}"
+        user: "{{ deploy_user }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: yes
+        mode: g+rwX,o=rX
+
+    - name: Make wildwest directory editable by anyone that can access miarka
+      file:
+        path: "{{ proj_root }}"
+        user: "{{ deploy_user }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: yes
+        mode: g+rwXs,o=rwX
+      when: deployment_environment == "staging"
+
   post_tasks:
-    - include: tasks/post-install.yml
-      tags: always
+
+    - debug:
+        msg: Finished deploying to {{ root_path }}
