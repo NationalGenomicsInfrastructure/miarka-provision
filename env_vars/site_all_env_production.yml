@@ -9,3 +9,12 @@ ngi_containers: "{{ deployment_remote_path }}/containers/"
 # Ports
 tarzan_http_port: 8888
 tarzan_https_port: 4444
+
+# ngi_pipeline
+charon_base_url: https://charon-dev.scilifelab.se
+
+# taca
+snic_api_url: https://supr.snic.se/api
+
+# statusdb
+orderportal_api_url: https://ngisweden.scilifelab.se/orders/api

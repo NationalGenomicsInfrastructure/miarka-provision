@@ -1,50 +1,11 @@
 ---
-# NOTE: STATUSDB IS A REQUIREMENT, BUT CURRENTLY CONFIG IS ONLY PROVIDED FOR NORMAL TACA-NGI-PIPELINE. THIS IS ACCEPTABLE
-- name: Copy SNIC-SUPR credentials
-  copy: src="files/{{ snic_sthlm_creds }}" dest="{{ ngi_pipeline_conf }}/{{ snic_sthlm_creds }}"
-
-- name: Add SUPR credentials envvar to sourceme 
-  lineinfile: dest="{{ ngi_pipeline_conf }}/{{ bash_env_sthlm_script }}"
-              line="export SNIC_API_STOCKHOLM={{ ngi_pipeline_conf }}/{{ snic_sthlm_creds }}"
-              backup=no
-
-- name: Copy Orderportal credentials
-  copy: src="files/{{ orderportal_creds }}" dest="{{ ngi_pipeline_conf }}/{{ orderportal_creds }}"
-
-- name: Add Orderportal credentials envvar to sourceme
-  lineinfile: dest="{{ ngi_pipeline_conf }}/{{ bash_env_sthlm_script }}"
-              line="export ORDER_PORTAL={{ ngi_pipeline_conf }}/{{ orderportal_creds }}"
-              backup=no
-
-- name: Fetch statusdb from GitHub
-  git: repo="{{ statusdb_repo }}"
-       dest="{{ statusdb_dest }}"
-       version="{{ statusdb_version }}"
-       force=yes
-
-- name: Install statusdb requirements
-  pip:
-    requirements: "{{ statusdb_dest }}/requirements.txt"
-    executable: "{{ ngi_pipeline_venv }}/bin/pip"
-
-- name: Install statusDB
-  pip:
-    name: "file:{{ statusdb_dest }}"
-    executable: "{{ ngi_pipeline_venv }}/bin/pip"
-
-- name: Copy statusDB credentials
-  copy: src="files/{{ statusdb_creds }}" dest="{{ ngi_pipeline_conf }}/{{ statusdb_creds }}"
-
-- name: Add statusDB envvar to sourceme 
-  lineinfile: dest={{ ngi_pipeline_conf }}/{{ bash_env_sthlm_script }}
-              line="export STATUS_DB_CONFIG={{ ngi_pipeline_conf }}/{{ statusdb_creds }}"
-              backup=no
 
 - name: Fetch flowcell_parser from GitHub
-  git: repo="{{ flowcell_parser_repo }}"
-       dest="{{ flowcell_parser_dest }}"
-       version="{{ flowcell_parser_version }}"
-       force=yes
+  git:
+    repo: "{{ flowcell_parser_repo }}"
+    dest: "{{ flowcell_parser_dest }}"
+    version: "{{ flowcell_parser_version }}"
+    force: yes
 
 - name: Install flowcell_parser requirements
   pip:
@@ -57,10 +18,11 @@
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Fetch TACA from GitHub
-  git: repo="{{ taca_repo }}"
-       dest="{{ taca_dest }}"
-       version="{{ taca_version }}"
-       force=yes
+  git:
+    repo: "{{ taca_repo }}"
+    dest: "{{ taca_dest }}"
+    version: "{{ taca_version }}"
+    force: yes
 
 - name: Install TACA requirements
   pip:
@@ -71,3 +33,14 @@
   pip:
     name: "file:{{ taca_dest }}"
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Deploy SNIC-SUPR credentials
+  template:
+    src: supr_credentials.yaml.j2
+    dest: "{{ ngi_pipeline_conf }}/{{ snic_creds }}"
+
+- name: Add SUPR credentials envvar to sourceme
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    line: "export {{ snic_sourceme_variable }}={{ ngi_pipeline_conf }}/{{ snic_creds }}"
+    backup: no

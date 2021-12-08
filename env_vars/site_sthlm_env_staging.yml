@@ -1,0 +1,11 @@
+
+# statusdb
+statusdb_creds: statusdb_creds_stage.yml
+statusdb_url: ngi-statusdb-dev.scilifelab.se
+statusdb_port: 5984
+
+orderportal_creds: orderportal_credentials.yaml
+orderportal_api_url: https://ngisweden.scilifelab.se/orders/api
+
+# taca
+snic_creds: snic_credentials_{{ site }}.yaml

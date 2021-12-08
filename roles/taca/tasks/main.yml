@@ -1,10 +1,11 @@
 - include: dependencies.yml
 
 - name: Fetch TACA-ngi-pipeline from GitHub
-  git: repo="{{ taca_ngi_repo }}"
-       dest="{{ taca_ngi_dest }}"
-       version="{{ taca_ngi_version }}"
-       force=yes
+  git:
+    repo: "{{ taca_ngi_repo }}"
+    dest: "{{ taca_ngi_dest }}"
+    version: "{{ taca_ngi_version }}"
+    force: yes
 
 - name: Install TACA-ngi-pipeline requirements
   pip:
@@ -17,53 +18,41 @@
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Create TACA delivery configs directory
-  file: path="{{ ngi_pipeline_conf }}/TACA" state=directory mode=g+s
-
-- name: Create TACA resources folders for each site
   file:
-    path: "{{ ngi_resources }}/TACA/{{ item }}"
+    path: "{{ ngi_pipeline_conf }}/TACA"
     state: directory
     mode: g+s
-  with_items:
-    - "upps"
-    - "sthlm"
 
-- set_fact:
-    site: "upps"
-    site_full: "uppsala"
-    ngi_pipeline_site_path: "{{ ngi_pipeline_upps_path }}"
-    ngi_site_softlinks: "{{ ngi_upps_softlinks }}"
-    ngi_pipeline_site_delivery: "{{ ngi_pipeline_upps_delivery }}"
-    recipient_mail: "{{ recipient_mail_upps }}"
+- name: Create TACA resources folders
+  file:
+    path: "{{ ngi_resources }}/TACA/{{ site }}"
+    state: directory
+    mode: g+s
 
 - name: Deploy {{ site }} TACA site configs
-  template: src="site_{{ item.config_tpl }}.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.config_dst }}.yml"
+  template:
+    src: site_{{ item.config_tpl }}.yml.j2
+    dest: "{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.config_dst }}.yml"
   with_items:
     - { config_tpl: "taca_delivery", config_dst: "taca_delivery" }
     - { config_tpl: "taca_sarek_delivery", config_dst: "taca_sarek_delivery" }
 
-- set_fact:
-    site: "sthlm"
-    site_full: "stockholm"
-    ngi_pipeline_site_path: "{{ ngi_pipeline_sthlm_path }}"
-    ngi_site_softlinks: "{{ ngi_sthlm_softlinks }}"
-    ngi_pipeline_site_delivery: "{{ ngi_pipeline_sthlm_delivery }}"
-    recipient_mail: "{{ recipient_mail_sthlm }}"
-
 - name: Deploy {{ site }} TACA site configs
-  template: src="site_{{ item.config_tpl }}.yml.j2" dest="{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.config_dst }}.yml"
+  template:
+    src: site_{{ item.config_tpl }}.yml.j2
+    dest: "{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ item.config_dst }}.yml"
   with_items:
-    - { config_tpl: "taca_cleanup", config_dst: "taca_cleanup" }
-    - { config_tpl: "fastq_delivery", config_dst: "taca_fastq_delivery" }
-    - { config_tpl: "taca_delivery", config_dst: "taca_wgs_delivery" }
-    - { config_tpl: "taca_sarek_delivery", config_dst: "taca_sarek_delivery" }
-    - { config_tpl: "taca_runfolder_delivery", config_dst: "taca_runfolder_delivery" }
-    - { config_tpl: "app_specific_delivery", config_dst: "taca_rna_delivery" }
-    - { config_tpl: "app_specific_delivery", config_dst: "taca_denovo_delivery" }
+    - { config_tpl: "taca_cleanup", config_dst: "taca_cleanup", item_type: cleanup }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_fastq_delivery", item_type: fastq }
+    - { config_tpl: "taca_runfolder_delivery", config_dst: "taca_runfolder_delivery", item_type: runfolder }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_rna_delivery", item_type: rna }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_denovo_delivery", item_type: denovo }
+  when: site == "sthlm"
 
-
-- name: Deploy script for softlinking sthlm delivery Readmes
-  template: src="create_delivery_readme_softlinks.sh.j2" dest="{{ ngi_resources }}/create_delivery_readme_softlinks.sh"
+- name: Deploy script for softlinking delivery Readmes
+  template:
+    src: create_delivery_readme_softlinks.sh.j2
+    dest: "{{ ngi_resources }}/create_delivery_readme_softlinks.sh"
 
 - name: Store taca tools version on deployment
   lineinfile:

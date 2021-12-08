@@ -18,13 +18,12 @@ nextflow_dest: "{{ sw_path }}/nextflow"
 
 # Name of the script that should be sourced from the user to get the
 # relevant environment variables setup. Perhaps move this to defaults vars.
-bash_env_script: sourceme_common.sh
-bash_env_upps_script: sourceme_upps.sh
-bash_env_sthlm_script: sourceme_sthlm.sh
+bash_env_common_script: sourceme_common.sh
 
-ngi_pipeline_repo: https://github.com/NationalGenomicsInfrastructure/ngi_pipeline.git
-ngi_pipeline_dest: "{{ sw_path }}/ngi_pipeline"
-ngi_pipeline_version: d1f206f2e28c6af498c711ff8b8d4a479d98440d
+ngi_pipeline_path: "{{ proj_root }}/{{ uppmax_project }}/private"
+ngi_pipeline_workdir: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI"
+ngi_softlinks: "{{ ngi_pipeline_workdir }}/softlinks"
+
 NGI_venv_name: "NGI"
 NGI_venv_py3_name: "NGI_py3"
 ngi_pipeline_venv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_name }}"
@@ -32,23 +31,8 @@ ngi_pipeline_venv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_name }}"
 ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"
 
-piper_module_version: 1.5.1
-gatk_bundle_b37: "/sw/data/uppnex/piper_references/2016-04-07/gatk_bundle/2.8/b37/"
-igenomes_path: /sw/data/uppnex/igenomes
-java_home: "/sw/comp/java/x86_64/sun_jdk1.8.0_151"
-
 sarek_tag: "2.7"
 sarek_dest: "{{ sw_path }}/sarek"
-sarek_containers: "{{ ngi_containers }}/sarek"
-
-gatk_key: pontus.larsson_medsci.uu.se.key
-snic_sthlm_creds: snic_credentials_sthlm.yml
-orderportal_creds: orderportal_credentials.yml
-
-validation_data_root: "{{ deployment_remote_path }}/validation_data/"
-validation_data:
- - "160915_ST-1234_0123_ATESTFCCXX"
- - "160915_ST-1234_0124_BCHR22CCXX"
 
 # File with tools/software version in the deployed env
 deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"

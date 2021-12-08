@@ -1,8 +1,8 @@
 log:
-    file: "{{ ngi_pipeline_sthlm_path }}/log/taca.log"
+    file: "{{ ngi_pipeline_path }}/log/taca.log"
 
 deliver:
-    rootpath: "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}"
+    rootpath: "{{ proj_root }}/{{ uppmax_project }}"
     datapath: <ROOTPATH>/incoming
     stagingpathhard: <ROOTPATH>/nobackup/NGI/DELIVERY_HARD/<PROJECTID>
     operator: "{{ recipient_mail }}"

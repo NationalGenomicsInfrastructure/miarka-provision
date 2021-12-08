@@ -1,9 +1,14 @@
 
 # common variables
 uppmax_project: ngi2016001
-recipient_mail: medsci-molmed-bioinfo@googlegroups.com
+
 bash_env_script: sourceme_{{ site }}.sh
 ngi_pipeline_sequencing_center: NGI-U
+recipient_mail: medsci-molmed-bioinfo@googlegroups.com
+site_full: uppsala
 
 # ngi_pipeline
 tsm_config_file: /etc/dsm.opt.ngiu
+
+# taca
+snic_sourceme_variable: SNIC_API_CREDENTIALS

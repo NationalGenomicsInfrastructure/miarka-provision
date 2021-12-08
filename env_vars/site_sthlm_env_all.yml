@@ -1,9 +1,14 @@
 
 # common variables
 uppmax_project: ngi2016003
-recipient_mail: ngi_pipeline_operators@scilifelab.se
+
 bash_env_script: sourceme_{{ site }}.sh
 ngi_pipeline_sequencing_center: NGI-S
+recipient_mail: ngi_pipeline_operators@scilifelab.se
+site_full: stockholm
 
 # ngi_pipeline
 tsm_config_file: /etc/dsm.opt.ngis
+
+# taca
+snic_sourceme_variable: SNIC_API_STOCKHOLM

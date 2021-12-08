@@ -1,0 +1,14 @@
+
+# statusdb
+
+statusdb_username: secret
+statusdb_password: secret
+orderportal_api_token: secret
+
+# taca
+
+snic_api_user: secret
+snic_api_password: secret
+
+# ngi_pipeline
+charon_api_token: secret
