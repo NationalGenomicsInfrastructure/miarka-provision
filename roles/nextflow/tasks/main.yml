@@ -6,21 +6,21 @@
 
 - name: Create NextFlow directory
   file:
-	path: "{{ nextflow_dest }}"
-	state: directory
-	mode: g+rwXs
+    path: "{{ nextflow_dest }}"
+    state: directory
+    mode: g+rwXs
 
 - name: Create NextFlow installation subdirectory
   file:
-	path: "{{ nextflow_dest }}/workfiles"
-	state: directory
-	mode: g+rwXs
+    path: "{{ nextflow_dest }}/workfiles"
+    state: directory
+    mode: g+rwXs
 
 - name: Download NextFlow
   get_url:
-	url: "{{ nextflow_download_url }}"
-	dest: "{{ nextflow_dest }}/nextflow"
-	mode: u+rwx,g=rwx
+    url: "{{ nextflow_download_url }}"
+    dest: "{{ nextflow_dest }}/nextflow"
+    mode: u+rwx,g=rwx
 
 # Resolved any problems. Run-time files are pushed to scratch
 - name: Install NextFlow
@@ -35,9 +35,9 @@
 
 - name: Add NextFlow to $PATH
   lineinfile:
-	dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-	line: "export PATH={{ root_path }}/sw/nextflow:$PATH"
-	backup: no
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ root_path }}/sw/nextflow:$PATH"
+    backup: no
 ###
 
 - name: Create miarka config
@@ -49,9 +49,9 @@
 # NXF_WORK is omitted, which puts them under current directory
 - name: Add Nextflow module vars to sourceme
   lineinfile:
-	dest: {{ ngi_pipeline_conf }}/{{ bash_env_common_script }}
-	line: "{{ item }}"
-	backup: no
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "{{ item }}"
+    backup: no
   with_items:
     - export NXF_OPTS={{ nextflow_env.NXF_OPTS }}
     - export NXF_VER={{ nextflow_ver.stdout }}

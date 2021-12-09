@@ -21,16 +21,18 @@
     - include: tasks/set-paths.yml
       tags: always
 
+    - include_vars:
+        dir: env_vars
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
+
+    - include_vars:
+        dir: env_secrets
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
+
   environment:
     "{{ tools_path }}"
-
-  vars_files:
-    - env_vars/site_all_env_{{ deployment_environment }}.yml
-    - env_vars/site_{{ site }}_env_all.yml
-    - env_vars/site_{{ site }}_env_{{ deployment_environment }}.yml
-    - env_secrets/site_all_env_{{ deployment_environment }}.yml
-    - env_secrets/site_{{ site }}_env_all.yml
-    - env_secrets/site_{{ site }}_env_{{ deployment_environment }}.yml
 
   roles:
     - { role: ngi_pipeline, tags: ngi_pipeline }

@@ -1,0 +1,12 @@
+
+- name: download {{ name }}
+  get_url:
+    url: "{{ url }}"
+    dest: "{{ misc_tools_bin_path }}/{{ name }}"
+    checksum: "{{ checksum }}"
+    mode: 0775
+
+- name: store {{ name }} version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ name }}: {{ version }}"

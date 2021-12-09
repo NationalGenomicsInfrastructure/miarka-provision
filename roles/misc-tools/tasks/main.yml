@@ -2,26 +2,15 @@
 
 - name: create misc tools bin folder
   file:
-	path: "{{ misc_tools_bin_path }}"
-	state: directory
+    path: "{{ misc_tools_bin_path }}"
+    state: directory
 
 - name: add misc tools bin folder to path
   lineinfile:
-	dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-	line: "export PATH={{ misc_tools_bin_path }}:$PATH"
-	backup: no
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ misc_tools_bin_path }}:$PATH"
+    backup: no
 
-- block:
-    name: download {{ item.name }}
-    get_url:
-      url: "{{ item.url }}"
-      dest: "{{ misc_tools_bin_path }}/{{ item.name }}"
-      checksum: "{{ item.checksum }}"
-      mode: 0775
-
-    name: store {{ item.name }} version in deployment
-    lineinfile:
-      dest: "{{ deployed_tool_versions }}"
-      line: "{{ item.name }}: {{ item.version }}"
-
+- name: deploy tools
+  include_tasks: deploy_tool.yml
   with_items: tools
