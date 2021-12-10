@@ -14,7 +14,7 @@
 
 - name: Install flowcell_parser
   pip:
-    name: "file:{{ flowcell_parser_dest }}"
+    name: file:{{ flowcell_parser_dest }}
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Fetch TACA from GitHub
@@ -31,7 +31,7 @@
 
 - name: Install TACA
   pip:
-    name: "file:{{ taca_dest }}"
+    name: file:{{ taca_dest }}
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Deploy SNIC-SUPR credentials

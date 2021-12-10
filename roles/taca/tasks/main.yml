@@ -14,7 +14,7 @@
 
 - name: Install TACA-ngi-pipeline
   pip:
-    name: "file:{{ taca_ngi_dest }}"
+    name: file:{{ taca_ngi_dest }}
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Create TACA delivery configs directory
