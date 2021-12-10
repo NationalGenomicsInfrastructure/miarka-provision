@@ -22,6 +22,8 @@ bash_env_common_script: sourceme_common.sh
 
 ngi_pipeline_path: "{{ proj_root }}/{{ uppmax_project }}/private"
 ngi_pipeline_workdir: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI"
+ngi_log_path: "{{ proj_root }}/{{ uppmax_project }}/private/log"
+
 ngi_softlinks: "{{ ngi_pipeline_workdir }}/softlinks"
 
 NGI_venv_name: "NGI"
