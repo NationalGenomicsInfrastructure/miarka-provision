@@ -12,3 +12,15 @@ tsm_config_file: /etc/dsm.opt.ngis
 
 # taca
 snic_sourceme_variable: SNIC_API_STOCKHOLM
+
+# multiqc
+multiqc_options:
+  plots_flat_numseries: 1000
+  push_statusdb: True
+  save_remote: True
+  template: ngi
+
+multiqc_swedac_accredited: True
+
+multiqc_port: 22
+megaqc_url: http://megaqc.scilifelab.se/api/upload_parse

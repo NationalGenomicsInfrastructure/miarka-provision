@@ -29,6 +29,7 @@ ngi_softlinks: "{{ ngi_pipeline_workdir }}/softlinks"
 NGI_venv_name: "NGI"
 NGI_venv_py3_name: "NGI_py3"
 ngi_pipeline_venv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_name }}"
+ngi_pipeline_venv_py3: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py3_name }}"
 
 ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"

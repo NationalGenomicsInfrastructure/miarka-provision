@@ -12,3 +12,11 @@ tsm_config_file: /etc/dsm.opt.ngiu
 
 # taca
 snic_sourceme_variable: SNIC_API_CREDENTIALS
+
+# multiqc
+multiqc_options:
+  push_statusdb: False
+
+multiqc_swedac_accredited: False
+
+megaqc_url: https://megaqc.snpseq.medsci.uu.se:443/api/upload_data
