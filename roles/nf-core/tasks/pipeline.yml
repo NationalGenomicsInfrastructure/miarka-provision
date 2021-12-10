@@ -23,27 +23,17 @@
 - name: create nf-core {{ pipeline }} v{{ release }} config
   template:
     src: "site.config.j2"
-    dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ cfg.site }}.config"
-  with_items:
-    - { site: 'sthlm', project_id: "{{ ngi_pipeline_sthlm_delivery }}" }
-    - { site: 'upps', project_id: "{{ ngi_pipeline_upps_delivery }}" }
-  loop_control:
-    loop_var: cfg
+    dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config"
 
 - name: set alias for pipeline {{ pipeline }} v{{ release }}
   lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ cfg.script }}"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
           alias {{ pipeline }}='nextflow run {{ sw_path }}{{ pipeline }}/workflow/ \
           -profile uppmax \
-          -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ cfg.site }}.config \
-          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ cfg.site }}.config'
+          -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
+          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
     backup: no
-  with_items:
-    - { site: 'sthlm', script: "{{ bash_env_sthlm_script }}" }
-    - { site: 'upps', script: "{{ bash_env_upps_script }}" }
-  loop_control:
-    loop_var: cfg
 
 - name: download biocontainers
   import_tasks: biocontainers.yml

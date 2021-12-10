@@ -1,5 +1,5 @@
 - name: create virtual python env for delivery
-  shell: conda create --name {{ ugc_delivery_env_name }} python=2.7
+  shell: conda create --name {{ delivery_env_name }} python=2.7
   args: 
     creates: "{{ delivery_env_path }}"
 
@@ -42,5 +42,5 @@
 - name: store delivery tool version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "ugc-delivery: {{ delivery_version.stdout }}"
+    line: "delivery: {{ delivery_version.stdout }}"
   when: delivery_version.stdout

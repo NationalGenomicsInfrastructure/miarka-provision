@@ -34,13 +34,17 @@
     name: file:{{ taca_dest }}
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
-- name: Deploy SNIC-SUPR credentials
-  template:
-    src: supr_credentials.yaml.j2
-    dest: "{{ ngi_pipeline_conf }}/{{ snic_creds }}"
+- block:
 
-- name: Add SUPR credentials envvar to sourceme
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
-    line: "export {{ snic_sourceme_variable }}={{ ngi_pipeline_conf }}/{{ snic_creds }}"
-    backup: no
+  - name: Deploy SNIC-SUPR credentials
+    template:
+      src: supr_credentials.yaml.j2
+      dest: "{{ ngi_pipeline_conf }}/{{ snic_creds }}"
+
+  - name: Add SUPR credentials envvar to sourceme
+    lineinfile:
+      dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+      line: "export {{ snic_sourceme_variable }}={{ ngi_pipeline_conf }}/{{ snic_creds }}"
+      backup: no
+
+  when: snic_creds is defined

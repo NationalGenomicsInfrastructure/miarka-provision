@@ -13,4 +13,4 @@
 
 - name: deploy tools
   include_tasks: deploy_tool.yml
-  with_items: tools
+  with_items: "{{ tools }}"

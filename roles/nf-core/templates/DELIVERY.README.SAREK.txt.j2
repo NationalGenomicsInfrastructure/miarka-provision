@@ -35,7 +35,7 @@ ProjectID -> 00-Reports
 |--ProjectID
    |--00-Reports
       |--ProjectID_multiqc_report.html
-{% if sarek_site == "upps" %}
+{% if site == "upps" %}
       |--ProjectID_multiqc_report_data.zip
       |--SequenceQC
 {% endif %}
@@ -43,7 +43,7 @@ ProjectID -> 00-Reports
 --ProjectID_multiqc_report.html
 A project report summarizing the included samples and results from the sequencing and analysis.
 
-{% if sarek_site == "upps" %}
+{% if site == "upps" %}
 --ProjectID_multiqc_report_data.zip
 Source data for the project report.
 

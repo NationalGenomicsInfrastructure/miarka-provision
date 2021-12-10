@@ -5,7 +5,7 @@ params {
     seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"
 }
 
-{% if item.site == "sthlm" %}
+{% if site == "sthlm" %}
 process {
     withName: 'multiqc|MultiQC|MULTIQC' {
         container = null
