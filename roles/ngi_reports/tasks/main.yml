@@ -2,31 +2,35 @@
 - include: dependencies.yml
 
 - name: Fetch ngi_reports from github
-  git: repo="{{ ngi_reports_repo }}"
-       dest="{{ ngi_reports_dest }}"
-       version="{{ ngi_reports_version }}"
-       force=yes
-       recursive=yes
+  git:
+    repo: "{{ ngi_reports_repo }}"
+    dest: "{{ ngi_reports_dest }}"
+    version: "{{ ngi_reports_version }}"
+    force: yes
+    recursive: yes
 
 - name: Install ngi_reports
   pip:
     name: "file:{{ ngi_reports_dest }}"
-    executable: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py3_name }}/bin/pip"
+    executable: "{{ ngi_pipeline_venv_py3 }}/bin/pip"
     editable: yes
 
 - name: Create ngi_reports conf file
-  template: src="ngi_reports_sthlm.conf.j2" dest="{{ ngi_pipeline_conf }}/ngi_reports_sthlm.conf"
+  template:
+    src: ngi_reports.conf.j2
+    dest: "{{ ngi_pipeline_conf }}/ngi_reports_{{ site }}.conf"
 
 - name: Export NGI_REPORTS_CONFIG via sourceme_sthlm
-  lineinfile: dest="{{ ngi_pipeline_conf }}/{{ bash_env_sthlm_script }}"
-              line='export NGI_REPORTS_CONFIG={{ ngi_pipeline_conf }}/ngi_reports_sthlm.conf'
-              backup=no
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    line: export NGI_REPORTS_CONFIG={{ ngi_pipeline_conf }}/ngi_reports_{{ site }}.conf
+    backup: no
 
 - name: Set alias for regenerating project summary report
   lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_sthlm_script }}"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias make_report='{{ sw_path }}/anaconda/envs/{{ NGI_venv_py3_name }}/bin/ngi_reports project_summary -md'
+          alias make_report="{{ ngi_pipeline_venv_py3 }}/bin/ngi_reports project_summary -md"
     backup: no
 
 - name: Store ngi_reports tool version in deployment
