@@ -20,3 +20,8 @@ multiqc_options:
 multiqc_swedac_accredited: False
 
 megaqc_url: https://megaqc.snpseq.medsci.uu.se:443/api/upload_data
+
+# standalone scripts
+standalone_scripts_repo: https://github.com/Molmed/irma-scripts.git
+standalone_scripts_version: master
+standalone_scripts_dest: "{{ sw_path }}/upps_standalone_scripts"
