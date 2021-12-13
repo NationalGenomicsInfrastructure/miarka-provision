@@ -1,0 +1,47 @@
+
+- name: Fetch statusdb from GitHub
+  git:
+    repo: "{{ statusdb_repo }}"
+    dest: "{{ statusdb_dest }}"
+    version: "{{ statusdb_version }}"
+    force: yes
+
+- name: Install statusdb requirements
+  pip:
+    requirements: "{{ statusdb_dest }}/requirements.txt"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Install statusDB
+  pip:
+    name: "file:{{ statusdb_dest }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- block:
+
+    - name: Deploy statusDB credentials
+      template:
+        src: statusdb_credentials.yaml.j2
+        dest: "{{ ngi_pipeline_conf }}/{{ statusdb_creds }}"
+
+    - name: Add statusDB envvar to sourceme
+      lineinfile:
+        dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+        line: "export STATUS_DB_CONFIG={{ ngi_pipeline_conf }}/{{ statusdb_creds }}"
+        backup: no
+
+  when: statusdb_creds is defined
+
+- block:
+
+    - name: Deploy OrderPortal credentials
+      template:
+        src: orderportal_credentials.yaml.j2
+        dest: "{{ ngi_pipeline_conf }}/{{ orderportal_creds }}"
+
+    - name: Add Orderportal credentials envvar to sourceme
+      lineinfile:
+        dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+        line: "export ORDER_PORTAL={{ ngi_pipeline_conf }}/{{ orderportal_creds }}"
+        backup: no
+
+  when: orderportal_creds is defined

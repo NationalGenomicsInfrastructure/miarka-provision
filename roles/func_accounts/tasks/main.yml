@@ -6,16 +6,11 @@
 - name: Create ngi_resources folder
   file: name={{ ngi_resources }} state=directory mode=g+s
 
-# Run site-specific tasks for Uppsala
-- import_tasks: site_tasks.yml
-  vars:
-    site: upps
-    supervisord_log_dest: "{{ supervisord_log_dest_upps }}"
-    ngi_pipeline_web_port: "{{ ngi_pipeline_web_port_upps }}"
+- name: Deploy crontab file for {{ site }}
+  template: src="crontab.j2" dest="{{ ngi_pipeline_conf }}/crontab_{{ site }}"
 
-# Run site-specific tasks for Sthlm
-- import_tasks: site_tasks.yml
-  vars:
-    site: sthlm
-    supervisord_log_dest: "{{ supervisord_log_dest_sthlm }}"
-    ngi_pipeline_web_port: "{{ ngi_pipeline_web_port_sthlm }}"
+- name: Deploy supervisord.conf for {{ site }}
+  template: src="supervisord_site.conf.j2" dest="{{ ngi_pipeline_conf }}/supervisord_{{ site }}.conf"
+
+- name: Deploy start supervisord start script for {{ site }}
+  template: src="start_supervisord_site.sh.j2" dest="{{ ngi_resources }}/start_supervisord_{{ site }}.sh"

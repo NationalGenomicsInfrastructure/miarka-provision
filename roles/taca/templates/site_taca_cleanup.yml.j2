@@ -1,17 +1,17 @@
 log:
-    log_file: "{{ ngi_pipeline_site_path }}/taca.log"
+    log_file: "{{ ngi_pipeline_path }}/taca.log"
 
 cleanup:
     miarka:
         flowcell:
             root: 
-                - "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/incoming"
-                - "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/archive"
+                - "{{ proj_root }}/{{ uppmax_project }}/incoming"
+                - "{{ proj_root }}/{{ uppmax_project }}/archive"
             relative_project_source: Demultiplexing
             undet_file_pattern: "*Undetermined_*.fastq.gz"
-        data_dir: "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/nobackup/NGI/DATA"
+        data_dir: "{{ ngi_pipeline_workdir }}/DATA"
         analysis:
-            root: "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/nobackup/NGI/ANALYSIS"
+            root: "{{ ngi_pipeline_workdir }}/ANALYSIS"
             files_to_remove:
                 piper_ngi:
                     - "*.bam"

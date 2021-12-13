@@ -1,8 +1,8 @@
 log:
-    file: "{{ ngi_pipeline_sthlm_path }}/log/taca.log"
+    file: "{{ ngi_pipeline_path }}/log/taca.log"
 
 deliver:
-    rootpath: "{{ proj_root }}/{{ ngi_pipeline_sthlm_delivery }}/nobackup/NGI"
+    rootpath: "{{ ngi_pipeline_workdir }}"
     analysispath: <ROOTPATH>/ANALYSIS/<PROJECTID>
     datapath: <ROOTPATH>/DATA/<PROJECTID>
     stagingpath: <ROOTPATH>/DELIVERY/<PROJECTID>
@@ -20,17 +20,21 @@ deliver:
             - required: True
     misc_files_to_deliver:
         -
-{% if "rna" == item %}
+{% if "rna" == item.item_type %}
             - <ANALYSISPATH>/rnaseq_ngi/results/
             - <STAGINGPATH>/01-RNA-Results
             - required: True
-{% elif "denovo" == item %}
+{% elif "denovo" == item.item_type %}
             - <ANALYSISPATH>/nougat_ngi/02_QC_reports/
             - <STAGINGPATH>/01-QC-Results
             - required: True
+{% elif "fastq" == item.item_type %}
+        -
+            - {{ ngi_softlinks }}/DELIVERY.README.RAW_DATA.txt
+            - <STAGINGPATH>
 {% endif %}
         -
-            - {{ ngi_site_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
             - <STAGINGPATH>
         -
             - <ANALYSISPATH>/reports/*

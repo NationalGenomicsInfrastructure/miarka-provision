@@ -4,7 +4,7 @@ module load mover/1.0.0
 {% endif %}
 
 # Unique settings per site 
-export NGI_CONFIG={{ ngi_pipeline_conf }}/{{ site_config }} 
+export NGI_CONFIG={{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}
 export CHARON_API_TOKEN={{ charon_api_token }}
 export DSM_CONFIG={{ tsm_config_file }}
 
@@ -12,5 +12,5 @@ export DSM_CONFIG={{ tsm_config_file }}
 export PATH={{ sw_path }}:$PATH
 {% endif %}
 # Common settings shared for both sites
-source {{ ngi_pipeline_conf }}/{{ bash_env_script }}
+source {{ ngi_pipeline_conf }}/{{ bash_env_common_script }}
 

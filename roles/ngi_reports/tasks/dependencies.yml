@@ -1,9 +1,10 @@
 ---
 - name: Fetch ngi_visualizations from GitHub
-  git: repo="{{ ngi_visual_repo }}"
-       dest="{{ ngi_visual_dest }}"
-       version="{{ ngi_visual_version }}"
-       force=yes
+  git:
+    repo: "{{ ngi_visual_repo }}"
+    dest: "{{ ngi_visual_dest }}"
+    version: "{{ ngi_visual_version }}"
+    force: yes
 
 - name: Install ngi_visualizations requirements
   pip:
