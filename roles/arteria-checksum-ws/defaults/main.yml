@@ -1,30 +1,30 @@
 ---
 
-# If deploying to staging one should call with 
+# If deploying to staging one should call with
 # -e deployment_environment=staging
-# One can also override the default installed version 
-# by overriding the arteria_checksum_version on the command line. 
+# One can also override the default installed version
+# by overriding the arteria_checksum_version on the command line.
 #
-# This will set corresponding paths and use the appropriate port.  
+# This will set corresponding paths and use the appropriate port.
 arteria_checksum_repo: https://github.com/arteria-project/arteria-checksum.git
 arteria_checksum_version: v1.0.4
 
-# These values will be appended with production and staging specific 
+# These values will be appended with production and staging specific
 # paths in the tasks.
 #
 # NB. The log dirs need to be created manually on destination cluster.
 #
-# NB 2. Hard coded root path for runfolders, because that path 
+# NB 2. Hard coded root path for runfolders, because that path
 # needs to be reachable from outside world; i.e. have to be under /proj.
-# And hard coded log paths because we do not want the log files 
-# to disappear when the wildwest directory is cleaned out with every 
-# staging sync. 
-arteria_checksum_monitored_path: "/proj/{{ ngi_pipeline_upps_delivery }}/incoming"
+# And hard coded log paths because we do not want the log files
+# to disappear when the wildwest directory is cleaned out with every
+# staging sync.
+arteria_checksum_monitored_path: "{{ proj_root }}/{{ uppmax_project }}/incoming"
 arteria_checksum_env_root: "{{ anaconda_path }}/envs/arteria-checksum"
 arteria_checksum_src_path: "{{ sw_path }}/arteria/checksum_src/"
 arteria_checksum_config_root: "{{ ngi_pipeline_conf }}/arteria/checksum/"
-arteria_checksum_md5sum_log_dir: "/proj/{{ ngi_pipeline_upps_delivery }}/private/log/arteria/checksum_md5sum/"
-arteria_checksum_service_log: "/proj/{{ ngi_pipeline_upps_delivery }}/private/log/arteria/checksum-ws/"
+arteria_checksum_md5sum_log_dir: "{{ proj_root }}/{{ uppmax_project }}/private/log/arteria/checksum_md5sum/"
+arteria_checksum_service_log: "{{ proj_root }}/{{ uppmax_project }}/private/log/arteria/checksum-ws/"
 
 
 arteria_checksum_port_prod: 10420
