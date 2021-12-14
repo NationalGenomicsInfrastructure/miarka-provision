@@ -11,7 +11,7 @@ tarzan_http_port: 8888
 tarzan_https_port: 4444
 
 # ngi_pipeline
-charon_base_url: https://charon-dev.scilifelab.se
+charon_base_url: https://charon.scilifelab.se
 
 # taca
 snic_api_url: https://supr.snic.se/api
