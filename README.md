@@ -122,6 +122,19 @@ aliases defined above: `miarkaenv` followed by `ansibleenv` (or just `miarkaenv`
 Note that the order is important, and that they should not be run automatically at login, because that will cause an 
 infinite loop that will lock the user out.
 
+### SSH multiplexing
+For syncing deployments to the target host, it is necessary to set up the environment so that connections can be made 
+to the target host without needing interaction from the user (which ansible doesn't support). This can be done with 
+ssh-multiplexing. Add the following to the `~/.ssh/config` file (create the file first if it doesn't exist):
+```
+Host *.uppmax.uu.se
+    ControlMaster auto
+    ControlPath ~/.ssh/master-%r@%h:%p.socket
+    ControlPersist 60m
+```
+This will establish a SSH connection that will persist for 60 min after an initial connection has been made, which will 
+be re-used by subsequent SSH connections, even if the initial session has been closed. 
+
 ## Deployment of the Miarka software
 
 There are two staging branches in the repository, one called monthly and the other bimonthly. The changes that do not 
@@ -192,7 +205,13 @@ If you want to test your roles/playbook, run:
 This will install your development under `/vulpes/ngi/devel-<username>/<branch_name>.<date>.<commit hash>`
 
 You can also run the sync playbook to test this functionality but in the devel environment, the rsync command will 
-always run in `--dry-run` mode, so no data will be transferred:
+always run in `--dry-run` mode, so no data will be transferred.
+
+Before doing the sync, make sure that a SSH master connection is active:
+```
+    ssh miarka2.uppmax.uu.se exit
+```
+Then do the sync with:
 ```
     ansible-playbook -i inventory.yml sync.yml
 ```
@@ -220,8 +239,13 @@ automatically constructed by the playbook according to `<date>.<commit hash>[-bi
 added in case of a bimonthly deployment). If needed, you can override the deployment_version by passing 
 `-e deployment_version=VERSION` to the playbook.
 
-The `sync.yml` playbook can be used to sync the deployment to the cluster and shared filesystem, using the same 
-arguments as for the `install.yml` playbook:
+The `sync.yml` playbook can be used to sync the deployment to the cluster and shared filesystem.
+
+Before doing the sync, make sure that a SSH master connection is active:
+```
+    ssh miarka2.uppmax.uu.se exit
+```
+Then do the sync using the same arguments as for the `install.yml` playbook:
 ```
     ansible-playbook -i inventory.yml sync.yml \
       -e deployment_environment=staging
@@ -258,6 +282,7 @@ To perform the production deployment, use a similar approach as for the staging 
 Deploy and sync the deployment using the playbooks similarly to above:
 
 ```
+    ssh miarka2.uppmax.uu.se exit
     ansible-playbook -i inventory.yml install.yml -e deployment_environment=production
     ansible-playbook -i inventory.yml sync.yml -e deployment_environment=production
 ```

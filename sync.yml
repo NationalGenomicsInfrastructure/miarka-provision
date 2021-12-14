@@ -3,7 +3,7 @@
   hosts: deploy
   connection: local
 
-  pre_tasks:
+  tasks:
     - include: tasks/set-paths.yml
       tags: always
 
