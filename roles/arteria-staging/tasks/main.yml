@@ -4,12 +4,12 @@
   file: path="{{ item }}"
         state=directory
         mode=g+rwXs
-  with_items: 
+  with_items:
     - "{{ arteria_staging_path }}"
     - "{{ arteria_staging_path }}/bin"
 
 - name: add arteria-staging bin folder to Uppsala path
-  lineinfile: dest="{{ ngi_pipeline_conf }}/{{ bash_env_upps_script }}"
+  lineinfile: dest="{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
               line='export PATH={{ arteria_staging_path }}/bin:$PATH'
               backup=no
 
@@ -19,10 +19,10 @@
     dest: "{{ arteria_staging_path }}/arteria-staging.screen"
 
 - name: deploy start and stop scripts for arteria-staging
-  template: 
+  template:
     src: "{{ item }}.j2"
     dest: "{{ arteria_staging_path }}/bin/{{ item }}"
     mode: "u=rwx,g=rwx"
-  with_items: 
+  with_items:
     - "start-arteria-staging"
     - "stop-arteria-staging"
