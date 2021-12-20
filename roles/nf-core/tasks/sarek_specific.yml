@@ -14,17 +14,12 @@
 
 - name: update alias for pipeline
   lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ cfg.script }}"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     regexp: ^(alias {{ pipeline }}=.*)(')$
-    line: '\1 --project {{ cfg.project_id }} --custom_config_base {{ sw_path }}{{ pipeline }}/configs/ --igenomes_ignore\2'
+    line: '\1 --project {{ uppmax_project }} --custom_config_base {{ sw_path }}{{ pipeline }}/configs/ --igenomes_ignore\2'
     state: present
     backrefs: yes
     backup: no
-  with_items:
-    - { script: "{{ bash_env_sthlm_script }}", project_id: "{{ ngi_pipeline_sthlm_delivery }}" }
-    - { script: "{{ bash_env_upps_script }}", project_id: "{{ ngi_pipeline_upps_delivery }}" }
-  loop_control:
-    loop_var: cfg
 
 - name: Create recalibration script and add to TACA resources
   template:
@@ -34,8 +29,4 @@
 - name: Create Delivery READMEs and add to TACA resources
   template:
     src: "DELIVERY.README.SAREK.txt.j2"
-    dest: "{{ ngi_resources }}/TACA/{{ sarek_site }}/DELIVERY.README.SAREK.txt"
-  with_items:
-    - upps
-  loop_control:
-    loop_var: sarek_site
+    dest: "{{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.txt"

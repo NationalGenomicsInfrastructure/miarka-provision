@@ -5,7 +5,7 @@ tarzan_kong_version: "2.6.0"
 # Directories
 tarzan_root_dir: "{{ sw_path }}/tarzan/"
 tarzan_conf_dir: "{{ tarzan_root_dir }}/conf/"
-# TODO: when miarka filesystem is ready, change to: "{{ ngi_pipeline_upps_path }}/log/tarzan/"
+# TODO: when miarka filesystem is ready, change to: "{{ ngi_pipeline_path }}/log/tarzan/"
 tarzan_log_dir:  "{{ tarzan_root_dir }}/logs/"
 
 # Certs

@@ -1,8 +1,8 @@
 log:
-    file: "{{ ngi_pipeline_site_path }}/log/taca.log"
+    file: "{{ ngi_pipeline_path }}/log/taca.log"
 
 deliver:
-    rootpath: "{{ proj_root }}/{{ ngi_pipeline_site_delivery }}/nobackup/NGI"
+    rootpath: "{{ ngi_pipeline_workdir }}"
     analysispath: <ROOTPATH>/ANALYSIS/<PROJECTID>
     datapath: <ROOTPATH>/DATA/<PROJECTID>
     stagingpath: <ROOTPATH>/DELIVERY/<PROJECTID>
@@ -17,7 +17,7 @@ deliver:
     report_aggregate: "ngi_reports ign_aggregate_report -n {{ site_full }}"
     report_sample: "ngi_reports ign_sample_report -n {{ site_full }}"
     copy_reports_to_reports_outbox: True
-    reports_outbox: "{{ proj_root }}/{{ ngi_pipeline_site_delivery }}/incoming/reports/"
+    reports_outbox: "{{ proj_root }}/{{ uppmax_project }}/incoming/reports/"
 {% endif %}
     files_to_deliver:
 {% if "upps" == site %}
@@ -26,10 +26,10 @@ deliver:
             - <ANALYSISPATH>/seqreports/reports
             - <STAGINGPATH>/00-Reports/SequenceQC/seqreports
         -
-            - {{ ngi_site_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
             - <STAGINGPATH>
         -
-            - {{ ngi_site_softlinks }}/DELIVERY.README.txt
+            - {{ ngi_softlinks }}/DELIVERY.README.txt
             - <STAGINGPATH>
 {% endif %}
 {% if "sthlm" == site %}
@@ -105,10 +105,10 @@ deliver:
             - <STAGINGPATH>/05-Genotyping
     misc_files_to_deliver:
         -
-            - {{ ngi_site_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
             - <STAGINGPATH>
         -
-            - {{ ngi_site_softlinks }}/DELIVERY.README.txt
+            - {{ ngi_softlinks }}/DELIVERY.README.txt
             - <STAGINGPATH>
         -
             - <ANALYSISPATH>/reports/*

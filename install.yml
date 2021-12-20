@@ -20,14 +20,19 @@
   pre_tasks:
     - include: tasks/set-paths.yml
       tags: always
-    - include: tasks/pre-install.yml
+
+    - include_vars:
+        dir: env_vars
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
+
+    - include_vars:
+        dir: env_secrets
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
   environment:
     "{{ tools_path }}"
-
-  vars_files:
-    - env_vars/{{ deployment_environment }}/tarzan.yml
 
   roles:
     - { role: ngi_pipeline, tags: ngi_pipeline }
@@ -41,11 +46,36 @@
     - { role: arteria-checksum-ws, tags: arteria-checksum }
     - { role: arteria-delivery-ws, tags: arteria-delivery }
     - { role: standalone_scripts, tags: standalone_scripts }
-    - { role: ugc, tags: ugc }
+    - { role: delivery, tags: delivery }
     - { role: misc-tools, tags: misc-tools }
     - { role: archive-upload-ws, tags: archive-upload }
     - { role: nf-core, tags: nf-core }
 
+  tasks:
+
+    - name: Add miarka_provision version to deployed tools files
+      lineinfile:
+        dest: "{{ deployed_tool_versions }}"
+        line: "-- Deployed at {{ ansible_date_time.iso8601 }}, miarka_provision ({{ (branch_name, branch_tag, branch_hash) | join('.') }}), by {{ deploy_user }} --"
+
+    - name: set correct file permission for everything in the deployment
+      file:
+        path: "{{ root_path }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: yes
+        mode: g+rwX,o=rX
+
+    - name: Make wildwest directory editable by anyone that can access miarka
+      file:
+        path: "{{ proj_root }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: yes
+        mode: g+rwXs,o=rwX
+      when: deployment_environment == "staging"
+
   post_tasks:
-    - include: tasks/post-install.yml
-      tags: always
+
+    - debug:
+        msg: Finished deploying to {{ root_path }}

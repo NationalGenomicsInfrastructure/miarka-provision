@@ -2,30 +2,18 @@
 no_version_check: True
 export_plots: true
 
-{% if item.site == "upps" %}
-swedac_accredited: False
-swedac_location: 'uppsala'
-{% if deployment_environment == "production" %}
-megaqc_url: https://megaqc.snpseq.medsci.uu.se:443/api/upload_data
-megaqc_access_token: {{ megaqc_token_upps }}
-{% endif %}
-{% endif %}
+swedac_location: {{ site_full }}
+swedac_accredited: {{ multiqc_swedac_accredited }}
 
-{% if item.site == "sthlm" and deployment_environment in ["production", "staging"]%}
-push_statusdb: True
-save_remote: True
-template: ngi
-plots_flat_numseries: 1000
-swedac_accredited: True
-swedac_location: 'stockholm'
-{% if deployment_environment == "production" %}
-remote_sshkey: "/home/funk_006/ssh_keys/id_rsa"
-remote_destination: 'ngi.web@ngi-internal.scilifelab.se:/var/local/mqc_reports/'
-{% elif deployment_environment == "staging" %}
-remote_sshkey: "/home/funk_007/ssh_keys/id_rsa"
-remote_port: '22'             # Optional
-remote_destination: 'ngi.web@ngi-internal-dev.scilifelab.se:/home/ngi.web/mqc_reports/'
-megaqc_url: http://megaqc.scilifelab.se/api/upload_parse
-megaqc_access_token: {{ megaqc_token_sthlm_stage }}
-{% endif %}
+megaqc_url: {{ megaqc_url }}
+megaqc_access_token: {{ megaqc_access_token }}
+
+{% for key, value in multiqc_options | dictsort %}
+{{ key }}: {{ value }}
+{% endfor %}
+
+{% if site == "sthlm" %}
+  remote_sshkey: {{ multiqc_sshkey }}
+  remote_port: {{ multiqc_port }}
+  remote_destination: {{ multiqc_destination }}
 {% endif %}

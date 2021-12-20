@@ -1,0 +1,18 @@
+
+# statusdb
+statusdb_creds: statusdb_creds_prod.yml
+statusdb_url: ngi-statusdb.scilifelab.se
+statusdb_port: 5984
+
+orderportal_creds: orderportal_credentials.yaml
+
+# ngi_pipeline
+ngi_pipeline_web_port: 7777
+
+# taca
+snic_creds: snic_credentials_{{ site }}.yaml
+snic_api_url: https://supr.snic.se/api
+
+# multiqc
+multiqc_sshkey: /home/funk_006/ssh_keys/id_rsa
+multiqc_destination: ngi.web@ngi-internal.scilifelab.se:/var/local/mqc_reports/

@@ -4,13 +4,6 @@
   # environment variables depending on we're deploying to production,
   # staging, or development/test purposes.
 
-  - fail: msg="You must specify '-e deployment_environment=<production|staging|devel>'"
-    when: deployment_environment not in [ "production", "staging", "devel" ]
-
-  - name: set deployment target root path
-    set_fact:
-      deployment_target: "{{ deployment_remote_path }}/{{ deployment_environment }}"
-
   - name: get repo branch
     shell: echo $(git rev-parse --abbrev-ref HEAD)
     register: repo_branch
@@ -32,68 +25,10 @@
     shell: echo $(whoami)
     register: playbook_user
 
-  - block:
-    - name: append current user to deployment target root path
-      set_fact:
-        deployment_target: "{{ deployment_target }}-{{ playbook_user.stdout }}"
-
-    - name: set deployment_version for {{ deployment_environment }}
-      set_fact:
-        deployment_version: "{{ repo_branch.stdout }}.{{ current_date.stdout }}.{{ repo_hash.stdout }}"
-
-    - name: set root path and proj root for {{ deployment_environment }}
-      set_fact:
-        root_path: "{{ deployment_target }}/{{ deployment_version }}"
-        proj_root: "{{ deployment_target }}/wildwest"
-
-    - name: override containers path for {{ deployment_environment }}
-      set_fact:
-        ngi_containers: "{{ proj_root }}/containers"
-
-    when: deployment_environment == "devel"
-
-
-  - block:
-    - block:
-      - name: set deployment_version for {{ deployment_environment }}
-        set_fact:
-          deployment_version: "{{ current_date.stdout }}.{{ repo_hash.stdout }}"
-
-      - name: append branch name to deployment version
-        set_fact:
-          deployment_version: "{{ deployment_version }}-{{ repo_branch.stdout }}"
-        when: "{{ repo_branch.stdout == 'bimonthly' }}"
-
-      when: deployment_version == "default"
-
-    - name: set root path and proj root for {{ deployment_environment }}
-      set_fact:
-        root_path: "{{ deployment_target }}/{{ deployment_version }}"
-        proj_root: "{{ deployment_target }}/wildwest/"
-
-    - name: override containers path for {{ deployment_environment }}
-      set_fact:
-        ngi_containers: "{{ deployment_remote_path }}/containers/"
-
-    when: deployment_environment == "staging"
-
-
-  - block:
-    - block:
-      - name: set deployment_version for {{ deployment_environment }}
-        set_fact:
-          deployment_version: "{{ git_tag.stdout }}"
-      when: deployment_version == "default"
-
-    - name: set root path and proj root for {{ deployment_environment }}
-      set_fact:
-        root_path: "{{ deployment_target }}/{{ deployment_version }}"
-        proj_root: "/proj/"
-
-    - name: override containers path for {{ deployment_environment }}
-      set_fact:
-        ngi_containers: "{{ deployment_remote_path }}/containers/"
-
-    when: deployment_environment == "production"
-
-
+  - name: set playbook and git facts
+    set_fact:
+      branch_name: "{{ repo_branch.stdout }}"
+      branch_hash: "{{ repo_hash.stdout }}"
+      branch_tag: "{{ git_tag.stdout }}"
+      deploy_date: "{{ current_date.stdout }}"
+      deploy_user: "{{ playbook_user.stdout }}"

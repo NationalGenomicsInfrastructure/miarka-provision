@@ -1,0 +1,4 @@
+
+statusdb_repo: "https://github.com/SciLifeLab/statusdb.git"
+statusdb_dest: "{{ sw_path }}/statusdb"
+statusdb_version: "f21b4124e512aa50babe665f9839fcbc7205bc26"

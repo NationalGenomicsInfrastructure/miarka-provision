@@ -1,8 +1,8 @@
 log:
-    file: "{{ ngi_pipeline_site_path }}/log/taca.log"
+    file: "{{ ngi_pipeline_path }}/log/taca.log"
 
 deliver:
-    rootpath: "{{ proj_root }}/{{ ngi_pipeline_site_delivery }}/nobackup/NGI"
+    rootpath: "{{ ngi_pipeline_workdir }}"
     analysispath: <ROOTPATH>/ANALYSIS/<PROJECTID>
     stagingpath: <ROOTPATH>/DELIVERY/<PROJECTID>
     operator: "{{ recipient_mail }}"
@@ -49,6 +49,9 @@ deliver:
             - <ANALYSISPATH>/<SAMPLEID>/SarekGermlineAnalysis/results/VariantCalling/<SAMPLEID>/*
             - <STAGINGPATH>/<SAMPLEID>/results/VariantCalling/
             - required: True
+        -
+            - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - <STAGINGPATH>
         -
             - {{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.txt
             - <STAGINGPATH>
@@ -100,10 +103,10 @@ deliver:
             - required: True
     misc_files_to_deliver:
         -
-            - {{ ngi_site_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
             - <STAGINGPATH>
         -
-            - {{ ngi_site_softlinks }}/DELIVERY.README.SAREK.txt
+            - {{ ngi_softlinks }}/DELIVERY.README.SAREK.txt
             - <STAGINGPATH>
         -
             - <ANALYSISPATH>/reports/*
