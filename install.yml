@@ -1,8 +1,9 @@
 ---
 
 - name: Deploy miarka software
+  remote_user: root
   hosts: deploy
-  connection: local
+  #  connection: local
 
   # These three variables needs to be overriden when calling ansible-playbook.
   #
@@ -31,8 +32,8 @@
         files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
-  environment:
-    "{{ tools_path }}"
+      #  environment:
+      #    "{{ tools_path }}"
 
   roles:
     - { role: ngi_pipeline, tags: ngi_pipeline }
@@ -52,6 +53,11 @@
     - { role: nf-core, tags: nf-core }
 
   tasks:
+
+    - name: hello world
+      debug:
+        msg: "Hello world"
+      tags: seqreports
 
     - name: Add miarka_provision version to deployed tools files
       lineinfile:
