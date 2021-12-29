@@ -1,0 +1,12 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require_relative "../vagrant/shared"
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  shared_config "miarka", config
+  config.vm.box = "rockylinux/8"
+  config.ssh.forward_agent = true
+end
