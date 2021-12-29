@@ -1,12 +1,19 @@
 ---
 
+origin: seqreports
+checkqc_version: 3.6.5
+checkqc_config_path: /home/seqreports/checkqc.config
+checkqc_virtualenv: /tmp/checkqc
+checkqc_bcl2fastq_output_path: Unaligned
+
 seqreports_data_disk: /dev/sdb
 seqreports_data_path: /seqreports-data
 
 seqreports_env_path: /opt/seqreports/seqreports-env
 seqreports_user: seqreports  # Only used in dev and local environment
-seqreports_group: 'USER\MOLM-GG-BioInfo'  # Only used in dev and local environment
 seqreports_user_uid: 506  # Only used in dev and local environment
+seqreports_group: 'MOLM-GG-BioInfo'  # Only used in dev and local environment
+seqreports_group_uid: 504
 
 seqreports_fastq_screen_db_path: "{{ seqreports_data_path }}/FastQ_Screen_Genomes"
 seqreports_nxf_temp: "{{ seqreports_data_path }}/nxf_tmp/"

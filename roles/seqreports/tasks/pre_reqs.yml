@@ -14,6 +14,7 @@
     path: "{{ seqreports_fastq_screen_local_path }}"
   delegate_to: localhost
 
+# develop-1737, should this be removed?
 - name: download fastq_screen genomes (please note this will be very slow)
   command: python cmd/helpers/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_local_path }}
   args:
@@ -26,7 +27,9 @@
   # /JD 2018-03-27
   tags:
     - skip_ansible_lint
+  when: false
 
+# develop-1737, remove?
 - name: ensure genomes dir exists
   file:
     path: "{{ seqreports_fastq_screen_db_path }}"
@@ -35,6 +38,7 @@
     mode: "0555"
 
 # develop-1737, I take this in another PR
+# Remove?
 - name: synchronize genomes to host
   synchronize:
     src: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes/"
@@ -42,6 +46,7 @@
     recursive: yes
   when: env_current != env_local
 
+# develop-1737, remove?
 - name: ensure genomes are readable to user after upload
   file:
     path: "{{ seqreports_fastq_screen_db_path }}"
