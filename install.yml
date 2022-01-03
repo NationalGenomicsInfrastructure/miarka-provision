@@ -56,11 +56,6 @@
 
   tasks:
 
-    - name: hello world
-      debug:
-        msg: "Hello world"
-      tags: seqreports
-
     - name: Add miarka_provision version to deployed tools files
       lineinfile:
         dest: "{{ deployed_tool_versions }}"
