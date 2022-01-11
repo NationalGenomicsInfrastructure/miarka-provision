@@ -1,2 +1,4 @@
-[deploy]
-miarka.snpseq.local
+all:
+  hosts:
+    deploy:
+      ansible_host: miarka.snpseq.local

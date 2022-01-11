@@ -12,9 +12,9 @@
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: install miniconda
-  shell: "{{ miniconda_src }} -b -p {{ miniconda_dest }}"
+  shell: "{{ miniconda_src }} -b -p {{ anaconda_path }}"
   args:
-    creates: "{{ miniconda_dest }}/LICENSE.txt"
+    creates: "{{ anaconda_path }}/LICENSE.txt"
   tags: skip_ansible_lint
   ignore_errors: "{{ ansible_check_mode }}"
 

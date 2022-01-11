@@ -1,5 +1,14 @@
 ---
 
+- name: "Print out value of anaconda_path"
+  debug:
+    msg: "seqreports_venv_name {{ seqreports_venv_name }}"
+
+- name: create conda environment for seqreports
+  shell: "{{ anaconda_path }}/bin/conda create -n {{ seqreports_venv_name }} -c anaconda python=3.8"
+  args:
+    creates: "{{ seqreports_venv_name }}/bin/python3"
+
 - name: Set host fact boolean for miarka deployment
   set_fact:
     on_miarka: "{{ env_current == env_prod or env_current == env_staging }}"
@@ -34,12 +43,6 @@
 - import_tasks: pre_reqs.yml
   tags: seqreports_prereqs
   when: not on_miarka
-
-# develop-1737, investigate how conda environments are used within miarka
-- name: create conda environment for seqreports
-  shell: "{{ miniconda_dest }}/bin/conda create -y -p {{ seqreports_env_path }} python=3.7"
-  args:
-    creates: "{{ seqreports_env_path }}/bin/python3"
 
 - name: ensure nextflow directories exist and belong to seqreports user
   file:
