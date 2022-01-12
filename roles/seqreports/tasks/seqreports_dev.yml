@@ -11,8 +11,11 @@
     groups: "{{ seqreports_group }}"
     append: yes
 
-- name: Install unzip
+- name: Install required packages
   yum:
-    name: unzip
+    name: "{{ item }}"
     update_cache: yes
     state: present
+  loop:
+    - unzip
+    - git-all

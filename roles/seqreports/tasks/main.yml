@@ -13,15 +13,6 @@
   set_fact:
     on_miarka: "{{ env_current == env_prod or env_current == env_staging }}"
 
-- name: install pip
-  yum:
-    name: python3-pip
-    state: present
-
-- name: install virtualenv
-  pip:
-    name: virtualenv
-
 - import_tasks: seqreports_dev.yml
   when: not on_miarka
 
