@@ -10,3 +10,9 @@
     uid: "{{ seqreports_user_uid }}"
     groups: "{{ seqreports_group }}"
     append: yes
+
+- name: Install unzip
+  yum:
+    name: unzip
+    update_cache: yes
+    state: present

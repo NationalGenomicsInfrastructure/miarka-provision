@@ -33,12 +33,6 @@
     group: "{{ omit if on_miarka else seqreports_group }}"
     mode: "{{ omit if on_miarka else '0755' }}"
 
-- name: Install unzip
-  yum:
-    name: unzip
-    update_cache: yes
-    state: present
-
 # develop-1737, as far as I understand, no tasks in this file are needed on miarka. I have a note that "seqreports fastc screen db path" is already on a volume on irma/miarka
 - import_tasks: pre_reqs.yml
   tags: seqreports_prereqs
