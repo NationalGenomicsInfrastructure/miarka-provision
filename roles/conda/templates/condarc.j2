@@ -1,0 +1,10 @@
+{% if use_http_proxy %}
+
+proxy_servers:
+  https: {{ proxy_env.https_proxy }}
+  http: {{ proxy_env.http_proxy }}
+
+{% endif %}
+
+ssl_verify: {{ path_to_ca_certs }}
+

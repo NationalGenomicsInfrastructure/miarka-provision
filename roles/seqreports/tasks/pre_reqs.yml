@@ -1,0 +1,50 @@
+---
+
+# develop-1737, as far as I understand, no tasks in this file are needed on miarka. I have a note that "seqreports fastc screen db path" is already on a volume on irma/miarka
+
+# We download the fastq_screen_reference genomes to the orchestration machine and then transfer them to the
+# target machine, since this will be super slow to download, and we don't want to keep redoing it,
+# especially when running locally.
+- name: ensure files exists locally
+  file:
+    # noqa 208
+    # Adding lint exception since setting permissions on this folder is troublesome because it is done locally
+    # and will be done by different users 
+    state: directory
+    path: "{{ seqreports_fastq_screen_local_path }}"
+  delegate_to: localhost
+
+- name: download fastq_screen genomes (please note this will be very slow)
+  command: python cmd/helpers/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_local_path }}
+  args:
+    creates: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes"
+  delegate_to: localhost
+  # In the version of ansible-lint (3.5.1) that we are currently using
+  # there is a bug, which crashes ansible-lint if arv is used as above.
+  # https://github.com/ansible/ansible-lint/issues/352
+  # Therefore we will skip linting of this task for now.
+  # /JD 2018-03-27
+  tags:
+    - skip_ansible_lint
+
+- name: ensure genomes dir exists
+  file:
+    path: "{{ seqreports_fastq_screen_db_path }}"
+    state: directory
+    owner: "{{ seqreports_user }}"
+    mode: "0555"
+
+# develop-1737, I take this in another PR
+- name: synchronize genomes to host
+  synchronize:
+    src: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes/"
+    dest: "{{ seqreports_fastq_screen_db_path }}"
+    recursive: yes
+  when: env_current != env_local
+
+- name: ensure genomes are readable to user after upload
+  file:
+    path: "{{ seqreports_fastq_screen_db_path }}"
+    owner: "{{ seqreports_user }}"
+    mode: u=rx,g=rx,o=rx
+    recurse: yes

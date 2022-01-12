@@ -1,0 +1,4 @@
+[program:checkqc-ws]
+user = {{ checkqc_user }}
+command = {{ checkqc_virtualenv }}/bin/python3 {{ checkqc_virtualenv }}/bin/checkqc-ws --config {{ checkqc_config_path }} --port {{ checkqc_service_port }} {{ checkqc_monitor_path }}
+directory = {{ checkqc_log_dir }}

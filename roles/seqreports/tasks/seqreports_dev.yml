@@ -1,0 +1,9 @@
+- name: create seqwriters group
+  group: name=seqwriters gid=504 state=present
+
+- name: Add seqreports user to seqwriters
+  user:
+    name: "{{ seqreports_user }}"
+    uid: "{{ seqreports_user_uid }}"
+    groups: seqwriters
+    append: yes

@@ -1,0 +1,26 @@
+---
+
+- name: download miniconda
+  get_url:
+    url: "{{ miniconda_url }}"
+    dest: "{{ miniconda_src }}"
+
+- name: set miniconda src premissions
+  file:
+    path: "{{ miniconda_src }}"
+    mode: "0770"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: install miniconda
+  shell: "{{ miniconda_src }} -b -p {{ miniconda_dest }}"
+  args:
+    creates: "{{ miniconda_dest }}/LICENSE.txt"
+  tags: skip_ansible_lint
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: deploy condarc
+  template:
+    src: condarc.j2
+    dest: /root/.condarc
+    mode: "0770"
+  when: env_current == env_prod
