@@ -2,6 +2,7 @@
 
 origin: seqreports
 checkqc_version: 3.6.5
+checkqc_repo: https://github.com/Molmed/checkQC
 checkqc_config_path: /home/seqreports/checkqc.config
 checkqc_virtualenv: /tmp/checkqc
 checkqc_bcl2fastq_output_path: Unaligned
