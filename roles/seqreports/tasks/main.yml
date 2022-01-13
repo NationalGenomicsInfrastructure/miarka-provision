@@ -11,31 +11,31 @@
 
 - name: Set host fact boolean for miarka deployment
   set_fact:
-    on_miarka: "{{ env_current == env_prod or env_current == env_staging }}"
+    apply_to_conda: "{{ apply_to_conda | default(true) }}"
 
 - import_tasks: seqreports_dev.yml
-  when: not on_miarka
+  when: not apply_to_conda | bool
 
 - name: ensure seqreports user owns data directory
   file:
     path: "{{ seqreports_data_path }}"
     state: directory
-    owner: "{{ omit if on_miarka else seqreports_user }}"
-    group: "{{ omit if on_miarka else seqreports_group }}"
-    mode: "{{ omit if on_miarka else '0755' }}"
+    owner: "{{ omit if apply_to_conda else seqreports_user }}"
+    group: "{{ omit if apply_to_conda else seqreports_group }}"
+    mode: "{{ omit if apply_to_conda else '0755' }}"
 
 # develop-1737, as far as I understand, no tasks in this file are needed on miarka. I have a note that "seqreports fastc screen db path" is already on a volume on irma/miarka
 - import_tasks: pre_reqs.yml
   tags: seqreports_prereqs
-  when: not on_miarka
+  when: not apply_to_conda | bool
 
 - name: ensure nextflow directories exist and belong to seqreports user
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ omit if on_miarka else seqreports_user }}"
-    group: "{{ omit if on_miarka else seqreports_group }}"
-    mode: "{{ omit if on_miarka else '0755' }}"
+    owner: "{{ omit if apply_to_conda else seqreports_user }}"
+    group: "{{ omit if apply_to_conda else seqreports_group }}"
+    mode: "{{ omit if apply_to_conda else '0755' }}"
   loop:
     - "{{ seqreports_nxf_temp }}"
     - "{{ seqreports_nxf_work }}"
