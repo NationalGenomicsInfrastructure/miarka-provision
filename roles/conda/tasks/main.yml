@@ -18,9 +18,3 @@
   tags: skip_ansible_lint
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: deploy condarc
-  template:
-    src: condarc.j2
-    dest: /root/.condarc
-    mode: "0770"
-  when: env_current == env_prod
