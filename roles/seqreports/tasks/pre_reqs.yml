@@ -26,29 +26,6 @@
   tags:
     - skip_ansible_lint
 
-- name: ensure genomes working dir exists
-  file:
-    path: "{{ seqreports_data_fastq_screen_db_path }}"
-    state: directory
-    owner: "{{ seqreports_user }}"
-    mode: "0555"
-  when: not apply_to_conda | bool
-
-- name: synchronize genomes to host
-  synchronize:
-    src: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes/"
-    dest: "{{ seqreports_data_fastq_screen_db_path }}"
-    recursive: yes
-  when: not apply_to_conda | bool
-
-- name: ensure genomes are readable to user after upload
-  file:
-    path: "{{ seqreports_data_fastq_screen_db_path }}"
-    owner: "{{ seqreports_user }}"
-    mode: "0555"
-    recurse: yes
-  when: not apply_to_conda | bool
-
 - name: Create symlink to FastQ_Screen_Genomes (miarka only)
   file:
     src: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"

@@ -19,3 +19,49 @@
   loop:
     - unzip
     - git-all
+
+####
+# Tasks for fastq screen db
+####
+- name: set permissions to the seqreports data path
+  file:
+    path: "{{ seqreports_data_path }}"
+    state: directory
+    owner: "{{ seqreports_user }}"
+    group: "{{ seqreports_group }}"
+    mode: "0755"
+
+- name: set permissions to the nextflow catalogs
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ seqreports_user }}"
+    group: "{{ seqreports_group }}"
+    mode: "0755"
+  loop:
+    - "{{ seqreports_nxf_temp }}"
+    - "{{ seqreports_nxf_work }}"
+    - "{{ seqreports_nxf_logs }}"
+
+- name: ensure genomes working dir exists
+  file:
+    path: "{{ seqreports_data_fastq_screen_db_path }}"
+    state: directory
+    owner: "{{ seqreports_user }}"
+    group: "{{ seqreports_group }}"
+    mode: "0555"
+
+- name: synchronize genomes to host
+  synchronize:
+    src: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes/"
+    dest: "{{ seqreports_data_fastq_screen_db_path }}"
+    recursive: yes
+
+- name: ensure genomes are readable to user after upload
+  file:
+    path: "{{ seqreports_data_fastq_screen_db_path }}"
+    owner: "{{ seqreports_user }}"
+    group: "{{ seqreports_group }}"
+    mode: "0555"
+    recurse: yes
+

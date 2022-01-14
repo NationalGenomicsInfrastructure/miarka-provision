@@ -1,9 +1,5 @@
 ---
 
-- name: "Print out value of anaconda_path"
-  debug:
-    msg: "seqreports_venv_name {{ seqreports_venv_name }}"
-
 - name: create conda environment for seqreports
   shell: "{{ anaconda_path }}/bin/conda create -n {{ seqreports_venv_name }} -c anaconda python=3.8"
   args:
@@ -13,36 +9,24 @@
   set_fact:
     apply_to_conda: "{{ apply_to_conda | default(true) }}"
 
-- import_tasks: seqreports_dev.yml
-  when: not apply_to_conda | bool
-
 - name: ensure seqreports data path exists
   file:
     path: "{{ seqreports_data_path }}"
     state: directory
-    owner: "{{ omit if apply_to_conda else seqreports_user }}"
-    group: "{{ omit if apply_to_conda else seqreports_group }}"
-    mode: "{{ omit if apply_to_conda else '0755' }}"
-
-- name: Ensure resources/local directory exists for seqreports 
-  file:
-    path: "{{ seqreports_fastq_screen_resource_path }}"
-    state: directory
-
-- import_tasks: pre_reqs.yml
-  tags: seqreports_prereqs
 
 - name: ensure nextflow directories exist
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ omit if apply_to_conda else seqreports_user }}"
-    group: "{{ omit if apply_to_conda else seqreports_group }}"
-    mode: "{{ omit if apply_to_conda else '0755' }}"
   loop:
     - "{{ seqreports_nxf_temp }}"
     - "{{ seqreports_nxf_work }}"
     - "{{ seqreports_nxf_logs }}"
+
+- import_tasks: pre_reqs.yml
+
+- import_tasks: seqreports_dev.yml
+  when: not apply_to_conda | bool
 
 - name: Update and deploy checkQC config
   include_role:
