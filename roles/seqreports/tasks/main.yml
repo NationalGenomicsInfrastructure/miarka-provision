@@ -16,7 +16,7 @@
 - import_tasks: seqreports_dev.yml
   when: not apply_to_conda | bool
 
-- name: ensure seqreports user owns data directory
+- name: ensure seqreports data path exists
   file:
     path: "{{ seqreports_data_path }}"
     state: directory
@@ -24,12 +24,15 @@
     group: "{{ omit if apply_to_conda else seqreports_group }}"
     mode: "{{ omit if apply_to_conda else '0755' }}"
 
-# develop-1737, as far as I understand, no tasks in this file are needed on miarka. I have a note that "seqreports fastc screen db path" is already on a volume on irma/miarka
+- name: Ensure resources/local directory exists for seqreports 
+  file:
+    path: "{{ seqreports_fastq_screen_local_path }}"
+    state: directory
+
 - import_tasks: pre_reqs.yml
   tags: seqreports_prereqs
-  when: not apply_to_conda | bool
 
-- name: ensure nextflow directories exist and belong to seqreports user
+- name: ensure nextflow directories exist
   file:
     path: "{{ item }}"
     state: directory

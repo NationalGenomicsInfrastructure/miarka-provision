@@ -1,11 +1,10 @@
 ---
 
-# develop-1737, as far as I understand, no tasks in this file are needed on miarka. I have a note that "seqreports fastc screen db path" is already on a volume on irma/miarka
-
-# We download the fastq_screen_reference genomes to the orchestration machine and then transfer them to the
+# If this playbook was triggered from sysman, we download the fastq_screen_reference genomes 
+# to the orchestration/local machine and then transfer them to the
 # target machine, since this will be super slow to download, and we don't want to keep redoing it,
 # especially when running locally.
-- name: ensure files exists locally
+- name: ensure directory exists locally (sysman), or at resources (miarka)
   file:
     # noqa 208
     # Adding lint exception since setting permissions on this folder is troublesome because it is done locally
@@ -14,7 +13,6 @@
     path: "{{ seqreports_fastq_screen_local_path }}"
   delegate_to: localhost
 
-# develop-1737, should this be removed?
 - name: download fastq_screen genomes (please note this will be very slow)
   command: python cmd/helpers/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_local_path }}
   args:
@@ -27,29 +25,34 @@
   # /JD 2018-03-27
   tags:
     - skip_ansible_lint
-  when: false
 
-# develop-1737, remove?
-- name: ensure genomes dir exists
+- name: ensure genomes working dir exists
   file:
     path: "{{ seqreports_fastq_screen_db_path }}"
     state: directory
     owner: "{{ seqreports_user }}"
     mode: "0555"
+  when: not apply_to_conda | bool
 
-# develop-1737, I take this in another PR
-# Remove?
 - name: synchronize genomes to host
   synchronize:
     src: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes/"
     dest: "{{ seqreports_fastq_screen_db_path }}"
     recursive: yes
-  when: not apply_to_conda 
+  when: not apply_to_conda | bool
 
-# develop-1737, remove?
 - name: ensure genomes are readable to user after upload
   file:
     path: "{{ seqreports_fastq_screen_db_path }}"
     owner: "{{ seqreports_user }}"
-    mode: u=rx,g=rx,o=rx
+    mode: "0555"
     recurse: yes
+  when: not apply_to_conda | bool
+
+- name: Create symlink to FastQ_Screen_Genomes (miarka only)
+  file:
+    src: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes"
+    dest: "{{ seqreports_fastq_screen_db_path }}"
+    state: link
+  when: apply_to_conda | bool
+
