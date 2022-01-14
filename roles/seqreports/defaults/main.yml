@@ -4,10 +4,8 @@ origin: seqreports
 checkqc_version: 3.6.5
 checkqc_repo: https://github.com/Molmed/checkQC
 checkqc_config_path: /home/seqreports/checkqc.config
-checkqc_virtualenv: /tmp/checkqc
 checkqc_bcl2fastq_output_path: Unaligned
 
-seqreports_data_disk: /dev/sdb
 seqreports_data_path: /lupus/ngi/production/v1.9.2/sw/seqreports
 
 seqreports_venv_name: seqreports-env
