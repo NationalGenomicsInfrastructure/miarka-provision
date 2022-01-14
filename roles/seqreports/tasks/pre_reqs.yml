@@ -10,13 +10,13 @@
     # Adding lint exception since setting permissions on this folder is troublesome because it is done locally
     # and will be done by different users 
     state: directory
-    path: "{{ seqreports_fastq_screen_local_path }}"
+    path: "{{ seqreports_fastq_screen_resource_path }}"
   delegate_to: localhost
 
 - name: download fastq_screen genomes (please note this will be very slow)
-  command: python cmd/helpers/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_local_path }}
+  command: python cmd/helpers/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_resource_path }}
   args:
-    creates: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes"
+    creates: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
   delegate_to: localhost
   # In the version of ansible-lint (3.5.1) that we are currently using
   # there is a bug, which crashes ansible-lint if arv is used as above.
@@ -28,7 +28,7 @@
 
 - name: ensure genomes working dir exists
   file:
-    path: "{{ seqreports_fastq_screen_db_path }}"
+    path: "{{ seqreports_data_fastq_screen_db_path }}"
     state: directory
     owner: "{{ seqreports_user }}"
     mode: "0555"
@@ -36,14 +36,14 @@
 
 - name: synchronize genomes to host
   synchronize:
-    src: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes/"
-    dest: "{{ seqreports_fastq_screen_db_path }}"
+    src: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes/"
+    dest: "{{ seqreports_data_fastq_screen_db_path }}"
     recursive: yes
   when: not apply_to_conda | bool
 
 - name: ensure genomes are readable to user after upload
   file:
-    path: "{{ seqreports_fastq_screen_db_path }}"
+    path: "{{ seqreports_data_fastq_screen_db_path }}"
     owner: "{{ seqreports_user }}"
     mode: "0555"
     recurse: yes
@@ -51,8 +51,8 @@
 
 - name: Create symlink to FastQ_Screen_Genomes (miarka only)
   file:
-    src: "{{ seqreports_fastq_screen_local_path }}/FastQ_Screen_Genomes"
-    dest: "{{ seqreports_fastq_screen_db_path }}"
+    src: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
+    dest: "{{ seqreports_data_fastq_screen_db_path }}"
     state: link
   when: apply_to_conda | bool
 

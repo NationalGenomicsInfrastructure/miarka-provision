@@ -26,7 +26,7 @@
 
 - name: Ensure resources/local directory exists for seqreports 
   file:
-    path: "{{ seqreports_fastq_screen_local_path }}"
+    path: "{{ seqreports_fastq_screen_resource_path }}"
     state: directory
 
 - import_tasks: pre_reqs.yml

@@ -16,7 +16,7 @@ seqreports_user_uid: 506  # Only used in dev and local environment
 seqreports_group: 'MOLM-GG-BioInfo'  # Only used in dev and local environment
 seqreports_group_uid: 504
 
-seqreports_fastq_screen_db_path: "{{ seqreports_data_path }}/FastQ_Screen_Genomes"
+seqreports_data_fastq_screen_db_path: "{{ seqreports_data_path }}/FastQ_Screen_Genomes"
 seqreports_nxf_temp: "{{ seqreports_data_path }}/nxf_tmp/"
 seqreports_nxf_work: "{{ seqreports_data_path }}/nxf_work/"
 seqreports_nxf_logs: "{{ seqreports_data_path }}/nxf_logs/"
@@ -27,7 +27,7 @@ singularity_version: 2.6.1-2+nd2~nd16.04+1
 # to avoid duplicating the database for each new version.
 # Seqreports role can also be called from sysman, where this varibale is really
 # pointing to a local path
-seqreports_fastq_screen_local_path: /vulpes/ngi/resources/seqreports
+seqreports_fastq_screen_resource_path: /vulpes/ngi/resources/seqreports
 
 seqreports_mounts:
   - biotankX
