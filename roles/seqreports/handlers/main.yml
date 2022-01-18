@@ -1,6 +1,0 @@
-- name: restart seqreports
-  systemd:
-    state: restarted
-    daemon_reload: yes
-    name: seqreports
-  listen: "restart seqreports services"
