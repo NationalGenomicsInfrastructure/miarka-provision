@@ -1,6 +1,6 @@
 ---
 
-# If this playbook was triggered from sysman, we download the fastq_screen_reference genomes 
+# If this playbook was triggered from sysman, we download the fastq_screen_reference genomes
 # to the orchestration/local machine and then transfer them to the
 # target machine, since this will be super slow to download, and we don't want to keep redoing it,
 # especially when running locally.
@@ -8,7 +8,7 @@
   file:
     # noqa 208
     # Adding lint exception since setting permissions on this folder is troublesome because it is done locally
-    # and will be done by different users 
+    # and will be done by different users
     state: directory
     path: "{{ seqreports_fastq_screen_resource_path }}"
   delegate_to: localhost
