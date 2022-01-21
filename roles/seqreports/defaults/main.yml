@@ -19,8 +19,6 @@ seqreports_nxf_temp: "{{ seqreports_data_path }}/nxf_tmp/"
 seqreports_nxf_work: "{{ seqreports_data_path }}/nxf_work/"
 seqreports_nxf_logs: "{{ seqreports_data_path }}/nxf_logs/"
 
-singularity_version: 2.6.1-2+nd2~nd16.04+1
-
 # When called from miarka, this is refering to the resource directory
 # to avoid duplicating the database for each new version.
 # Seqreports role can also be called from sysman, where this varibale is really
@@ -29,6 +27,3 @@ singularity_version: 2.6.1-2+nd2~nd16.04+1
 # NOTE! deployment_remote_path is not included in the sync directory!!
 seqreports_fastq_screen_resource_path: "{{ deployment_remote_path }}/resources/seqreports"
 
-seqreports_mounts:
-  - biotankX
-  - biotankY
