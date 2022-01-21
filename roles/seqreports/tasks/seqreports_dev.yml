@@ -22,6 +22,9 @@
 
 ####
 # Tasks for fastq screen db
+# Note, the procedure for seqreports_dev is different from provision on miarka
+# on seqreports_dev, fastq screen database is synchronized between host and server
+# at miarka, no such synchronization is needed.
 ####
 - name: set permissions to the seqreports data path
   file:
