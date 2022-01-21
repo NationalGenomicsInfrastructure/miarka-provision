@@ -25,6 +25,9 @@
 
 - import_tasks: pre_reqs.yml
 
+- import_tasks: seqreports_dev.yml
+  when: not apply_to_conda | bool
+
 - name: Update and deploy checkQC config
   include_role:
     name: checkqc
