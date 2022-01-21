@@ -18,13 +18,6 @@
   args:
     creates: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
   delegate_to: localhost
-  # In the version of ansible-lint (3.5.1) that we are currently using
-  # there is a bug, which crashes ansible-lint if arv is used as above.
-  # https://github.com/ansible/ansible-lint/issues/352
-  # Therefore we will skip linting of this task for now.
-  # /JD 2018-03-27
-  tags:
-    - skip_ansible_lint
 
 - name: Create symlink to FastQ_Screen_Genomes (miarka only)
   file:
