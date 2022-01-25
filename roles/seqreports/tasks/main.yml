@@ -25,9 +25,6 @@
 
 - import_tasks: pre_reqs.yml
 
-- import_tasks: seqreports_dev.yml
-  when: not miarka_deployment | bool
-
 - name: Update and deploy checkQC config
   import_tasks: deploy_config.yml
 
