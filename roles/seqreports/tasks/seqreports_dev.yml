@@ -59,6 +59,7 @@
     src: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes/"
     dest: "{{ seqreports_data_fastq_screen_db_path }}"
     recursive: yes
+  when: env_current != env_local
 
 - name: ensure genomes are readable to user after upload
   file:
