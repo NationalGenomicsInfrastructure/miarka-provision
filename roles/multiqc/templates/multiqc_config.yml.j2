@@ -13,7 +13,7 @@ megaqc_access_token: {{ megaqc_access_token }}
 {% endfor %}
 
 {% if site == "sthlm" %}
-  remote_sshkey: {{ multiqc_sshkey }}
-  remote_port: {{ multiqc_port }}
-  remote_destination: {{ multiqc_destination }}
+remote_sshkey: {{ multiqc_sshkey }}
+remote_port: {{ multiqc_port }}
+remote_destination: {{ multiqc_destination }}
 {% endif %}
