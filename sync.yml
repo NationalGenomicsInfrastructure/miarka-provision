@@ -7,6 +7,15 @@
     - include: tasks/set-paths.yml
       tags: always
 
+    - include_vars:
+        dir: env_vars
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
+
+    - include_vars:
+        dir: env_secrets
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
 
 - name: prepare syncing deployment to target host
   hosts: deploy
