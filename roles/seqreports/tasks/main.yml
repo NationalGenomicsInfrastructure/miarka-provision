@@ -3,7 +3,7 @@
 - name: create conda environment for seqreports
   shell: "{{ anaconda_path }}/bin/conda create -n {{ seqreports_venv_name }} -c anaconda python=3.8 -y"
   args:
-    creates: "{{ seqreports_venv_name }}/bin/python3"
+    creates: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/python3"
 
 - name: Set host fact boolean for miarka deployment
   set_fact:
