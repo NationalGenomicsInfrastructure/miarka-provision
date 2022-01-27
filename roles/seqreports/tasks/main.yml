@@ -7,7 +7,7 @@
 
 - name: Set host fact boolean for miarka deployment
   set_fact:
-    apply_to_conda: "{{ apply_to_conda | default(true) }}"
+    miarka_deployment: "{{ miarka_deployment | default(true) }}"
 
 - name: ensure seqreports data path exists
   file:
@@ -26,7 +26,7 @@
 - import_tasks: pre_reqs.yml
 
 - import_tasks: seqreports_dev.yml
-  when: not apply_to_conda | bool
+  when: not miarka_deployment | bool
 
 - name: Update and deploy checkQC config
   include_role:

@@ -7,15 +7,15 @@
     depth: 1
     dest: /tmp/checkQC
 
-- name: fix apply_to_conda variable if not yet set
+- name: fix miarka_deployment variable if not yet set
   set_fact:
-    apply_to_conda: "{{ apply_to_conda | default(false) }}"
+    miarka_deployment: "{{ miarka_deployment | default(false) }}"
 
 - name: create folder for config
   file:
     path: "{{ checkqc_config_path | dirname }}"
     state: directory
-    mode: "{{ omit if apply_to_conda  else '0775' }}"
+    mode: "{{ omit if miarka_deployment  else '0775' }}"
 
 ###
 # these next couple of tasks exist in order to preserve idempotence. If we modified the
@@ -32,7 +32,7 @@
     src: /tmp/checkQC/checkQC/default_config/config.yaml
     remote_src: yes
     dest: "{{ tmpconfig.path }}"
-    mode: "{{ omit if apply_to_conda else '0664' }}"
+    mode: "{{ omit if miarka_deployment else '0664' }}"
 
 - name: change bcl2fastq output path
   lineinfile:
@@ -40,7 +40,7 @@
     regexp: '^([ \t]*bcl2fastq_output_path:)'
     line: '\1 {{ checkqc_bcl2fastq_output_path }}'
     backrefs: yes
-    mode: "{{ omit if apply_to_conda else '0664' }}"
+    mode: "{{ omit if miarka_deployment else '0664' }}"
 
 ###
 # end of idempotence-keeping
@@ -52,7 +52,7 @@
     remote_src: yes
     dest: "{{ checkqc_config_path }}"
     backup: yes
-    mode: "{{ omit if apply_to_conda else '0664' }}"
+    mode: "{{ omit if miarka_deployment else '0664' }}"
 
 - name: remove temporarily checkqc repo
   file:

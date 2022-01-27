@@ -25,6 +25,6 @@
     src: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
     dest: "{{ seqreports_data_fastq_screen_db_path }}"
     state: link
-  when: apply_to_conda | bool
+  when: miarka_deployment | bool
   when: false
 
