@@ -29,7 +29,5 @@
   when: not miarka_deployment | bool
 
 - name: Update and deploy checkQC config
-  include_role:
-    name: checkqc
-    tasks_from: deploy_config.yml
+  import_tasks: deploy_config.yml
 
