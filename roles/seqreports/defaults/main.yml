@@ -3,7 +3,7 @@
 origin: seqreports
 checkqc_version: 3.6.5
 checkqc_repo: https://github.com/Molmed/checkQC
-checkqc_config_path: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/checkqc.config"
+checkqc_config_path: "{{ root_path }}/conf/checkqc"
 checkqc_bcl2fastq_output_path: Unaligned
 
 seqreports_data_path: "{{ sw_path }}/seqreports"
