@@ -18,6 +18,10 @@
   # upload data into the cluster.
 
   pre_tasks:
+    - fail:
+        msg: "You must specify '-e site=<upps | sthlm>'"
+        when: site not in [ "upps", "sthlm" ]
+
     - include: tasks/set-paths.yml
       tags: always
 

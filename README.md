@@ -37,6 +37,7 @@ the specific `deployment_environment` and/or `site` are located in the correspon
 `site_[all | sthlm | upps]_env_[all | devel | staging | production ].yml`) in the `env_vars/` folder. When the playbook
 is run, the appropriate variable files will automatically be imported.
 
+
 ##### `env_secrets`
 Similar to the `env_vars/` folder, the `env_secrets/` folder contains variable files organized in the same way 
 according to `deployment_environment` and `site`. This is where variables that should be kept secret (e.g. api-keys, 
@@ -227,10 +228,17 @@ deployments are performed) on miarka3.
 
 There you can develop your own Ansible roles in your private feature branch.
 
+In `env_vars/` and `env_secrets/` you can find example variable files that can be used as a basis for 
+`deployment_environment`- or `site`-specific variable files:
+```
+cp env_vars/site_all_env_devel.yml.example env_vars/site_all_env_devel.yml
+cp env_secrets/site_all_env_all.yml.example env_secrets/site_upps_env_devel.yml
+```
+
 If you want to test your roles/playbook, run:
 ```
     cd /path/to/development/resources/miarka-provision
-    ansible-playbook -i inventory.yml install.yml
+    ansible-playbook -i inventory.yml -e site=upps install.yml
 ```
 This will install your development under `/vulpes/ngi/devel-<username>/<branch_name>.<date>.<commit hash>`
 
@@ -262,7 +270,7 @@ Do the staging deployment to the local disk by running the `install.yml` playboo
 `deployment_environment` argument:
 ```
     ansible-playbook -i inventory.yml install.yml \
-      -e deployment_environment=staging
+      -e deployment_environment=staging -e site=upps 
 ```
 This will install your deployment under `/vulpes/ngi/staging/<deployment_version>`, where `deployment_version` is 
 automatically constructed by the playbook according to `<date>.<commit hash>[-bimonthly]` (the `-bimonthly` suffix is 
@@ -313,7 +321,7 @@ Deploy and sync the deployment using the playbooks similarly to above:
 
 ```
     ssh miarka2.uppmax.uu.se exit
-    ansible-playbook -i inventory.yml install.yml -e deployment_environment=production
+    ansible-playbook -i inventory.yml install.yml -e site=upps -e deployment_environment=production
     ansible-playbook -i inventory.yml sync.yml -e deployment_environment=production
 ```
 This will install your deployment under `/vulpes/ngi/production/<deployment_version>`, where `deployment_version` is 
