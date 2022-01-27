@@ -26,14 +26,14 @@ mkdir -p "$DEPLOYROOT"
 chgrp ngi-sw "$DEPLOYROOT"
 chmod g+rwXs "$DEPLOYROOT"
 
-ORIGIN="$(pwd)"
-cd "$DEPLOYROOT"
-
 echo "Cloning the Miarka provisioning repo"
-git clone -b "$PROVISIONBRANCH" "$PROVISIONURL"
+git clone -b "$PROVISIONBRANCH" "$PROVISIONURL" "${DEPLOYROOT}/${PROVISIONREPO}"
 
 echo "Set up the repo"
-bash "${PROVISIONREPO}/bootstrap/setup_repo.sh" ${DEPLOYROOT}/${PROVISIONREPO}"
+bash "${PROVISIONREPO}/bootstrap/setup_repo.sh" "${DEPLOYROOT}/${PROVISIONREPO}"
+
+ORIGIN="$(pwd)"
+cd "$DEPLOYROOT"
 
 echo "Setting up a venv for Ansible"
 /usr/bin/python3 -m venv "ansible-env"
