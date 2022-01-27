@@ -14,7 +14,7 @@
   delegate_to: localhost
 
 - name: download fastq_screen genomes (please note this will be very slow)
-  command: python cmd/helpers/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_resource_path }}
+  command: python roles/seqreports/files/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_resource_path }}
   args:
     creates: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
   delegate_to: localhost
