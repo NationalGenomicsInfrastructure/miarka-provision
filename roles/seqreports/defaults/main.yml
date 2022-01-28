@@ -1,0 +1,29 @@
+---
+
+origin: seqreports
+checkqc_version: 3.6.5
+checkqc_repo: https://github.com/Molmed/checkQC
+checkqc_config_path: "{{ root_path }}/conf/checkqc"
+checkqc_bcl2fastq_output_path: Unaligned
+
+seqreports_data_path: "{{ sw_path }}/seqreports"
+
+seqreports_venv_name: seqreports-env
+seqreports_user: seqreports  # Only used in dev and local environment
+seqreports_user_uid: 506  # Only used in dev and local environment
+seqreports_group: 'MOLM-GG-BioInfo'  # Only used in dev and local environment
+seqreports_group_uid: 504
+
+seqreports_data_fastq_screen_db_path: "{{ seqreports_data_path }}/FastQ_Screen_Genomes"
+seqreports_nxf_temp: "{{ seqreports_data_path }}/nxf_tmp/"
+seqreports_nxf_work: "{{ seqreports_data_path }}/nxf_work/"
+seqreports_nxf_logs: "{{ seqreports_data_path }}/nxf_logs/"
+
+# When called from miarka, this is refering to the resource directory
+# to avoid duplicating the database for each new version.
+# Seqreports role can also be called from sysman, where this varibale is really
+# pointing to a local path
+#
+# NOTE! deployment_remote_path is not included in the sync directory!!
+seqreports_fastq_screen_resource_path: "{{ deployment_remote_path }}/resources/seqreports"
+
