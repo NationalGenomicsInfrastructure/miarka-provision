@@ -45,5 +45,4 @@
     dest: "{{ seqreports_data_fastq_screen_db_path }}"
     state: link
   when: miarka_deployment | bool
-  when: false
 
