@@ -7,6 +7,15 @@
     - include: tasks/set-paths.yml
       tags: always
 
+    - include_vars:
+        dir: env_vars
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
+
+    - include_vars:
+        dir: env_secrets
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
 
 - name: prepare syncing deployment to target host
   hosts: deploy
@@ -85,8 +94,9 @@
           - "{{ exclude_pattern | map('regex_replace', '^(.*)$', '--exclude=\"\\1\"') | join(' ') }}"
           - "{{ '--dry-run' if (deployment_environment == 'devel') else '' }}"
       with_items:
-        - "{{ hostvars['deploy']['root_path'] }}"
-        - "{{ hostvars['deploy']['ngi_containers'] }}"
+          - "{{ hostvars['deploy']['root_path'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
+          - "{{ hostvars['deploy']['ngi_containers'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
+
 
     - name: create or move the latest symlink to {{ deployment_version }}
       file:
