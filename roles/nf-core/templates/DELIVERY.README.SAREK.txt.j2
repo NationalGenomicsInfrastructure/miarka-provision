@@ -76,7 +76,7 @@ ProjectID -> SampleN
 ====================================================================
 Each sample will contain a results folder:
 
-{% if "sthlm" == item.site %}
+{% if "sthlm" == site %}
 |--ProjectID
    |--SampleN
       |--results
@@ -86,7 +86,7 @@ Each sample will contain a results folder:
          ...
          |--PipelineToolN
 {% endif %}
-{% if "upps" == item.site %}
+{% if "upps" == site %}
 SampleN
 └── results
     ├── Annotation

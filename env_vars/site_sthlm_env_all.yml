@@ -21,6 +21,8 @@ multiqc_options:
   template: ngi
 
 multiqc_swedac_accredited: True
+multiqc_sshkey: /path/to/ssh_key
+multiqc_destination: multiqc_user@multiqc_host:/path/to/mqc_reports/
 
 multiqc_port: 22
 megaqc_url: http://megaqc.scilifelab.se/api/upload_parse

@@ -29,11 +29,11 @@
 - name: Create Delivery READMEs and add to TACA resources
   template:
     src: "DELIVERY.README.SAREK.txt.j2"
-    dest: "{{ ngi_resources }}/TACA/{{ site }}/"
+    dest: "{{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.txt"
 
 - name: Create Delivery READMEs for WES and add to TACA resources
   template:
     src: "DELIVERY.README.SAREK.WES.md.j2"
-    dest: "{{ ngi_resources }}/TACA/{{ site }}/"
+    dest: "{{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.WES.md"
   when: site == "upps"
 

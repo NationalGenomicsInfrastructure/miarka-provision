@@ -2,7 +2,7 @@ log:
     file: "{{ ngi_pipeline_path }}/log/taca.log"
 
 deliver:
-    rootpath: "{{ proj_root }}/{{ ngi_pipeline_site_delivery }}/nobackup/NGI"
+    rootpath: "{{ ngi_pipeline_workdir }}"
     analysispath: <ROOTPATH>/ANALYSIS/<PROJECTID>
     stagingpath: <ROOTPATH>/DELIVERY/<PROJECTID>
     operator: "{{ recipient_mail }}"
