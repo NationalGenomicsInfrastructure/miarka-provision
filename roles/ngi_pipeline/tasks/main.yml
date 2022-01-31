@@ -72,7 +72,7 @@
 - name: Deploy fastqc conf for miarka
   template:
     src: fastq_screen.miarka.conf.j2
-    dest: "{{ ngi_pipeline_conf }}"
+    dest: "{{ ngi_pipeline_conf }}/fastq_screen.miarka.conf"
 
 - name: Deploy script for creating site specific ngi_pipeline dirs for logs and db
   template:
