@@ -20,7 +20,7 @@
   pre_tasks:
     - fail:
         msg: "You must specify '-e site=<upps | sthlm>'"
-        when: site not in [ "upps", "sthlm" ]
+      when: site is not defined or site is not in [ "upps", "sthlm" ]
 
     - include: tasks/set-paths.yml
       tags: always

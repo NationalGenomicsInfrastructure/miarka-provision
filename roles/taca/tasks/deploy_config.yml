@@ -1,0 +1,6 @@
+
+- name: Deploy {{ site }} TACA {{ config_dst }} config
+  template:
+    src: site_{{ config_tpl }}.yml.j2
+    dest: "{{ ngi_pipeline_conf }}/TACA/{{ site }}_{{ config_dst }}.yml"
+  when: site in config_site
