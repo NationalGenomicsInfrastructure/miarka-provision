@@ -1,5 +1,5 @@
 ---
-# Empty placeholder that gets filled by tasks/pre-install.yml
+# Empty placeholder that gets filled by env_vars and/or tasks/set_paths.yml
 root_path:
 ngi_containers:
 

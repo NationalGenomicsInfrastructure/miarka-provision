@@ -25,3 +25,8 @@ megaqc_url: https://megaqc.snpseq.medsci.uu.se:443/api/upload_data
 standalone_scripts_repo: https://github.com/Molmed/irma-scripts.git
 standalone_scripts_version: master
 standalone_scripts_dest: "{{ sw_path }}/upps_standalone_scripts"
+
+# tarzan
+tarzan_proj_dir: "{{ ngi_pipeline_path }}/tarzan/{{ development_environment }}"
+tarzan_cert_file: "{{ tarzan_proj_dir }}/certs/tarzan_cert.pem"
+tarzan_key_file: "{{ tarzan_proj_dir }}/certs/tarzan_key.pem"

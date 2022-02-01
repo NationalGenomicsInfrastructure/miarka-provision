@@ -3,14 +3,9 @@
 tarzan_kong_version: "2.6.0"
 
 # Directories
-tarzan_root_dir: "{{ sw_path }}/tarzan/"
-tarzan_conf_dir: "{{ tarzan_root_dir }}/conf/"
-# TODO: when miarka filesystem is ready, change to: "{{ ngi_pipeline_path }}/log/tarzan/"
-tarzan_log_dir:  "{{ tarzan_root_dir }}/logs/"
-
-# Certs
-tarzan_cert_file: "{{ tarzan_conf_dir }}/tarzan_cert.pem"
-tarzan_key_file: "{{ tarzan_conf_dir }}/tarzan_key.pem"
+tarzan_root_dir: "{{ sw_path }}/tarzan"
+tarzan_conf_dir: "{{ ngi_pipeline_conf }}/tarzan"
+tarzan_log_dir:  "{{ tarzan_proj_dir }}/logs"
 
 # Config files
 tarzan_server_conf_file: "{{ tarzan_conf_dir }}/kong.conf"
@@ -22,8 +17,8 @@ tarzan_start_script: "{{ tarzan_conf_dir }}/start_kong.sh"
 
 # Singularity image
 tarzan_singularity_image_file: "kong-{{ tarzan_kong_version }}-centos.sif"
-tarzan_singularity_image_file_src: "{{ ngi_containers }}/kong/{{ tarzan_singularity_image_file }}"
-tarzan_singularity_image_file_dest: "{{ tarzan_root_dir }}/{{ tarzan_singularity_image_file }}"
+tarzan_singularity_image_file_src: "{{ deployment_static_resources }}/{{ tarzan_singularity_image_file }}"
+tarzan_singularity_image_file_dest: "{{ ngi_containers }}/kong/{{ tarzan_singularity_image_file }}"
 tarzan_singularity_image_sha1: "0a6ff9026711cbd5662af0c37dcdfab0611c5741"
 
 # Singularity container
