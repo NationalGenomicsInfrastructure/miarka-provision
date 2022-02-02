@@ -34,8 +34,5 @@ tarzan_key_file: "{{ tarzan_proj_dir }}/certs/tarzan_key.pem"
 # arteria-common
 arteria_service_log_dir: "{{ ngi_log_path }}/arteria/{{ arteria_service_name }}/{{ deployment_environment }}"
 
-# arteria checksum
-arteria_checksum_monitored_path: "{{ proj_root }}/{{ uppmax_project }}/incoming"
-
 # arteria archive upload
 archive_upload_path_to_archive_root: "{{ ngi_pipeline_nobackup }}/arteria/pdc_archive_links/{{ deployment_environment }}"

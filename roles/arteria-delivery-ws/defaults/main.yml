@@ -9,8 +9,7 @@
 arteria_delivery_repo: https://github.com/arteria-project/arteria-delivery.git
 arteria_delivery_version: v2.4.1
 
-arteria_install_path: "{{ sw_path }}/arteria"
-conda_bin: "{{ sw_path }}/anaconda/bin/conda"
+arteria_service_name: arteria-delivery-ws
 
 # These values will be appended with production and staging specific
 # paths in the tasks.
@@ -22,27 +21,7 @@ conda_bin: "{{ sw_path }}/anaconda/bin/conda"
 # And hard coded log paths because we do not want the log files
 # to disappear when the wildwest directory is cleaned out with every
 # staging sync.
-arteria_delivery_env_root: "{{ sw_path }}/anaconda/envs/arteria-delivery"
-arteria_delivery_sources_path: "{{ arteria_install_path }}/delivery_src"
-arteria_delivery_config_root: "{{ ngi_pipeline_conf }}/arteria/delivery"
-arteria_delivery_app_config: "{{ arteria_delivery_config_root }}/app.config"
-arteria_delivery_logger_config: "{{ arteria_delivery_config_root }}/logger.config"
-arteria_delivery_log: "{{ proj_root }}/{{ uppmax_project }}/private/log/arteria/delivery-ws"
 
-runfolder_path_stage: "{{ proj_root }}/{{ uppmax_project }}/incoming/staging"
-project_path_stage: "{{ proj_root }}/{{ uppmax_project }}/incoming/staging/projects"
-staging_path_stage: "{{ proj_root }}/{{ uppmax_project }}/incoming/staging/staged"
-
-runfolder_path_prod: "{{ proj_root }}/{{ uppmax_project }}/incoming"
-project_path_prod: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/DELIVERY"
-staging_path_prod: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/DELIVERY/arteria-staged"
-
-db_path_stage: "{{ proj_root }}/{{ uppmax_project }}/private/db/arteria/staging"
-db_path_prod: "{{ proj_root }}/{{ uppmax_project }}/private/db/arteria"
-alembic_path: "{{ arteria_delivery_sources_path }}/alembic/"
-delivery_links: "{{ proj_root }}/{{ uppmax_project }}/nobackup/arteria/delivery_project_links"
-
-arteria_delivery_port_prod: 10440
-arteria_delivery_port_stage: 10441
-
+alembic_path: "{{ arteria_service_src_path }}/alembic/"
+delivery_links: "{{ ngi_pipeline_nobackup }}/arteria/delivery_project_links"
 mover_path: "/usr/local/mover/1.0.0/"
