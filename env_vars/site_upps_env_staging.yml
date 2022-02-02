@@ -5,3 +5,7 @@ ngi_pipeline_web_port: 6667
 # arteria checksum
 arteria_checksum_port: 10421
 arteria_checksum_monitored_path: "{{ arteria_checksum_monitored_path }}/{{ deployment_environment }}"
+
+# arteria archive upload
+archive_upload_port: 10481
+archive_upload_monitored_path: "{{ ngi_pipeline_nobackup }}/arteria/tmp"
