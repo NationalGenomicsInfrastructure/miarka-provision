@@ -1,28 +1,10 @@
 ---
 
-# Set vars depending on if we're in production or staging. 
-
-# Production 
-- set_fact: 
-    arteria_checksum_monitored_path: "{{ arteria_checksum_monitored_path }}"
-    arteria_checksum_md5sum_log_dir: "{{ arteria_checksum_md5sum_log_dir }}/production"
-    arteria_checksum_service_log: "{{ arteria_checksum_service_log}}/production"
-    arteria_checksum_port: "{{ arteria_checksum_port_prod }}"
-  when: deployment_environment == "production"
-
-# Staging
-- set_fact:
-    arteria_checksum_monitored_path: "{{ arteria_checksum_monitored_path }}/staging/"
-    arteria_checksum_md5sum_log_dir: "{{ arteria_checksum_md5sum_log_dir }}/staging"
-    arteria_checksum_service_log: "{{ arteria_checksum_service_log}}/staging"
-    arteria_checksum_port: "{{ arteria_checksum_port_stage }}"
-  when: deployment_environment in [ "staging", "devel" ]
-
 - include: 1_install.yml
 
 - include: 2_install_config.yml
 
-- name: Store arteria-checksum-ws tool version in deployment
+- name: Store {{ arteria_service_name }} tool version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "arteria-checksum: {{ arteria_checksum_version }}"
+    line: "{{ arteria_service_name }}: {{ arteria_checksum_version }}"

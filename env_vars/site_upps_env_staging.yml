@@ -1,3 +1,7 @@
 
 # ngi_pipeline
 ngi_pipeline_web_port: 6667
+
+# arteria checksum
+arteria_checksum_port: 10421
+arteria_checksum_monitored_path: "{{ arteria_checksum_monitored_path }}/{{ deployment_environment }}"

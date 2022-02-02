@@ -3,9 +3,9 @@
 root_path:
 ngi_containers:
 
-sw_path: "{{ root_path }}/sw/"
+sw_path: "{{ root_path }}/sw"
 
-anaconda_path: "{{ sw_path }}anaconda"
+anaconda_path: "{{ sw_path }}/anaconda"
 default_env: "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sw/uppmax/bin"
 anaconda_env:
   PATH: "{{ anaconda_path }}/bin:{{ default_env }}" # this hopefully gets updated by anaconda role
@@ -39,3 +39,8 @@ sarek_dest: "{{ sw_path }}/sarek"
 
 # File with tools/software version in the deployed env
 deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"
+
+# arteria-common configuration options
+arteria_service_env_root: "{{ anaconda_path }}/envs/{{ arteria_service_name }}"
+arteria_service_src_path: "{{ sw_path }}/arteria/{{ arteria_service_name }}"
+arteria_service_config_root: "{{ ngi_pipeline_conf }}/arteria/{{ arteria_service_name }}"

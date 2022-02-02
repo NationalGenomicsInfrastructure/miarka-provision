@@ -1,3 +1,6 @@
 
 # ngi_pipeline
 ngi_pipeline_web_port: 6666
+
+# arteria checksum
+arteria_checksum_port: 10420

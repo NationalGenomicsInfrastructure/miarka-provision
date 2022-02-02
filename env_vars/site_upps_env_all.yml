@@ -30,3 +30,7 @@ standalone_scripts_dest: "{{ sw_path }}/upps_standalone_scripts"
 tarzan_proj_dir: "{{ ngi_pipeline_path }}/tarzan/{{ development_environment }}"
 tarzan_cert_file: "{{ tarzan_proj_dir }}/certs/tarzan_cert.pem"
 tarzan_key_file: "{{ tarzan_proj_dir }}/certs/tarzan_key.pem"
+
+# arteria checksum
+arteria_service_log_dir: "{{ ngi_log_path }}/arteria/{{ arteria_service_name }}/{{ deployment_environment }}"
+arteria_checksum_monitored_path: "{{ proj_root }}/{{ uppmax_project }}/incoming"
