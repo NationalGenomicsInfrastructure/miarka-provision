@@ -1,5 +1,6 @@
 dependencies:
   - { role: arteria-checksum-ws, tags: arteria-checksum }
   - { role: arteria-delivery-ws, tags: arteria-delivery }
+  - { role: archive-upload-ws, tags: archive-upload }
   - { role: ngi_pipeline, tags: ngi_pipeline }
 
