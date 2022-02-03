@@ -34,7 +34,7 @@
 
 - name: modify uppsala's supervisord conf to add start kong command attribute
   ini_file:
-    dest: "{{ ngi_pipeline_conf }}/supervisord_{{ site }}.conf"
+    dest: "{{ supervisord_conf }}"
     section: "program:tarzan-{{ deployment_environment }}"
     option: command
     value: "{{ tarzan_start_script }}"
@@ -42,7 +42,7 @@
 
 - name: modify uppsala's supervisord conf to add autorestart kong attribute
   ini_file:
-    dest: "{{ ngi_pipeline_conf }}/supervisord_{{ site }}.conf"
+    dest: "{{ supervisord_conf }}"
     section: "program:tarzan-{{ deployment_environment }}"
     option: autorestart
     value: true

@@ -20,7 +20,7 @@
 
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
   ini_file: 
-    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    dest: "{{ supervisord_conf }}"
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: command
     value: "{{ arteria_service_env_root }}/bin/python {{ arteria_service_env_root }}/bin/delivery-ws --configroot={{ arteria_service_config_root }} --port={{ arteria_delivery_port }}"
@@ -28,7 +28,7 @@
 
 - name: modify uppsala's supervisord conf to autostart {{ arteria_service_name }}
   ini_file: 
-    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    dest: "{{ supervisord_conf }}"
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: autorestart
     value: true

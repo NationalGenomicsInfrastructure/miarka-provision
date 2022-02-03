@@ -45,3 +45,6 @@ deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"
 arteria_service_env_root: "{{ anaconda_path }}/envs/{{ arteria_service_name }}"
 arteria_service_src_path: "{{ sw_path }}/arteria/{{ arteria_service_name }}"
 arteria_service_config_root: "{{ ngi_pipeline_conf }}/arteria/{{ arteria_service_name }}"
+
+# supervisord
+supervisord_conf: "{{ ngi_pipeline_conf }}/supervisord_{{ site }}.conf"
