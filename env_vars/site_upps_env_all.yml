@@ -27,12 +27,12 @@ standalone_scripts_version: master
 standalone_scripts_dest: "{{ sw_path }}/upps_standalone_scripts"
 
 # tarzan
-tarzan_proj_dir: "{{ ngi_pipeline_path }}/tarzan/{{ development_environment }}"
+tarzan_proj_dir: "{{ static_ngi_pipeline_path }}/tarzan/{{ development_environment }}"
 tarzan_cert_file: "{{ tarzan_proj_dir }}/certs/tarzan_cert.pem"
 tarzan_key_file: "{{ tarzan_proj_dir }}/certs/tarzan_key.pem"
 
 # arteria-common
-arteria_service_log_dir: "{{ ngi_log_path }}/arteria/{{ arteria_service_name }}/{{ deployment_environment }}"
+arteria_service_log_dir: "{{ static_ngi_log_path }}/arteria/{{ arteria_service_name }}/{{ deployment_environment }}"
 
 # arteria archive upload
-archive_upload_path_to_archive_root: "{{ ngi_pipeline_nobackup }}/arteria/pdc_archive_links/{{ deployment_environment }}"
+archive_upload_path_to_archive_root: "{{ static_ngi_pipeline_nobackup }}/arteria/pdc_archive_links/{{ deployment_environment }}"

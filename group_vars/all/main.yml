@@ -6,5 +6,7 @@ deployment_override: false # Set to true if you want to deploy into existing pro
 deployment_remote_path: /vulpes/ngi
 deployment_static_resources: "{{ deployment_remote_path }}/deploy/files"
 
+static_proj_root: /proj
+
 ngi_group: ngi-sw
 exclude_pattern: [ "*.swp", "miarka3/" ]
