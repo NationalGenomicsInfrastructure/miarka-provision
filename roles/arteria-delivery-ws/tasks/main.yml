@@ -1,60 +1,40 @@
 ---
 
-# Production values
-- set_fact: 
-    arteria_delivery_log: "{{ arteria_delivery_log }}/production"
-    runfolder_path: "{{ runfolder_path_prod }}"
-    project_path: "{{ project_path_prod }}"
-    staging_path: "{{ staging_path_prod }}"
-    arteria_delivery_port: "{{ arteria_delivery_port_prod }}"
-    db_path: "{{ db_path_prod }}/arteria-delivery.db"
-  when: deployment_environment == "production"
-
-# Staging values
-- set_fact: 
-    arteria_delivery_log: "{{ arteria_delivery_log }}/staging"
-    runfolder_path: "{{ runfolder_path_stage }}"
-    project_path: "{{ project_path_stage }}"
-    staging_path: "{{ staging_path_stage }}"
-    arteria_delivery_port: "{{ arteria_delivery_port_stage }}"
-    db_path: "{{ db_path_stage }}/arteria-delivery.db"
-  when: deployment_environment in [ "staging", "devel" ]
-
 - include: install.yml
 
-- name: ensure arteria-delivery conf dir exists
+- name: ensure {{ arteria_service_name }} conf dir exists
   file:
     state: directory
-    path: "{{ arteria_delivery_config_root }}"
+    path: "{{ arteria_service_config_root }}"
     mode: g+rwXs
 
-- name: deploying arteria-delivery app config
+- name: deploying {{ arteria_service_name }} app config
   template:
     src: delivery_app.config.j2
-    dest: "{{ arteria_delivery_config_root }}/app.config"
+    dest: "{{ arteria_service_config_root }}/app.config"
 
-- name: deploying arteria-delivery logger config
+- name: deploying {{ arteria_service_name }} logger config
   template:
     src: delivery_logger.config.j2
-    dest: "{{ arteria_delivery_config_root }}/logger.config"
+    dest: "{{ arteria_service_config_root }}/logger.config"
 
-- name: modify uppsala's supervisord conf to start arteria-delivery-ws 
+- name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
   ini_file: 
-    dest="{{ ngi_pipeline_conf }}/supervisord_upps.conf"
-    section="program:arteria-delivery-ws-{{ deployment_environment }}"
-    option=command
-    value="{{ arteria_delivery_env_root }}/bin/python {{ arteria_delivery_env_root }}/bin/delivery-ws --configroot={{ arteria_delivery_config_root }} --port={{ arteria_delivery_port }}"
-    backup=no
+    dest: "{{ supervisord_conf }}"
+    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
+    option: command
+    value: "{{ arteria_service_env_root }}/bin/python {{ arteria_service_env_root }}/bin/delivery-ws --configroot={{ arteria_service_config_root }} --port={{ arteria_delivery_port }}"
+    backup: no
 
-- name: modify uppsala's supervisord conf to autostart arteria-delivery-ws
+- name: modify uppsala's supervisord conf to autostart {{ arteria_service_name }}
   ini_file: 
-    dest="{{ ngi_pipeline_conf }}/supervisord_upps.conf"
-    section="program:arteria-delivery-ws-{{ deployment_environment }}"
-    option=autorestart
-    value=true
-    backup=no
+    dest: "{{ supervisord_conf }}"
+    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
+    option: autorestart
+    value: true
+    backup: no
 
-- name: Store arteria-delivery-ws tool version in deployment
+- name: Store {{ arteria_service_name }} tool version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "arteria-delivery: {{ arteria_delivery_version }}"
+    line: "{{ arteria_service_name }}: {{ arteria_delivery_version }}"

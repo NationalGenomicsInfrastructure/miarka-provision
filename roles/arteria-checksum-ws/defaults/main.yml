@@ -19,14 +19,7 @@ arteria_checksum_version: v1.0.4
 # And hard coded log paths because we do not want the log files
 # to disappear when the wildwest directory is cleaned out with every
 # staging sync.
-arteria_checksum_monitored_path: "{{ proj_root }}/{{ uppmax_project }}/incoming"
-arteria_checksum_env_root: "{{ anaconda_path }}/envs/arteria-checksum"
-arteria_checksum_src_path: "{{ sw_path }}/arteria/checksum_src/"
-arteria_checksum_config_root: "{{ ngi_pipeline_conf }}/arteria/checksum/"
-arteria_checksum_md5sum_log_dir: "{{ proj_root }}/{{ uppmax_project }}/private/log/arteria/checksum_md5sum/"
-arteria_checksum_service_log: "{{ proj_root }}/{{ uppmax_project }}/private/log/arteria/checksum-ws/"
-
-
-arteria_checksum_port_prod: 10420
-arteria_checksum_port_stage: 10421
+arteria_service_name: arteria-checksum-ws
+arteria_checksum_md5sum_log_dir: "{{ arteria_service_log_dir }}"
+arteria_checksum_service_log: "{{ arteria_service_log_dir }}/{{ arteria_service_name }}.log"
 arteria_checksum_cores_to_use: 8

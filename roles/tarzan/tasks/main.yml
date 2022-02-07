@@ -11,12 +11,6 @@
     state: directory
     mode: g+rwXs
 
-- name: create tarzan log dir
-  file:
-    name: "{{ tarzan_log_dir }}"
-    state: directory
-    mode: g+rwXs
-
 - name: deploy server config file for kong
   template:
     src: "kong.conf.j2"
@@ -27,21 +21,16 @@
     src: "kong.yml.j2"
     dest: "{{ tarzan_entity_conf_file }}"
 
-- name: deploy ssl cert for kong
-  copy:
-    src: "tarzan_cert.pem"
-    dest: "{{ tarzan_cert_file }}"
-
-- name: deploy ssl key for kong
-  copy:
-    src: "tarzan_key.pem"
-    dest: "{{ tarzan_key_file }}"
-  no_log: True
-
 - name: deploy kong start script
   template:
     src: "start_kong.sh.j2"
     dest: "{{ tarzan_start_script }}"
+
+- name: create tarzan singularity image dir
+  file:
+    name: "{{ tarzan_singularity_image_file_dest | dirname }}"
+    state: directory
+    mode: g+rwXs
 
 - name: deploy singularity image for kong
   copy:
@@ -51,7 +40,7 @@
 
 - name: modify uppsala's supervisord conf to add start kong command attribute
   ini_file:
-    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    dest: "{{ supervisord_conf }}"
     section: "program:tarzan-{{ deployment_environment }}"
     option: command
     value: "{{ tarzan_start_script }}"
@@ -59,7 +48,7 @@
 
 - name: modify uppsala's supervisord conf to add autorestart kong attribute
   ini_file:
-    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    dest: "{{ supervisord_conf }}"
     section: "program:tarzan-{{ deployment_environment }}"
     option: autorestart
     value: true

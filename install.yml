@@ -46,7 +46,6 @@
     - { role: taca, tags: taca }
     - { role: ngi_reports, tags: ngi_reports }
     - { role: multiqc, tags: multiqc }
-    - { role: arteria-staging, tags: arteria-staging }
     - { role: arteria-checksum-ws, tags: arteria-checksum }
     - { role: arteria-delivery-ws, tags: arteria-delivery }
     - { role: standalone_scripts, tags: standalone_scripts }
