@@ -16,7 +16,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     regexp: ^(alias {{ pipeline }}=.*)(')$
-    line: '\1 --project {{ uppmax_project }} --custom_config_base {{ sw_path }}{{ pipeline }}/configs/ --igenomes_ignore\2'
+    line: '\1 --project {{ uppmax_project }} --custom_config_base {{ sw_path }}/{{ pipeline }}/configs/ --igenomes_ignore\2'
     state: present
     backrefs: yes
     backup: no

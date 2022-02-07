@@ -1,10 +1,10 @@
 
 - name: nf-core download {{ pipeline }} v{{ release }}
-  command: "nf-core -v download {{ pipeline }} --compress none -c none --outdir {{ sw_path }}{{ pipeline }} -r {{ release }}"
+  command: "nf-core -v download {{ pipeline }} --compress none -c none --outdir {{ sw_path }}/{{ pipeline }} -r {{ release }}"
   environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ sw_path }}"
-    creates: "{{ sw_path }}{{ pipeline }}"
+    creates: "{{ sw_path }}/{{ pipeline }}"
 
 - name: create directories for {{ pipeline }} singularity images
   file:
@@ -29,7 +29,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias {{ pipeline }}='nextflow run {{ sw_path }}{{ pipeline }}/workflow/ \
+          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/ \
           -profile uppmax \
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
