@@ -1,24 +1,11 @@
 
-# ngi_pipeline
-ngi_pipeline_web_port: 6667
-
 # arteria-common
 static_runfolder_path: "{{ static_proj_root }}/{{ uppmax_project }}/incoming/{{ deployment_environment }}"
 
-# arteria checksum
-arteria_checksum_port: 10421
-arteria_checksum_monitored_path: "{{ static_runfolder_path }}"
-
 # arteria archive upload
-archive_upload_port: 10481
 archive_upload_monitored_path: "{{ static_ngi_pipeline_nobackup }}/arteria/tmp"
 
 # arteria delivery
-arteria_delivery_port: 10441
 project_path: "{{ static_runfolder_path }}/projects"
 staging_path: "{{ static_runfolder_path }}/staged"
 db_path: "{{ static_ngi_pipeline_path }}/db/arteria/{{ deployment_environment }}"
-
-# tarzan ports
-tarzan_http_port: 8887
-tarzan_https_port: 4443

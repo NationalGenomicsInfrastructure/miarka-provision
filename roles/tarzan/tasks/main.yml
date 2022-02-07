@@ -26,6 +26,12 @@
     src: "start_kong.sh.j2"
     dest: "{{ tarzan_start_script }}"
 
+- name: create tarzan singularity image dir
+  file:
+    name: "{{ tarzan_singularity_image_file_dest | dirname }}"
+    state: directory
+    mode: g+rwXs
+
 - name: deploy singularity image for kong
   copy:
     src: "{{ tarzan_singularity_image_file_src }}"
