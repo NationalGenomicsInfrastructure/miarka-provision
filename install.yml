@@ -35,6 +35,9 @@
         files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
+    - set_fact:
+        root_path: "{{ deployment_output | default(root_path) }}"
+
   environment:
     "{{ tools_path }}"
 
@@ -68,17 +71,7 @@
         group: "{{ ngi_sw_group }}"
         state: directory
         recurse: yes
-        mode: g+rwX,o=rX
-
-    - name: make wildwest directory editable by anyone that can access miarka
-      file:
-        path: "{{ proj_root }}"
-        group: "{{ ngi_group }}"
-        state: directory
-        recurse: yes
-        mode: g+rwXs,o=rwX
-      when: deployment_environment == "staging"
-      ignore_errors: true
+        mode: g+rwXs,o=rX
 
     - name: make containers directory readable by anyone that can access miarka
       file:
@@ -86,7 +79,17 @@
         group: "{{ ngi_group }}"
         state: directory
         recurse: yes
-        mode: g+rwxs,o=rwX
+        mode: g+rwXs,o-rwx
+
+    - name: make wildwest directory editable by anyone that can access miarka
+      file:
+        path: "{{ proj_root }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: yes
+        mode: g+rwXs,o-rwx
+      when: deployment_environment == "staging"
+      ignore_errors: true
 
   post_tasks:
 
