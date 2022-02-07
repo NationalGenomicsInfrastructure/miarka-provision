@@ -41,7 +41,7 @@
       - name: test if all files have correct permissions
         pause:
           prompt: Some files are not {{ item }}, continue anyway? Hit return to continue or Ctrl+C and 'A' to abort!
-        when: find.files | rejectattr(item) | list | length > 0
+        when: find.files | rejectattr(item) | list | length > 0
         with_items:
           - rgrp
           - wgrp
@@ -51,7 +51,7 @@
       - name: test if all files have correct group ownership
         pause:
           prompt: Some files are not owned by {{ item }}, continue anyway? Hit return to continue or Ctrl+C and 'A' to abort!
-        when: find.files | rejectattr('gr_name', '==', item) | list | length > 0
+        when: find.files | rejectattr('gr_name', '==', item) | list | length > 0
         with_items:
           - "{{ ngi_group }}"
         register: cont_g
