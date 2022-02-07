@@ -14,3 +14,7 @@
 
 - name: Deploy start supervisord start script for {{ site }}
   template: src="start_supervisord_site.sh.j2" dest="{{ ngi_resources }}/start_supervisord_{{ site }}.sh"
+
+- name: add folders that needs to be created for supervisord post-sync
+  set_fact:
+    folders_to_create: "{{ folders_to_create + [supervisord_log_dest] }}"

@@ -54,6 +54,14 @@
     value: true
     backup: no
 
+- name: add folders that needs to be created for tarzan post-sync
+  set_fact:
+    folders_to_create: "{{ folders_to_create + [item] }}"
+  with_items:
+    - "{{ tarzan_proj_dir }}"
+    - "{{ tarzan_cert_dir }}"
+    - "{{ tarzan_log_dir }}"
+
 - name: Store tarzan tools version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"

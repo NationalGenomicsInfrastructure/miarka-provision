@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Minimalistic script that initiates project/site specific directories. To be run after syncing a deployment 
+
+{% for dir in folders_to_create | unique | sort %}
+mkdir -p "{{ dir }}"
+{% endfor %}

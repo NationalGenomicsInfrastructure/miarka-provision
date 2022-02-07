@@ -29,8 +29,9 @@ standalone_scripts_dest: "{{ sw_path }}/upps_standalone_scripts"
 
 # tarzan
 tarzan_proj_dir: "{{ static_ngi_pipeline_path }}/tarzan/{{ deployment_environment }}"
-tarzan_cert_file: "{{ tarzan_proj_dir }}/certs/tarzan_cert.pem"
-tarzan_key_file: "{{ tarzan_proj_dir }}/certs/tarzan_key.pem"
+tarzan_cert_dir: "{{ tarzan_proj_dir }}/certs"
+tarzan_cert_file: "{{ tarzan_cert_dir }}/tarzan_cert.pem"
+tarzan_key_file: "{{ tarzan_cert_dir }}/tarzan_key.pem"
 tarzan_http_port: 8888
 tarzan_https_port: 4444
 

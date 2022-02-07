@@ -33,6 +33,10 @@
           alias make_report="{{ ngi_pipeline_venv_py3 }}/bin/ngi_reports project_summary -md"
     backup: no
 
+- name: add folders that needs to be created for ngi_reports post-sync
+  set_fact:
+    folders_to_create: "{{ folders_to_create + [ngi_log_path] }}"
+
 - name: Store ngi_reports tool version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"

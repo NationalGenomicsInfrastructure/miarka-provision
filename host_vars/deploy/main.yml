@@ -53,3 +53,14 @@ arteria_service_config_root: "{{ ngi_pipeline_conf }}/arteria/{{ arteria_service
 
 # supervisord
 supervisord_conf: "{{ ngi_pipeline_conf }}/supervisord_{{ site }}.conf"
+
+# folders that need to be created post-sync
+folders_to_create:
+  - "{{ ngi_pipeline_path }}"
+  - "{{ ngi_pipeline_nobackup }}"
+  - "{{ ngi_pipeline_workdir }}"
+  - "{{ ngi_log_path }}"
+  - "{{ ngi_softlinks }}"
+  - "{{ static_ngi_pipeline_path }}"
+  - "{{ static_ngi_pipeline_nobackup }}"
+  - "{{ static_ngi_log_path }}"

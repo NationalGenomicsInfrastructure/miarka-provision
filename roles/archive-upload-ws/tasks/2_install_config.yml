@@ -31,3 +31,11 @@
     option: autorestart
     value: true
     backup: no
+
+- name: add folders that needs to be created for {{ arteria_service_name }} post-sync
+  set_fact:
+    folders_to_create: "{{ folders_to_create + [item] }}"
+  with_items:
+    - "{{ archive_upload_monitored_path }}"
+    - "{{ archive_upload_path_to_archive_root }}"
+    - "{{ arteria_service_log_dir }}"

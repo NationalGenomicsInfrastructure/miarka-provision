@@ -52,6 +52,18 @@
     src: create_delivery_readme_softlinks.sh.j2
     dest: "{{ ngi_resources }}/create_delivery_readme_softlinks.sh"
 
+- name: add folders that needs to be created for taca post-sync
+  set_fact:
+    folders_to_create: "{{ folders_to_create + [item] }}"
+  with_items:
+    - "{{ ngi_softlinks }}"
+    - "{{ ngi_log_path }}"
+    - "{{ ngi_pipeline_workdir }}"
+    - "{{ ngi_pipeline_workdir }}/DATA"
+    - "{{ ngi_pipeline_workdir }}/ANALYSIS"
+    - "{{ ngi_pipeline_workdir }}/DELIVERY"
+    - "{{ proj_root }}/{{ uppmax_project }}/incoming/reports"
+
 - name: Store taca tools version on deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
