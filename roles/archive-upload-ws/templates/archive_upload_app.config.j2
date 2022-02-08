@@ -33,7 +33,7 @@ log_directory: "{{ arteria_service_log_dir }}"
 # jobs to succeed. 
 #
 # See full list at e.g. https://www.ibm.com/support/knowledgecenter/en/SSGSG7_7.1.1/com.ibm.itsm.msgs.client.doc/msgs_client_list_intro.html
-whitelisted_warnings: "{{ archive_upload_whitelisted_warnings | to_json }}"
+whitelisted_warnings: {{ archive_upload_whitelisted_warnings | to_json }}
 
 # Exclude filters (different on biotank and Miarka)
 #
