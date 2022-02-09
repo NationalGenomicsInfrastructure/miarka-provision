@@ -23,6 +23,34 @@ _transform: true
 # Each Kong entity (core entity or custom entity introduced by a plugin)
 # can be listed in the top-level as an array of objects:
 
+services:
+  - name: arteria_checksum
+    host: localhost
+    port: 10420
+    protocol: http
+    routes:
+    - paths:
+      - /arteria_checksum
+      strip_path: true
+
+  - name: arteria_delivery
+    host: localhost
+    port: 10440
+    protocol: http
+    routes:
+    - paths:
+      - /arteria_delivery
+      strip_path: true
+
+  - name: arteria_archive
+    host: localhost
+    port: 10480
+    protocol: http
+    routes:
+    - paths:
+      - /arteria_archive
+      strip_path: true
+
 # services:
 # - name: example-service
 #   url: http://example.com
