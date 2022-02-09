@@ -5,7 +5,7 @@ anonymous_reports = off
 #------------------------------------------------------------------------------
 # NGINX
 #------------------------------------------------------------------------------
-proxy_listen = 0.0.0.0:{{ tarzan_singularity_container_http_port }} http2, 0.0.0.0:{{ tarzan_singularity_container_https_port }} ssl
+proxy_listen = 0.0.0.0:{{ tarzan_singularity_container_http_port }}, 0.0.0.0:{{ tarzan_singularity_container_https_port }} ssl
 
 ssl_cert = {{ tarzan_singularity_container_cert_file }}
 ssl_cert_key = {{ tarzan_singularity_container_key_file }}
