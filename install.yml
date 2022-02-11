@@ -62,8 +62,8 @@
 
     - name: copy script for creating directories post-sync
       template:
-        - src: create_site_dirs.sh.j2
-        - dest: "{{ ngi_resources }}/create_{{ site }}_dirs.sh"
+        src: create_site_dirs.sh.j2
+        dest: "{{ ngi_resources }}/create_{{ site }}_dirs.sh"
 
     - name: Add miarka_provision version to deployed tools files
       lineinfile:
