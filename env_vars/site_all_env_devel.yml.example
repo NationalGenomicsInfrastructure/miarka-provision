@@ -7,5 +7,4 @@ proj_root: "{{ deployment_target }}/wildwest/"
 ngi_containers: "{{ proj_root }}/containers/"
 
 # Ports
-tarzan_http_port: 8887
-tarzan_https_port: 4443
+tarzan_port: 4443

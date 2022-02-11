@@ -28,5 +28,4 @@ tarzan_singularity_container_entity_conf_file: "/kong.yml"
 tarzan_singularity_container_cert_file: "/cert.pem"
 tarzan_singularity_container_key_file: "/key.pem"
 tarzan_singularity_container_log_dir: "/tarzan_logs"
-tarzan_singularity_container_http_port: 8888
-tarzan_singularity_container_https_port: 4444
+tarzan_singularity_container_port: 4444
