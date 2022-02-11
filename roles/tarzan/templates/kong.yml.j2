@@ -4,7 +4,7 @@ _transform: true
 services:
   - name: arteria_checksum
     host: localhost
-    port: 10420
+    port: {{ arteria_checksum_port }}
     routes:
     - paths:
       - /arteria_checksum
@@ -12,7 +12,7 @@ services:
 
   - name: arteria_delivery
     host: localhost
-    port: 10440
+    port: {{ arteria_delivery_port }}
     routes:
     - paths:
       - /arteria_delivery
@@ -20,7 +20,7 @@ services:
 
   - name: arteria_archive
     host: localhost
-    port: 10480
+    port: {{ archive_upload_port }}
     routes:
     - paths:
       - /arteria_archive
