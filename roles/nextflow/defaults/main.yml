@@ -1,7 +1,7 @@
 java_home: "/sw/comp/java/x86_64/sun_jdk1.8.0_151"
 nextflow_java: "{{ java_home }}"
-nextflow_version_tag: "v21.04.3"
-nextflow_download_url: "https://github.com/nextflow-io/nextflow/releases/download/{{ nextflow_version_tag }}/nextflow"
+nextflow_version_tag: "21.04.3"
+nextflow_download_url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow-{{ nextflow_version_tag }}-all"
 nextflow_env:
   NXF_LAUNCHER: '$PWD/work'
   NXF_LAUNCHBASE: '$PWD/work'

@@ -1,6 +1,5 @@
+{% if pipeline == 'methylseq' or pipeline == 'ampliseq' %}
 process {
-
-  container = '{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ pipeline }}-{{ release }}.simg'
 
   {% if pipeline == 'methylseq' %}
 
@@ -17,7 +16,7 @@ process {
 
   {% if pipeline == 'ampliseq' %}
 
-  withName:classifier {
+  withName:QIIME2_CLASSIFY {
         cpus = 20
         memory = 120.GB
         time = 36.h
@@ -26,11 +25,7 @@ process {
   {% endif %}
 }
 
-{% if pipeline == 'sarek' %}
-
-singularity.cacheDir = '{{ ngi_containers }}/{{ pipeline }}'
-
-{% endif %}
+singularity.cacheDir = '{{ container_dir }}'
 
 {% if pipeline == 'rnaseq' %}
 

@@ -1,24 +1,35 @@
 
+- name: create directories for {{ pipeline }} singularity images
+  file:
+    path: "{{ container_dir }}"
+    state: directory
+    mode: 02775 #ug=rwx, o=rx, g+s
+
 - name: nf-core download {{ pipeline }} v{{ release }}
-  command: "nf-core -v download {{ pipeline }} --compress none -c none --outdir {{ sw_path }}/{{ pipeline }} -r {{ release }}"
+  command: "nf-core -v
+    download {{ pipeline }}
+    --compress none
+    --outdir {{ sw_path }}/{{ pipeline }}
+    --revision {{ release }}
+    --container singularity
+    --singularity-cache-only"
   environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ sw_path }}"
     creates: "{{ sw_path }}/{{ pipeline }}"
 
-- name: create directories for {{ pipeline }} singularity images
-  file:
-    path: "{{ ngi_containers }}/{{ pipeline }}"
-    state: directory
-    mode: 02775 #ug=rwx, o=rx, g+s
-
-- name: pull singularity images for {{ pipeline }} v{{ release }}
-  command: "singularity pull --name nf-core-{{ pipeline }}-{{ release }}.simg {{ nf_core_container_repo }}/{{ pipeline }}:{{ release }}"
+- name: pull pipeline-specific images for {{ pipeline }} v{{ release }}
+  command: "singularity pull --name nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg {{ nf_core_container_repo }}/{{ container.0 }}:{{ release }}.{{ container.1 }}"
   environment: "{{ nf_core_vars }}"
   args:
-    chdir: "{{ ngi_containers }}/{{ pipeline }}"
-    creates: "{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ pipeline }}-{{ release }}.simg"
+    chdir: "{{ container_dir }}"
+    creates: "{{ container_dir }}/nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg"
   ignore_errors: true
+  with_nested:
+    - "{{ pipeline_specific_containers }}"
+    - "{{ pipeline_genomes }}"
+  loop_control:
+    loop_var: container
 
 - name: create nf-core {{ pipeline }} v{{ release }} config
   template:
@@ -45,6 +56,13 @@
 
 - name: download ampliseq requirements
   block:
+
+  - name: create directory for {{ pipeline }}  resources
+    file:
+      path: "{{ ngi_containers }}/{{ pipeline }}"
+      state: directory
+      mode: 02775 #ug=rwx, o=rx, g+s
+
   - name: check if SILVA zip exists
     stat:
       get_attributes: no

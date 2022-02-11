@@ -12,7 +12,7 @@
 - name: Install ngi_reports
   pip:
     name: "file:{{ ngi_reports_dest }}"
-    executable: "{{ ngi_pipeline_venv_py3 }}/bin/pip"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
     editable: yes
 
 - name: Create ngi_reports conf file
@@ -30,13 +30,13 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias make_report="{{ ngi_pipeline_venv_py3 }}/bin/ngi_reports project_summary -md"
+          alias make_report="{{ ngi_pipeline_venv }}/bin/ngi_reports project_summary -md"
     backup: no
 
 - name: Store ngi_reports tool version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "{{ NGI_venv_py3_name }}, {{ item.tool_name }}: {{ item.tool_version }}"
+    line: "{{ NGI_venv_name }}, {{ item.tool_name }}: {{ item.tool_version }}"
   with_items:
     - { tool_name: "ngi_reports", tool_version: "{{ ngi_reports_version }}" }
     - { tool_name: "ngi_visualizations", tool_version: "{{ ngi_visual_version }}" }

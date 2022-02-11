@@ -6,16 +6,18 @@ nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
   SINGULARITY_CACHEDIR: "/scratch/singularity_cache"
   SINGULARITY_TMPDIR: "/scratch/singularity_temp"
-  NXF_SINGULARITY_CACHEDIR: "/scratch/singularity_cache"
+  NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
   NXF_LAUNCHER: "/scratch"
   NXF_HOME: "{{ nextflow_env.NXF_HOME }}"
   NXF_WORK: "{{ nextflow_env.NXF_WORK }}"
   NXF_TEMP: "{{ nextflow_env.NXF_TEMP }}"
   JAVA_HOME: "{{ nextflow_env.NXF_JAVA_HOME }}"
   PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
+biocontainers_dirname: biocontainers
 pipelines:
   - name: rnaseq
-    release: 3.0
+    release: 3.3
+    container_dir: "{{ biocontainers_dirname }}"
     biocontainer_base_url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp
   - name: sarek
     release: "{{ sarek_tag }}"
@@ -33,10 +35,12 @@ pipelines:
     release: 2.0.0
     silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
     silva_zip: Silva_132_release.zip
+    container_dir: "{{ biocontainers_dirname }}"
   - name: atacseq
     release: 1.2.1
   - name: viralrecon
     release: 2.2
+    container_dir: "{{ biocontainers_dirname }}"
   - name: rnafusion
     release: 1.2.0
   - name: nanoseq
