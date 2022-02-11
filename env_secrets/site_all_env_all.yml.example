@@ -15,3 +15,6 @@ charon_api_token: secret
 
 # multiqc
 megaqc_access_token: secret
+
+# tarzan
+tarzan_api_key: secret
