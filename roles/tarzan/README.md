@@ -21,11 +21,13 @@ Set `tarzan_singularity_image_sha1` to this value.
 
 # Certificates
 
-It is recommended to have a separate certificates for staging and production.
+It is recommended to have separate certificates for staging and production.
 
-On the node running Kong, run: `openssl req -x509 -newkey rsa:2048 -keyout tarzan_key.pem -out tarzan_cert.pem -days 1460 -nodes -subj '/CN=miarka2.uppmax.uu.se'`.
+On the node running Kong, run: `openssl req -x509 -newkey rsa:2048 -keyout tarzan_key.pem -out tarzan_cert.pem -days 1460 -nodes -subj '/CN=miarka2.uppmax.uu.se'`. (Or `CN=miarka1.uppmax.uu.se` for production.)
 
-Move the generate certificate and key to the paths defined in `tarzan_cert_file` and `tarzan_key_file`.
+Move the generated certificate and key to the paths defined in `tarzan_cert_file` and `tarzan_key_file`.
+
+One can then add the contents of tarzan_cert.pem to the client's CA bundle to get rid of certificate warnings. Some clients (like Stackstorm) use the Mozilla CA bundle in the Python library requests, which can usually be found under a path similar to `.../python2.7/site-packages/requests/cacert.pem`.
 
 # Authentication
 
