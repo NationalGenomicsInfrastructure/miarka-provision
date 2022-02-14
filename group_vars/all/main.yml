@@ -8,5 +8,6 @@ deployment_static_resources: "{{ deployment_remote_path }}/deploy/files"
 
 static_proj_root: /proj
 
-ngi_group: ngi-sw
+ngi_sw_group: ngi-sw
+ngi_group: ngi
 exclude_pattern: [ "*.swp", "miarka3/" ]
