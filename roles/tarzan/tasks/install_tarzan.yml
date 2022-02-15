@@ -1,0 +1,60 @@
+---
+- name: create tarzan root dir
+  file:
+    name: "{{ tarzan_root_dir }}"
+    state: directory
+    mode: g+rwXs
+
+- name: create tarzan conf dir
+  file:
+    name: "{{ tarzan_conf_dir }}"
+    state: directory
+    mode: g+rwXs
+
+- name: deploy server config file for kong
+  template:
+    src: "kong.conf.j2"
+    dest: "{{ tarzan_server_conf_file }}"
+
+- name: deploy entity config file for kong
+  template:
+    src: "kong.yml.j2"
+    dest: "{{ tarzan_entity_conf_file }}"
+
+- name: deploy kong start script
+  template:
+    src: "start_kong.sh.j2"
+    dest: "{{ tarzan_start_script }}"
+
+- name: create tarzan singularity image dir
+  file:
+    name: "{{ tarzan_singularity_image_file_dest | dirname }}"
+    state: directory
+    mode: g+rwXs
+
+- name: deploy singularity image for kong
+  copy:
+    src: "{{ tarzan_singularity_image_file_src }}"
+    dest: "{{ tarzan_singularity_image_file_dest }}"
+    checksum: "{{ tarzan_singularity_image_sha1 }}"
+
+- name: modify uppsala's supervisord conf to add start kong command attribute
+  ini_file:
+    dest: "{{ supervisord_conf }}"
+    section: "program:tarzan-{{ deployment_environment }}"
+    option: command
+    value: "{{ tarzan_start_script }}"
+    backup: no
+
+- name: modify uppsala's supervisord conf to add autorestart kong attribute
+  ini_file:
+    dest: "{{ supervisord_conf }}"
+    section: "program:tarzan-{{ deployment_environment }}"
+    option: autorestart
+    value: true
+    backup: no
+
+- name: Store tarzan tools version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "Kong: {{ tarzan_kong_version }}"

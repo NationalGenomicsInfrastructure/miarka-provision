@@ -83,7 +83,7 @@
         path: "{{ proj_root }}"
         group: "{{ ngi_group }}"
         state: directory
-        recurse: yes
+        recurse: no
         mode: g+rwXs,o-rwx
       when: deployment_environment in ["staging", "devel"]
 
