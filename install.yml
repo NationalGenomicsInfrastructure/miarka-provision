@@ -85,7 +85,7 @@
         state: directory
         recurse: yes
         mode: g+rwXs,o-rwx
-      when: deployment_environment == "staging"
+      when: deployment_environment in ["staging", "devel"]
 
   post_tasks:
 

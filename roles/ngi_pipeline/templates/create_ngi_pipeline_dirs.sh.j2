@@ -14,26 +14,35 @@ if [ $# -ne 1 ]; then
         exit 1
 fi
 
+FACILITY_PROJECT_PATH="{{ proj_root }}/$1"
+
 # Removes old softlinks directory, thus forcing md5 recalculation
-if [ -d "{{ proj_root }}/$1/nobackup/NGI/softlinks" ]; then
-rm -r {{ proj_root }}/$1/nobackup/NGI/softlinks
+if [ -d "$FACILITY_PROJECT_PATH/nobackup/NGI/softlinks" ]; then
+rm -r "$FACILITY_PROJECT_PATH/nobackup/NGI/softlinks"
 fi
 
-mkdir -p {{ proj_root }}/$1/private/log
-mkdir -p {{ proj_root }}/$1/private/db
-mkdir -p {{ proj_root }}/$1/nobackup/NGI/softlinks
-mkdir -p {{ proj_root }}/$1/private/log/supervisord
+# create the facility-specific project dir and set appropriate permissions
+mkdir -p "$FACILITY_PROJECT_PATH"
+chgrp -R $1 "$FACILITY_PROJECT_PATH"
+chmod -R g+rwXs,o-rwx "$FACILITY_PROJECT_PATH"
+
+mkdir -p "$FACILITY_PROJECT_PATH/incoming"
+mkdir -p "$FACILITY_PROJECT_PATH/private/log"
+mkdir -p "$FACILITY_PROJECT_PATH/private/db"
+mkdir -p "$FACILITY_PROJECT_PATH/private/log/supervisord"
+mkdir -p "$FACILITY_PROJECT_PATH/nobackup/NGI/softlinks"
+
 #If case since folders are excessive for uppsala
 if [ $1 == "ngi2016003" ]; then
-mkdir -p {{ proj_root }}/$1/genotype_data/incoming
-mkdir -p {{ proj_root }}/$1/genotype_data/archive
+mkdir -p "$FACILITY_PROJECT_PATH/genotype_data/incoming"
+mkdir -p "$FACILITY_PROJECT_PATH/genotype_data/archive"
 ACKNOWLEDGE_SITE="ACKNOWLEDGEMENTS_S.txt"
 else
 ACKNOWLEDGE_SITE="ACKNOWLEDGEMENTS_U.txt"
 fi
 
-ln -s {{ deployment_target }}/latest/sw/ngi_pipeline/DELIVERY.README.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.txt
-ln -s {{ deployment_target }}/latest/sw/ngi_pipeline/$ACKNOWLEDGE_SITE {{ proj_root }}/$1/nobackup/NGI/softlinks/ACKNOWLEDGEMENTS.txt
+ln -s "{{ deployment_target }}/latest/sw/ngi_pipeline/DELIVERY.README.txt" "$FACILITY_PROJECT_PATH/nobackup/NGI/softlinks/DELIVERY.README.txt"
+ln -s "{{ deployment_target }}/latest/sw/ngi_pipeline/$ACKNOWLEDGE_SITE" "$FACILITY_PROJECT_PATH/nobackup/NGI/softlinks/ACKNOWLEDGEMENTS.txt"
 
 #if sthlm, source delivery readme script
 if [ $1 == "ngi2016003" ]; then
