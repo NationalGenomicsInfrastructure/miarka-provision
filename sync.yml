@@ -17,16 +17,6 @@
         files_matching: site_all_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
-- name: prepare syncing deployment to target host
-  hosts: deploy
-  connection: local
-  tags: permissions
-
-  vars:
-    skip_permission_check: true
-
-  tasks:
-
     - block:
       - name: list files in deployment to check permissions
         find:
@@ -64,7 +54,7 @@
           - "{{ cont_p }}"
           - "{{ cont_g }}"
 
-      when: not skip_permission_check
+      tags: permission_check
 
 - name: sync deployment to target host
   hosts: target
