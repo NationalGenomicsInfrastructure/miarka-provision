@@ -1,5 +1,9 @@
 - name: Download anaconda
-  get_url: url={{ anaconda_url }} dest={{ anaconda_src }} mode=ug+rwx checksum="sha256:{{ anaconda_checksum }}"
+  get_url:
+    url: "{{ anaconda_url }}"
+    dest: "{{ anaconda_src }}"
+    mode: ug+rwx
+    checksum: sha256:{{ anaconda_checksum }}
 
 - name: Install anaconda
   shell: "{{ anaconda_src }} -b -p {{ anaconda_path }}"

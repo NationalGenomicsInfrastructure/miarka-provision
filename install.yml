@@ -35,6 +35,35 @@
         files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
+    - name: create {{ root_path }} folder and configure setgid
+      file:
+        path: "{{ root_path }}"
+        group: "{{ ngi_sw_group }}"
+        state: directory
+        recurse: no
+        mode: g+rwXs,o=rX
+      tags: always
+
+    - name: create {{ ngi_containers }} folder and configure setgid
+      file:
+        path: "{{ ngi_containers }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: no
+        mode: g+rwXs,o-rwx
+      tags: always
+
+    - name: create {{ proj_root }} folder and configure setgid
+      file:
+        path: "{{ proj_root }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: no
+        mode: g+rwXs,o-rwx
+      when: deployment_environment in ["staging", "devel"]
+      tags: always
+
+
   environment:
     "{{ tools_path }}"
 
@@ -68,7 +97,7 @@
         group: "{{ ngi_sw_group }}"
         state: directory
         recurse: yes
-        mode: g+rwXs,o=rX
+        mode: g+rwX,o=rX
 
     - name: make containers directory readable by anyone that can access miarka
       file:
@@ -76,16 +105,7 @@
         group: "{{ ngi_group }}"
         state: directory
         recurse: yes
-        mode: g+rwXs,o-rwx
-
-    - name: Make wildwest directory editable by anyone that can access miarka
-      file:
-        path: "{{ proj_root }}"
-        group: "{{ ngi_group }}"
-        state: directory
-        recurse: no
-        mode: g+rwXs,o-rwx
-      when: deployment_environment in ["staging", "devel"]
+        mode: g+rwX,o-rwx
 
   post_tasks:
 

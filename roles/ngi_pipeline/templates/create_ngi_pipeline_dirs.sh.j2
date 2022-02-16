@@ -24,7 +24,7 @@ fi
 # create the facility-specific project dir and set appropriate permissions
 mkdir -p "$FACILITY_PROJECT_PATH"
 chgrp -R $1 "$FACILITY_PROJECT_PATH"
-chmod -R g+rwXs,o-rwx "$FACILITY_PROJECT_PATH"
+chmod g+rwXs,o-rwx "$FACILITY_PROJECT_PATH"
 
 mkdir -p "$FACILITY_PROJECT_PATH/incoming"
 mkdir -p "$FACILITY_PROJECT_PATH/private/log"
