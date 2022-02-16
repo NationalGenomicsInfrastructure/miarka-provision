@@ -29,7 +29,6 @@ deliver:
             - <STAGINGPATH>/01-QC-Results
             - required: True
 {% elif "fastq" == item.item_type %}
-        -
             - {{ ngi_softlinks }}/DELIVERY.README.RAW_DATA.txt
             - <STAGINGPATH>
 {% endif %}
