@@ -1,6 +1,6 @@
 # Deployment playbooks for NGI-Pipeline and related software (Piper, TACA, Tarzan, etc.)
 
-This repository concerns the creation and maintenance of the NGI python environment; which is a collection of software 
+This repository concerns the creation and maintenance of the NGI environment; which is a collection of software 
 and solutions utilized by NGI Production on the currently available HPC.
 
 The NGI environment is currently deployed on Miarka using Ansible playbooks. Ansible playbooks are scripts written for 
@@ -9,7 +9,7 @@ easily adaptable automated deployment. The Ansible playbooks are stored here.
 The deployment is intended to be performed in three stages:
 - deployment to a local disk on the deployment node (miarka3)
 - synchronize the deployment to the shared file system on the cluster
-- create directories and re-initialize services on the cluster
+- create site-specific directories and re-initialize services on the cluster
 
 ## Repo layout
 
@@ -72,59 +72,36 @@ deployment node (primarily if the Singularity image is not used for deployment).
 
 ## Setting up Ansible for deployments
 
-Ansible can either be run from the local environment on Miarka3 or from a Singularity container. 
+Ansible can either be run in a Singularity container (preferred) or from an installation in the local environment on 
+Miarka3. 
 
-For the first option, follow the bootstrap instructions below to set up the local environment. For the second option, 
-skip down to the Singularity section below.
-
-### Bootstrap the Ansible environment
-
-Before any deployments can be done we need to setup the Ansible environment. If we've got a clean environment then this 
-can be done by running the bootstrap script:
-
-```
-newgrp ngi-sw
-
-curl -L \
-https://raw.githubusercontent.com/NationalGenomicsInfrastructure/miarka-provision/devel/bootstrap/bootstrap.sh \
--o /tmp/bootstrap.sh
-
-bash /tmp/bootstrap.sh [/path/to/deployment/resources]
-```
-
-If a path is supplied to the bootstrap script, the resources will be set up under that path. Otherwise, the default
-location, `/vulpes/ngi/deploy`, will be used.
-
-For convenience, it is recommended that the user adds the following two lines (or something similar) into `~/.bashrc`:
-
-```
-alias miarkaenv='source /path/to/deployment/resources/bashrc'
-alias ansibleenv='source /path/to/deployment/resources/ansible-env/bin/activate'
-```
+For the first option, follow the Singularity instructions below. For the second option, skip down to the local 
+environment bootstrap instructions below.
 
 ### Building a singularity image
 
-Instead of bootstrapping the local environment, Ansible can also be run from a Singularity container. Currently, the 
-container is not hosted anywhere, so you would need to build it yourself in an environment where you can have 
-sufficient privileges.
+The preferred way of running Ansible is in a Singularity container. Currently, the container needs to be built 
+in an environment where the user can have sufficient privileges. This is not possible on Miarka.
 
-Note also that at this point, deployments done with Singularity have not been tested or validated so there could be 
-downstream complications that are yet unknown.
+If there is already a current singularity image available in `/vulpes/ngi/deploy` on `miarka3` you should use this for 
+staging and production deployments (also for devel unless there is a reason not to).
 
 The singularity image is built from a Docker image whose definition file is available at `docker/Dockerfile`. The image 
 has been built and tested with Docker v20.10.7 and Singularity v3.7.1. 
 
 To build the singularity image, clone this repository and run `docker/build_singularity.sh`. This will create a 
-singularity image, `miarka-ansible.sif` in the working directory. This image can be uploaded to `miarka3`.
+singularity image, `miarka-ansible.<commit hash>.sif` in the working directory. The image itself is not dependent on 
+changes to the miarka-provision repo, with the exception to changes in the `docker` folder. For clarity, the image 
+will be tagged with the git commit hash of the repo that the image was built from.
 
-If there is already a singularity image available on `miarka3`, e.g. under `/vulpes/ngi/deploy`, you can probably use 
-it for deployments. The image itself is not dependent on changes to the miarka-provision repo, with the exception to 
-changes in the `docker` folder. For reference, the image should be tagged with the git commit hash of the repo that the 
-image was built from.
+The singularity image can be then be uploaded to `miarka3` and used for deployment. When you are confident that the 
+image is stable and should be used in production, move it to the `/vulpes/ngi/deploy` folder and move the 
+`miarka-ansible.sif` symlink to point to this image.
+
 
 ### Setting up the environment for using the singularity image
 
-On `miarka3`, clone the provision repo by running:
+On `miarka3`, clone the `miarka-provision` repo by running:
 
 ```
 cd /path/to/deployment/resources
@@ -142,7 +119,32 @@ alias ansible-playbook='singularity run --bind /vulpes,/sw,/scratch /path/to/mia
 ```
 
 Note that this will add an alias for `ansible-playbook` that refers to the singularity container. If this is not 
-suitable for your specific use case, you can skip this. The instructions commands below will assume the alias exist.
+suitable for your specific use case, you can skip this. The commands below will assume the alias exist.
+
+
+### Bootstrap the Ansible environment
+
+If you will be running Ansible in a singularity container, you should skip this section.
+
+Before any deployments can be done we need to setup the Ansible environment. If we've got a clean environment then this 
+can be done by running the bootstrap script:
+
+```
+newgrp ngi-sw
+
+curl -L \
+https://raw.githubusercontent.com/NationalGenomicsInfrastructure/miarka-provision/devel/bootstrap/bootstrap.sh \
+-o /tmp/bootstrap.sh
+
+bash /tmp/bootstrap.sh /path/to/deployment/resources
+```
+
+For convenience, it is recommended that the user adds the following two lines (or something similar) into `~/.bashrc`:
+
+```
+alias miarkaenv='source /path/to/deployment/resources/bashrc'
+alias ansibleenv='source /path/to/deployment/resources/ansible-env/bin/activate'
+```
 
 ## User prerequisites before developing or deploying
 
