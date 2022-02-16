@@ -9,12 +9,12 @@
 
     - include_vars:
         dir: env_vars
-        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+        files_matching: site_all_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
     - include_vars:
         dir: env_secrets
-        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+        files_matching: site_all_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
 - name: prepare syncing deployment to target host
@@ -41,7 +41,7 @@
       - name: test if all files have correct permissions
         pause:
           prompt: Some files are not {{ item }}, continue anyway? Hit return to continue or Ctrl+C and 'A' to abort!
-        when: find.files | rejectattr(item) | list | length > 0
+        when: find.files | rejectattr(item) | list |length > 0
         with_items:
           - rgrp
           - wgrp
@@ -51,9 +51,9 @@
       - name: test if all files have correct group ownership
         pause:
           prompt: Some files are not owned by {{ item }}, continue anyway? Hit return to continue or Ctrl+C and 'A' to abort!
-        when: find.files | rejectattr('gr_name', '==', item) | list | length > 0
+        when: find.files | rejectattr('gr_name', '==', item) | list |length > 0
         with_items:
-          - "{{ ngi_group }}"
+          - "{{ ngi_sw_group }}"
         register: cont_g
 
       - name: log a warning that permissions are wrong
