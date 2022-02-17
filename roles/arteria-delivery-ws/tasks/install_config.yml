@@ -1,4 +1,3 @@
----
 
 - name: ensure {{ arteria_service_name }} conf dir exists
   file:
@@ -6,28 +5,28 @@
     path: "{{ arteria_service_config_root }}"
     mode: g+rwX
 
-- name: deploy {{ arteria_service_name }} app config
+- name: deploying {{ arteria_service_name }} app config
   template:
-    src: checksum_app.config.j2
+    src: delivery_app.config.j2
     dest: "{{ arteria_service_config_root }}/app.config"
 
-- name: deploy {{ arteria_service_name }} logger config
+- name: deploying {{ arteria_service_name }} logger config
   template:
-    src: checksum_logger.config.j2
+    src: delivery_logger.config.j2
     dest: "{{ arteria_service_config_root }}/logger.config"
 
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
-  ini_file: 
+  ini_file:
     dest: "{{ supervisord_conf }}"
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: command
-    value: "{{ arteria_service_env_root }}/bin/checksum-ws --configroot={{ arteria_service_config_root }} --port={{ arteria_checksum_port }}"
+    value: "{{ arteria_service_env_root }}/bin/python {{ arteria_service_env_root }}/bin/delivery-ws --configroot={{ arteria_service_config_root }} --port={{ arteria_delivery_port }}"
     backup: no
- 
-- name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
-  ini_file: 
+
+- name: modify uppsala's supervisord conf to autostart {{ arteria_service_name }}
+  ini_file:
     dest: "{{ supervisord_conf }}"
-    section: "program:{{ arteria_service_name }}-{{ deployment_environment }}"
+    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: autorestart
     value: true
     backup: no

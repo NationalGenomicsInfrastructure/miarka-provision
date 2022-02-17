@@ -4,13 +4,21 @@
   shell: conda install -n {{ NGI_venv_name }} supervisor
 
 - name: Create ngi_resources folder
-  file: name={{ ngi_resources }} state=directory mode=g+s
+  file:
+    name: "{{ ngi_resources }}"
+    state: directory
 
 - name: Deploy crontab file for {{ site }}
-  template: src="crontab.j2" dest="{{ ngi_pipeline_conf }}/crontab_{{ site }}"
+  template:
+    src: crontab.j2
+    dest: "{{ ngi_pipeline_conf }}/crontab_{{ site }}"
 
 - name: Deploy supervisord.conf for {{ site }}
-  template: src="supervisord_site.conf.j2" dest="{{ supervisord_conf }}"
+  template:
+    src: supervisord_site.conf.j2
+    dest: "{{ supervisord_conf }}"
 
 - name: Deploy start supervisord start script for {{ site }}
-  template: src="start_supervisord_site.sh.j2" dest="{{ ngi_resources }}/start_supervisord_{{ site }}.sh"
+  template:
+    src: start_supervisord_site.sh.j2
+    dest: "{{ ngi_resources }}/start_supervisord_{{ site }}.sh"
