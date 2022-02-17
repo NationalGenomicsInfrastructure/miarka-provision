@@ -1,5 +1,5 @@
----
-- name: create virtual python env for arteria-delivery 
+
+- name: create virtual python env for arteria-delivery
   shell: "conda create --name {{ arteria_service_name }} python=3.6"
   args: 
     creates: "{{ arteria_service_env_root }}"
