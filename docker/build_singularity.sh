@@ -17,5 +17,5 @@ docker build \
 # build the singularity image from the docker image
 singularity build \
   -F \
-  "${IMAGE_NAME}.sif" \
+  "${IMAGE_NAME}.$(git rev-parse --short HEAD || echo "latest").sif" \
   "docker-daemon:${IMAGE_NAME}:${TAG}"

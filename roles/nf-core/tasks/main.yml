@@ -30,7 +30,9 @@
   with_items: "{{ pipelines }}"
 
 - name: Remove singularity cache directories
-  file: name="{{ item }}" state=absent
+  file:
+    name: "{{ item }}"
+    state: absent
   with_items:
     - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
     - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"

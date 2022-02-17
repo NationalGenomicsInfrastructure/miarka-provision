@@ -90,14 +90,11 @@
     line: "export PATH={{ anaconda_path }}/bin:$PATH"
     backup: no
 
-- name: Create ngi_pipeline staging incoming & archive directories for {{ site }}
+- name: Create ngi_pipeline wildwest directory
   file:
-    path: "{{ proj_root }}/{{ uppmax_project }}/{{ item }}"
+    path: "{{ proj_root }}"
     state: directory
     mode: g+s
-  with_items:
-    - "incoming"
-    - "archive"
   when: deployment_environment in ["staging", "devel"]
 
 - name: Deploy miarka ngi_pipeline config for {{ site }}

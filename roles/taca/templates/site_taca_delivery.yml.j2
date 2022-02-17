@@ -34,6 +34,7 @@ deliver:
 {% endif %}
 {% if "sthlm" == site %}
 #Adds FASTQ files to Vulpes (aka Miarka) deliveries
+        -
             - <DATAPATH>/<SAMPLEID>/*/*
             - <STAGINGPATH>/<SAMPLEID>/02-FASTQ
             - required: True

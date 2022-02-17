@@ -8,13 +8,13 @@
   file:
     path: "{{ nextflow_dest }}"
     state: directory
-    mode: g+rwXs
+    mode: g+rwX
 
 - name: Create NextFlow installation subdirectory
   file:
     path: "{{ nextflow_dest }}/workfiles"
     state: directory
-    mode: g+rwXs
+    mode: g+rwX
 
 - name: Create NextFlow installation plugins subdirectory
   file:

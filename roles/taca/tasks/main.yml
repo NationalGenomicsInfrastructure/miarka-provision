@@ -38,7 +38,8 @@
     item_type: "{{ item.item_type | default('') }}"
     config_site: "{{ item.config_site | default(['upps', 'sthlm']) }}"
   with_items:
-    - { config_tpl: "taca_delivery", config_dst: "taca_delivery" }
+    - { config_tpl: "taca_delivery", config_dst: "taca_delivery", config_site: ["upps"] }
+    - { config_tpl: "taca_delivery", config_dst: "taca_wgs_delivery", config_site: ["sthlm"] }
     - { config_tpl: "taca_sarek_delivery", config_dst: "taca_sarek_delivery" }
     - { config_tpl: "taca_sarek_wes_delivery", config_dst: "taca_sarek_wes_delivery", config_site: ["upps"] }
     - { config_tpl: "taca_cleanup", config_dst: "taca_cleanup", item_type: cleanup, config_site: ["sthlm"] }
