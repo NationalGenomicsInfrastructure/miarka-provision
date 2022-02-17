@@ -18,6 +18,7 @@
   get_url:
     url: "{{ nextflow_download_url }}"
     dest: "{{ nextflow_dest }}/nextflow"
+    mode: u=rwx
 
 # Resolved any problems. Run-time files are pushed to scratch
 - name: Install NextFlow
