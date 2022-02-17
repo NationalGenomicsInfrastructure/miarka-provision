@@ -234,7 +234,8 @@ tarzan_api_key
 ```
 
 In addition, valid SSL certificates for the web proxy need to be available on the main `vulpes` file system (i.e. 
-accessible from `miarka1` and `miarka2`) under the path specified by the variable `tarzan_cert_path`.
+accessible from `miarka1` and `miarka2`) under the path specified by the variable `tarzan_cert_path`. See 
+`roles/tarzan/README.md` for details.
 
 #### NGI-S
 
