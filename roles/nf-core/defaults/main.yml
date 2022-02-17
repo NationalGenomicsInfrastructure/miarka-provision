@@ -7,6 +7,7 @@ nf_core_vars:
   SINGULARITY_CACHEDIR: "/scratch/singularity_cache"
   SINGULARITY_TMPDIR: "/scratch/singularity_temp"
   NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
+  NXF_SINGULARITY_LIBRARY: "{{ container_dir }}"
   NXF_LAUNCHER: "/scratch"
   NXF_HOME: "{{ nextflow_env.NXF_HOME }}"
   NXF_WORK: "{{ nextflow_env.NXF_WORK }}"

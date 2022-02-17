@@ -3,7 +3,6 @@
   file:
     path: "{{ container_dir }}"
     state: directory
-    mode: 02775 #ug=rwx, o=rx, g+s
 
 - name: nf-core download {{ pipeline }} v{{ release }}
   command: "nf-core -v
@@ -46,10 +45,6 @@
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
     backup: no
 
-- name: download biocontainers
-  import_tasks: biocontainers.yml
-  when: pipeline == "rnaseq"
-
 - name: download sarek additional images
   import_tasks: sarek_specific.yml
   when: pipeline == "sarek"
@@ -61,7 +56,6 @@
     file:
       path: "{{ ngi_containers }}/{{ pipeline }}"
       state: directory
-      mode: 02775 #ug=rwx, o=rx, g+s
 
   - name: check if SILVA zip exists
     stat:
