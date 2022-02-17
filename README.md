@@ -11,6 +11,30 @@ The deployment is intended to be performed in three stages:
 - synchronize the deployment to the shared file system on the cluster
 - create site-specific directories and re-initialize services on the cluster
 
+## TL;DR
+
+Below are the main commands to run for a staging or production deployment once the environment and relevant variables 
+has been set up.
+```
+# setup the miarka environment
+miarkaenv
+
+# cd to the playbook directory and checkout the correct branch/version
+cd /path/to/deployment/resources/miarka-provision
+git fetch [--tags] origin
+git checkout [monthly / bimonthly / tags/vX.Y]
+
+# do deployment to local file system for each site
+ansible-playbook -i inventory.yml install.yml -e deployment_environment=[staging / production] -e site=upps
+ansible-playbook -i inventory.yml install.yml -e deployment_environment=[staging / production] -e site=sthlm
+
+# sync the deployment to the main vulpes file system
+ssh miarka2.uppmax.uu.se exit
+ansible-playbook -i inventory.yml sync.yml -e deployment_environment=[staging / production]
+
+# reload services and crontab on the miarka nodes
+```
+
 ## Repo layout
 
 ### Ansible-specific content
@@ -37,11 +61,16 @@ the specific `deployment_environment` and/or `site` are located in the correspon
 `site_[all | sthlm | upps]_env_[all | devel | staging | production ].yml`) in the `env_vars/` folder. When the playbook
 is run, the appropriate variable files will automatically be imported.
 
+In `env_vars/` you can find an example variable file that can be used as a basis for `deployment_environment`- or 
+`site`-specific variable files.
 
 ##### `env_secrets`
 Similar to the `env_vars/` folder, the `env_secrets/` folder contains variable files organized in the same way 
 according to `deployment_environment` and `site`. This is where variables that should be kept secret (e.g. api-keys, 
 passwords etc.) should be defined. These variable files will be ignored by `git` and should thus never be checked in.
+
+In `env_secrets/` you can find an example variable file that can be used as a basis for `deployment_environment`- or 
+`site`-specific variable files.
 
 ##### `role / defaults`
 Variables that are only used within a role and are independent of `deployment_environment` and `site` should be defined
@@ -76,7 +105,7 @@ Ansible can either be run in a Singularity container (preferred) or from an inst
 Miarka3. 
 
 For the first option, follow the Singularity instructions below. For the second option, skip down to the local 
-environment bootstrap instructions below.
+environment bootstrap instructions [below](#bootstrap-the-ansible-environment).
 
 ### Building a singularity image
 
@@ -148,12 +177,12 @@ alias ansibleenv='source /path/to/deployment/resources/ansible-env/bin/activate'
 
 ## User prerequisites before developing or deploying
 
-Before a user starts developing new Ansible playbooks/roles or deploy them, the current umask and GID needs to be set, 
-and the Ansible virtual environment needs to be loaded. This can be accomplished by *manually* running the two bash 
-aliases defined above: `miarkaenv` followed by `ansibleenv` (or just `miarkaenv` if using Singularity).  
+Before a user starts developing new Ansible playbooks/roles or deploy them, the current umask and GID needs to be set. 
+This is accomplished by *manually* running the bash alias: `miarkaenv` (defined above).
 
-Note that the order is important, and that they should not be run automatically at login, because that will cause an 
-infinite loop that will lock the user out.
+If you are running Ansible from the local environment, Ansible the virtual environment needs to be loaded. To do this, 
+execute the bash alias `ansibleenv` (defined above). Note that the order is important, and that the aliases should not 
+be run automatically at login, because that will cause an infinite loop that will lock the user out.
 
 ### SSH multiplexing
 For syncing deployments to the target host, it is necessary to set up the environment so that connections can be made 
@@ -185,40 +214,41 @@ cycle once all validations are complete.
 
 ### Requirements
 
-When deploying the Miarka software, some credentials files are required to be present under the cloned 
-`miarka-provision` repo but they are not distributed with git and therefore need to be added explicitly. For this 
-purpose, the script `bootstrap/setup_required_files.sh` can be run:
+As described [above](#variables), the git repository does not contain any sensitive credentials. Instead, these need to 
+be specified in the correct file under `env_vars` and `env_secrets` in the checked out `miarka-provision` folder you 
+will be deploying from. In practice, you will probably copy these files from `/vulpes/ngi/deploy` or from the last 
+deployment and only modify them when something needs changing.
+
+Below is a list of variables that are expected to be defined:
+
+#### SNP&SEQ
+
+In `env_secrets/site_upps_env_*.yml`:
 
 ```
-bash /path/to/deployment/resources/miarka-provision/bootstrap/setup_required_files.sh \
-  /path/to/deployment/resources/miarka-provision \
-  /path/to/required/files
+charon_api_token
+megaqc_access_token
+snic_api_password
+snic_api_user
+tarzan_api_key
 ```
 
-This will symlink the required files under the specified path to the correct location under the specified repo. Note 
-that if the required files are not found at the specified location, dummy files will be created instead (in fact, this
-is what happens when running the bootstrap script above). This is useful in order to be able to develop and test 
-deploying without running into Ansible errors because of missing files or variables.  
+In addition, valid SSL certificates for the web proxy need to be available on the main `vulpes` file system (i.e. 
+accessible from `miarka1` and `miarka2`) under the path specified by the variable `tarzan_cert_path`.
 
-For reference, the required files are:
+#### NGI-S
 
-- A valid GATK key placed under `files/`. The filename must be specified in the `gatk_key` variable in 
-`host_vars/deploy/main.yml`.
+In `env_secrets/site_sthlm_env_*.yml`:
 
-- A `charon_credentials.yml` file placed under `host_vars/deploy/` listing the variables 
-`charon_base_url_{stage,prod}`, `charon_api_token_upps_{stage,prod}` and `charon_api_token_sthlm_{stage,prod}`
-
-- A `megaqc_token.yml` file placed under `host_vars/deploy/` listing the variables `megaqc_token_upps` and 
-`megaqc_token_sthlm_stage`
-
-- A valid `statusdb_creds_{stage,prod}.yml` access file placed under `files/`. Necessary layout is described at 
-https://github.com/SciLifeLab/statusdb
-
-- A valid `orderportal_credentials.yml` access file placed under `files/`.
-
-- Valid SSL certificates for the web proxy under `files/` (see `roles/tarzan/README.md` for details)
-
-Note that these files should never be commited with git (they are also included in `.gitignore`).
+```
+charon_api_token
+megaqc_access_token
+orderportal_api_token
+snic_api_password
+snic_api_user
+statusdb_password
+statusdb_username
+```
 
 ### Development deployment
 
@@ -226,7 +256,8 @@ Typically roles are developed (or at least tested) locally on `miarka3`.
 
 Start by forking the repository https://github.com/NationalGenomicsInfrastructure/miarka-provision to your private 
 Github repo. Clone this repository to a suitable location (i.e. NOT from where the stage and production 
-deployments are performed) on miarka3. 
+deployments are performed) on miarka3. Below, it is assumed that the clone is at 
+`/path/to/development/resources/miarka-provision`.
 
 There you can develop your own Ansible roles in your private feature branch.
 
@@ -241,6 +272,7 @@ If you want to test your roles/playbook, run:
 ```
     cd /path/to/development/resources/miarka-provision
     ansible-playbook -i inventory.yml -e site=upps install.yml
+    ansible-playbook -i inventory.yml -e site=sthlm install.yml
 ```
 This will install your development under `/vulpes/ngi/devel-<username>/<branch_name>.<date>.<commit hash>`
 
@@ -268,36 +300,40 @@ and make sure that the desired branch is checked out and updated:
     git checkout [monthly/bimonthly]
     git pull origin [monthly/bimonthly]
 ```
-Do the staging deployment to the local disk by running the `install.yml` playbook and specify the 
+Do the staging deployment to the local disk by running the `install.yml` playbook, once for each site, and specify the 
 `deployment_environment` argument:
 ```
-    ansible-playbook -i inventory.yml install.yml \
-      -e deployment_environment=staging -e site=upps 
+    ansible-playbook -i inventory.yml install.yml -e deployment_environment=staging -e site=upps
+    ansible-playbook -i inventory.yml install.yml -e deployment_environment=staging -e site=sthlm 
 ```
 This will install your deployment under `/vulpes/ngi/staging/<deployment_version>`, where `deployment_version` is 
 automatically constructed by the playbook according to `<date>.<commit hash>[-bimonthly]` (the `-bimonthly` suffix is 
 added in case of a bimonthly deployment). If needed, you can override the deployment_version by passing 
 `-e deployment_version=VERSION` to the playbook.
 
-The `sync.yml` playbook can be used to sync the deployment to the cluster and shared filesystem.
+The `sync.yml` playbook is used to sync the deployment to the cluster and shared filesystem.
 
 Before doing the sync, make sure that a SSH master connection is active:
 ```
     ssh miarka2.uppmax.uu.se exit
 ```
-Then do the sync using the same arguments as for the `install.yml` playbook:
+Then do the sync, specifying the deployment_environment:
 ```
-    ansible-playbook -i inventory.yml sync.yml \
-      -e deployment_environment=staging
+    ansible-playbook -i inventory.yml sync.yml -e deployment_environment=staging
 ```
+
+This will also move the `/vulpes/ngi/staging/latest` symlink on `miarka1` and `miarka2` to 
+`/vulpes/ngi/staging/<deployment_version>`.
 
 When everything is synced properly then login to the cluster as your personal user and source the new environment and
 activate the NGI conda environment (where `site` is `upps` or `sthlm` depending on location): 
 ```
     source /vulpes/ngi/staging/latest/conf/sourceme_<site>.sh && source activate NGI
 ```
-For convenience, add this to your personal bash init file `~/.bashrc`. This will load the 
+For convenience, add this to your personal bash init file `~/.bashrc` on `miarka1` or `miarka2`. This will load the 
 staging environment for your user with the appropriate staging variables set.
+
+You should now skip [down](#reload-services) to the procedures for reloading services.
 
 When the staged environment has been verified to work OK, proceed with making a pull request from the staging branch to 
 the master branch of the repository. 
@@ -324,45 +360,41 @@ Deploy and sync the deployment using the playbooks similarly to above:
 ```
     ssh miarka2.uppmax.uu.se exit
     ansible-playbook -i inventory.yml install.yml -e site=upps -e deployment_environment=production
+    ansible-playbook -i inventory.yml install.yml -e site=sthlm -e deployment_environment=production
     ansible-playbook -i inventory.yml sync.yml -e deployment_environment=production
 ```
-This will install your deployment under `/vulpes/ngi/production/<deployment_version>`, where `deployment_version` is 
-the git production release tag.
+This will install your deployment under `/vulpes/ngi/production/<deployment_version>` and move the 
+`/vulpes/ngi/production/latest` symlink on `miarka1` and `miarka2` to `/vulpes/ngi/production/<deployment_version>`, 
+where `deployment_version` is the git production release tag.
 
-#### Reload services
+You should now skip down to the procedures for reloading services.
+
+### Reload services
 
 After the deployment has been synced, each facility need to update the crontab and reload any running services in order
 to run these from the new deployment.
 
-On the node (e.g. `miarka1`) where the crontab and services are running and as the user currently having the crontab 
-installed, run:
+On the node where the crontab and services are running (e.g. `miarka1` for production instances and `miarka2` for 
+staging instances) and as the user currently having the crontab installed, run:
 ```
-    crontab /vulpes/ngi/production/latest/conf/crontab_<site>
+    crontab /vulpes/ngi/<deployment_environment>/latest/conf/crontab_<site>
 ```
 
-As the user running the services needing a reboot, shut down the running instances of the services and re-start the new 
-versions of the software.
+Then, as the user running the services needing a reboot, shut down the running instances of the services and re-start 
+the new versions of the services.
 
-##### Uppsala
-
-In the case of Uppsala one should then do: 
-```
-    /vulpes/ngi/production/latest/resources/stop_kong.sh
-```
-, followed by starting `supervisord` and `kong` (see the commands in the crontab).  
-
-#### First deployment
+### First deployment
 
 The first time a deployment is made to the cluster, or when modifications to the project directory structure have been 
 made, each site needs to run:
 
 ```
-    /vulpes/ngi/production/latest/resources/create_ngi_pipeline_dirs.sh <project_name>
-    crontab /vulpes/ngi/production/latest/conf/crontab_<site>
+    /vulpes/ngi/<deployment_environment>/latest/resources/create_ngi_pipeline_dirs.sh <project_name>
+    crontab /vulpes/ngi/<deployment_environment>/latest/conf/crontab_<site>
 ```
 
-, once per project (i.e. ngi2016003) to create the log, db and softlink directories for NGI pipeline (and generate the 
-softlinks) and initialize the crontab.
+This should be run once per project (i.e. ngi2016003) to create the log, db and softlink directories for NGI pipeline 
+(and generate the softlinks) and initialize the crontab.
 
 ## Miarka user
 
@@ -378,43 +410,7 @@ make sure to add the following lines to the bash init file `~/.bashrc`:
 
 - Always run the `miarkaenv` alias before doing development or deployments in order to assert correct permissions
 - Deploying requires the user to be in both the `ngi-sw` and the `ngi` groups
-- Everything under `/vulpes/ngi/` is owned by `ngi-sw` and only this group has write access
+- Everything under `/vulpes/ngi/` is owned by `ngi-sw` and only this group has write access, with the exception of the
+    staging project area `/vulpes/ngi/staging/wildwest`, which belongs to the `ngi` group.
 - The Ansible log file is found at `/path/to/deployment/resources/log/ansible.log`
 - The rsync log file is found at `/vulpes/ngi/<deployment_environment>/<deployment_version>.rsync.log`
-
-### Environment integrity verification
-
-Once the ansible-playbook has successfully been executed, log onto the target machine and create a simulated flowcell:
-```
-    python NGI_pipeline_test.py create --fastq1 <R1.fastq.gz> --fastq2 <R2.fastq.gz> --FC 1
-```  
-Run `ngi_pipeline_start.py` with the commands `organize flowcell`, `analyze project` and `qc project` to organize, 
-analyze and qc the generated data respectively.
-
-### Arteria staging
-
-The Arteria roles will pick up on whether we're running in `deployment_environment` equal to `production` or `staging` 
-and then use different ports, runfolders, log files, etc.
-
-So in essence it should work almost as usual. If you, for example, want to stage test a specific commit hash of 
-`arteria-checksum` and the default versions of the other arteria services, you run something similar to:
-
-```
-    ansible-playbook -i inventory.yml install.yml \
-        -e deployment_environment=staging \
-        -e deployment_version=arteria-staging-FOO \
-        -e arteria_checksum_version=660a8ff
-
-    ansible-playbook -i inventory.yml sync.yml \
-        -e deployment_environment=staging \
-        -e deployment_version=arteria-staging-FOO
-```
-
-Launch the Arteria staging services by running the command `start-arteria-staging`. This will spawn a detached screen 
-session named `arteria-staging` with one window for each Arteria web service. 
-
-If a service has crashed then one can (after debugging the stacktrace) respawn the process by hitting the `r` key  for 
-the relevant window. If one want to manually force a restart of the process one can first abort the process with a 
-normal `^C`, followed by the `r` key as mentioned previously. 
-
-To kill all Arteria services the whole screen session can be closed down with the command `stop-arteria-staging`.  

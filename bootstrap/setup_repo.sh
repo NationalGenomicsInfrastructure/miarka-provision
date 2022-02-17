@@ -16,6 +16,3 @@ mkdir -p "$DEPLOYROOT/log"
 
 echo "Copying environment bashrc file"
 cp "$DEPLOYROOT/${PROVISIONREPO}/bootstrap/bashrc" "$DEPLOYROOT/bashrc"
-
-echo "Set up required files"
-bash "$DEPLOYROOT/${PROVISIONREPO}/bootstrap/setup_required_files.sh" "$DEPLOYROOT/${PROVISIONREPO}" "${DEPLOYROOT}/files"
