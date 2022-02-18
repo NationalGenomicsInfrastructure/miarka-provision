@@ -4,7 +4,6 @@
   file:
     state: directory
     path: "{{ arteria_service_config_root }}"
-    mode: g+rwX
 
 - name: deploy {{ arteria_service_name }} app config
   template:
