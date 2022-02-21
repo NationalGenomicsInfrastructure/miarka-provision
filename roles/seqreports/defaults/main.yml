@@ -27,3 +27,7 @@ seqreports_nxf_logs: "{{ seqreports_data_path }}/nxf_logs/"
 # NOTE! deployment_remote_path is not included in the sync directory!!
 seqreports_fastq_screen_resource_path: "{{ deployment_remote_path }}/resources/seqreports"
 
+artifact_zip: "artifacts.zip"
+seqreports_artifacts_path: "/opt/seqreports/seqreports-artifacts"
+job_id: "22"
+git_version: "3e78fa611d5d5f5ddee49ab5c34e83c4d10bb5a3"
