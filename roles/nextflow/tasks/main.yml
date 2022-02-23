@@ -51,7 +51,7 @@
     backup: no
   with_items:
     - export NXF_OPTS={{ nextflow_env.NXF_OPTS }}
-    - export NXF_VER={{ nextflow_ver.stdout }}
+    - export NXF_VER={{ nextflow_env.NXF_VER }}
     - export NXF_HOME={{ nextflow_env.NXF_HOME }}
     - export NXF_LAUNCHBASE={{ nextflow_env.NXF_LAUNCHBASE }}
   # Defines where the classpath file ends up
