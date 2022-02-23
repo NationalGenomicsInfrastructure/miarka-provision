@@ -16,7 +16,6 @@
       file:
         path: "{{ ngi_containers }}/biocontainers"
         state: directory
-        mode: ug=rwx, o=rx
 
     - name: Create temp directories for download
       file:

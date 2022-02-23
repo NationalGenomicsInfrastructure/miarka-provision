@@ -25,7 +25,6 @@
   file:
     path: "{{ ngi_pipeline_conf }}"
     state: directory
-    mode: g+s
 
 - name: deploy ugc bash env file 
   template:

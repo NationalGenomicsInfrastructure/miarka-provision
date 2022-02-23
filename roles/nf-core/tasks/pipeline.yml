@@ -10,7 +10,6 @@
   file:
     path: "{{ ngi_containers }}/{{ pipeline }}"
     state: directory
-    mode: g+rwX,o=rX
 
 - name: pull singularity images for {{ pipeline }} v{{ release }}
   command: "singularity pull --name nf-core-{{ pipeline }}-{{ release }}.simg {{ nf_core_container_repo }}/{{ pipeline }}:{{ release }}"

@@ -39,7 +39,6 @@
   file:
     path: "{{ ngi_pipeline_conf }}"
     state: directory
-    mode: g+s
 
 - name: Install PyVCF for joint calling
   pip:
@@ -50,13 +49,11 @@
   file:
     name: "{{ ngi_resources }}"
     state: directory
-    mode: g+s
 
 - name: Create ngi_resources/piper folder
   file:
     name: "{{ ngi_resources }}/piper"
     state: directory
-    mode: g+s
 
 - name: Create deployed tools version file
   copy:
@@ -94,7 +91,6 @@
   file:
     path: "{{ proj_root }}"
     state: directory
-    mode: g+s
   when: deployment_environment in ["staging", "devel"]
 
 - name: Deploy miarka ngi_pipeline config for {{ site }}

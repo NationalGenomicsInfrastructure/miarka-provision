@@ -21,13 +21,11 @@
   file:
     path: "{{ ngi_pipeline_conf }}/TACA"
     state: directory
-    mode: g+s
 
 - name: Create TACA resources folders
   file:
     path: "{{ ngi_resources }}/TACA/{{ site }}"
     state: directory
-    mode: g+s
 
 # Deploy TACA configs
 - name: deploy TACA configs

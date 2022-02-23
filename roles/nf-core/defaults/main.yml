@@ -4,10 +4,10 @@ nf_core_version: 2.1
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
-  SINGULARITY_CACHEDIR: "/scratch/singularity_cache"
-  SINGULARITY_TMPDIR: "/scratch/singularity_temp"
-  NXF_SINGULARITY_CACHEDIR: "/scratch/singularity_cache"
-  NXF_LAUNCHER: "/scratch"
+  SINGULARITY_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
+  SINGULARITY_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
+  NXF_SINGULARITY_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
+  NXF_LAUNCHER: "{{ nextflow_env.NXF_LAUNCHER }}"
   NXF_HOME: "{{ nextflow_env.NXF_HOME }}"
   NXF_WORK: "{{ nextflow_env.NXF_WORK }}"
   NXF_TEMP: "{{ nextflow_env.NXF_TEMP }}"

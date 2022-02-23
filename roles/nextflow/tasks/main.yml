@@ -8,19 +8,17 @@
   file:
     path: "{{ nextflow_dest }}"
     state: directory
-    mode: g+rwX
 
 - name: Create NextFlow installation subdirectory
   file:
     path: "{{ nextflow_dest }}/workfiles"
     state: directory
-    mode: g+rwX
 
 - name: Download NextFlow
   get_url:
     url: "{{ nextflow_download_url }}"
     dest: "{{ nextflow_dest }}/nextflow"
-    mode: u+rwx,g=rwx
+    mode: u=rwx
 
 # Resolved any problems. Run-time files are pushed to scratch
 - name: Install NextFlow
