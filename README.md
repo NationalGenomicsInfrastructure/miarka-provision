@@ -14,15 +14,17 @@ The deployment is intended to be performed in three stages:
 ## TL;DR
 
 Below are the main commands to run for a staging or production deployment once the environment and relevant variables 
-has been set up.
+has been set up. For a detailed description and walk-through of the procedures, continue the reading below.
+
 ```
 # setup the miarka environment
 miarkaenv
 
 # cd to the playbook directory and checkout the correct branch/version
 cd /path/to/deployment/resources/miarka-provision
-git fetch [--tags] origin
+git fetch --tags origin
 git checkout [monthly / bimonthly / tags/vX.Y]
+git pull
 
 # do deployment to local file system for each site
 ansible-playbook -i inventory.yml install.yml -e deployment_environment=[staging / production] -e site=upps

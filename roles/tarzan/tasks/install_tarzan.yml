@@ -3,13 +3,11 @@
   file:
     name: "{{ tarzan_root_dir }}"
     state: directory
-    mode: g+rwX
 
 - name: create tarzan conf dir
   file:
     name: "{{ tarzan_conf_dir }}"
     state: directory
-    mode: g+rwX
 
 - name: deploy server config file for kong
   template:
@@ -30,7 +28,6 @@
   file:
     name: "{{ tarzan_singularity_image_file_dest | dirname }}"
     state: directory
-    mode: g+rwX
 
 - name: deploy singularity image for kong
   copy:
