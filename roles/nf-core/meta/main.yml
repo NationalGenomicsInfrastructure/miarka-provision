@@ -1,2 +1,2 @@
 dependencies:
-  - { role: nextflow, tags: nextflow }
+  - { role: ngi_pipeline, tags: ngi_pipeline, environment: "{{ tools_path }}" }

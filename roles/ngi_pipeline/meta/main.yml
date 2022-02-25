@@ -1,2 +1,3 @@
 dependencies:
   - { role: anaconda, tags: anaconda }
+  - { role: nextflow, tags: nextflow }
