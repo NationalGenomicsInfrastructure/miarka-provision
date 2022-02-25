@@ -124,3 +124,5 @@
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
     line: "NGI Pipeline: {{ ngi_pipeline_version }}"
+
+- include_tasks: configure_nextflow.yml
