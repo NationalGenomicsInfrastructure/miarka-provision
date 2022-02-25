@@ -8,10 +8,6 @@
   set_fact:
     has_virtual_env: "{{ virtual_env != 'noenv' | bool }}"
 
-- name: print out
-  debug:
-    msg: "virtual_env is {{ virtual_env }} and has_virtual_env is {{ has_virtual_env }}"
-
 # If this playbook was triggered from sysman, we download the fastq_screen_reference genomes
 # to the orchestration/local machine and then transfer them to the
 # target machine, since this will be super slow to download, and we don't want to keep redoing it,
