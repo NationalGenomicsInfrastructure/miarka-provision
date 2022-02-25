@@ -1,0 +1,36 @@
+- name: Grab Nextflow version number
+  shell: "ls {{ nextflow_dest }}/workfiles/framework/ | tail -1"
+  register: nextflow_ver
+
+- name: Add NextFlow to $PATH
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ root_path }}/sw/nextflow:$PATH"
+    backup: no
+
+- name: Create miarka config
+  template:
+    src: "nextflow_miarka_site.config.j2"
+    dest: "{{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config"
+
+# Change target to {{ ngi_rnaseq_dest }} when using module system
+# NXF_WORK is omitted, which puts them under current directory
+- name: Add Nextflow module vars to sourceme
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "{{ item }}"
+    backup: no
+  with_items:
+    - export NXF_OPTS={{ nextflow_env.NXF_OPTS }}
+    - export NXF_VER={{ nextflow_env.NXF_VER }}
+    - export NXF_HOME={{ nextflow_env.NXF_HOME }}
+    - export NXF_LAUNCHBASE={{ nextflow_env.NXF_LAUNCHBASE }}
+  # Defines where the classpath file ends up
+    - export NXF_LAUNCHER={{ nextflow_env.NXF_LAUNCHER }}
+  # Path to java to be used for nextflow
+    - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
+
+- name: Store nextflow version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "Nextflow: {{ nextflow_ver.stdout }}"
