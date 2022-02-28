@@ -18,7 +18,6 @@
   file:
     path: "{{ nextflow_dest }}/workfiles/plugins"
     state: directory
-    mode: g+rwXs
 
 - name: Download NextFlow
   get_url:
@@ -32,10 +31,6 @@
   environment: "{{ nextflow_env }}"
   args:
     chdir: "{{ nextflow_dest }}"
-
-- name: Grab Nextflow version number
-  shell: "ls {{ nextflow_dest }}/workfiles/framework/ | tail -1"
-  register: nextflow_ver
 
 - name: Add NextFlow to $PATH
   lineinfile:
@@ -56,8 +51,8 @@
     line: "{{ item }}"
     backup: no
   with_items:
-    - export NXF_OPTS={{ nextflow_env.NXF_OPTS }}
-    - export NXF_VER={{ nextflow_ver.stdout }}
+    - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
+    - export NXF_VER={{ nextflow_env.NXF_VER }}
     - export NXF_HOME={{ nextflow_env.NXF_HOME }}
     - export NXF_LAUNCHBASE={{ nextflow_env.NXF_LAUNCHBASE }}
   # Defines where the classpath file ends up
@@ -68,4 +63,4 @@
 - name: Store nextflow version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "Nextflow: {{ nextflow_ver.stdout }}"
+    line: "Nextflow: {{ nextflow_version_tag }}"

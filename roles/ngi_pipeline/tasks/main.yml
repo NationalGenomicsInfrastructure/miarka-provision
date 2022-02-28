@@ -19,12 +19,6 @@
     version: "{{ ngi_pipeline_version }}"
     force: yes
 
-- name: (Temporary until everything is updated) Install click7.0 as click7.1 breaks everything
-  pip:
-    name: click
-    version: "7.0"
-    executable: "{{ ngi_pipeline_venv }}/bin/pip"
-
 - name: Install ngi_pipeline requirements
   pip:
     requirements: "{{ ngi_pipeline_dest }}/requirements.txt"
