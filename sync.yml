@@ -94,4 +94,6 @@
         src: "{{ hostvars['deploy']['root_path'] }}"
         dest: "{{ hostvars['deploy']['root_path'] | dirname | regex_replace('^(.*)/?$', '\\1/latest') }}"
         state: link
-      when: not deployment_environment == 'devel'
+      when:
+        - not deployment_environment == 'devel'
+        - not branch_name == 'bimonthly'

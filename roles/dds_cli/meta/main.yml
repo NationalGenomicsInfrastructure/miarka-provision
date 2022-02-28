@@ -1,0 +1,2 @@
+dependencies:
+  - { role: ngi_pipeline, tags: ngi_pipeline }
