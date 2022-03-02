@@ -1,0 +1,66 @@
+---
+
+- name: set artifact path
+  set_fact:
+    artifact_path: "{{ seqreports_artifacts_path }}/{{ job_id }}"
+
+- name: create directory for artifact
+  file:
+    path: "{{ artifact_path }}"
+    state: directory
+    mode: "0755"
+
+- name: create conda environment for seqreports
+  shell: "{{ anaconda_path }}/bin/conda create -n {{ seqreports_venv_name }} -c anaconda python=3.8 -y"
+  args:
+    creates: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/python3"
+
+- name: Set host fact boolean for miarka deployment
+  set_fact:
+    miarka_deployment: "{{ miarka_deployment | default(true) }}"
+
+- name: ensure seqreports data path exists
+  file:
+    path: "{{ seqreports_data_path }}"
+    state: directory
+
+- name: ensure nextflow directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ seqreports_nxf_temp }}"
+    - "{{ seqreports_nxf_work }}"
+    - "{{ seqreports_nxf_logs }}"
+
+- import_tasks: pre_reqs.yml
+
+- name: Update and deploy checkQC config
+  import_tasks: deploy_config.yml
+
+- name: unzip artifact zip file
+  unarchive:
+    src: "{{ artifact_zip }}"
+    dest: "{{ artifact_path }}"
+
+- name: get path to wheel
+  shell: find "{{ artifact_path }}" -name "*.whl"
+  register: whl_path
+
+- name: set wheel path
+  set_fact:
+    wheel_path: "{{ whl_path.stdout }}"
+
+- name: Make sure pip is up to date
+  pip:
+    name: pip
+    #virtualenv: "{{ seqreports_venv_name }}"
+    executable: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/pip"
+    state: latest
+
+- name: install seqreports
+  pip:
+      name: "{{ wheel_path }}"
+      executable: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/pip"
+      state: present
+      extra_args: "-U"
