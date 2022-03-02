@@ -1,0 +1,31 @@
+---
+
+port: {{ seqreports_service_port }}
+db_connection_string: sqlite:///{{ seqreports_db_path }}
+reports_dir: {{ seqreports_output_dir }}
+monitored_directories:
+{% for dir in seqreports_monitored_directories %}
+    - {{ dir }}
+{% endfor %}
+alembic_scripts: {{ seqreports_src_path }}/alembic/
+alembic_log_config_path: {{ seqreports_config_root }}/logger.config
+process_queue_check_interval: 5 # in seconds
+nextflow_log_dirs: {{ seqreports_nxf_logs }}
+nextflow_config:
+    main_workflow_path: {{ seqreports_src_path }}/seqreports/main.nf
+    nf_config: {{ seqreports_src_path }}/seqreports/nextflow.config
+    nf_profile: {{ seqreports_nf_profile }}
+    environment:
+        NXF_TEMP: {{ seqreports_nxf_temp }}
+        NXF_WORK: {{ seqreports_nxf_work }}
+        NXF_VER: {{ nextflow_version }}
+{% if env_current == env_prod %}
+        HTTP_PROXY: {{ proxy_env.http_proxy }}
+        HTTPS_PROXY: {{ proxy_env.https_proxy }}
+{% endif %}
+    parameters:
+        run_folder: ${DEFAULT:runfolder_path}
+        config_dir: {{ seqreports_src_path }}/seqreports/config/
+        fastqscreen_databases: {{ seqreports_data_fastq_screen_db_path }}
+        checkqc_config: {{ checkqc_config_path }}
+        result_dir: {{ seqreports_result_dir }}

@@ -18,6 +18,10 @@ seqreports_data_fastq_screen_db_path: "{{ seqreports_data_path }}/FastQ_Screen_G
 seqreports_nxf_temp: "{{ seqreports_data_path }}/nxf_tmp/"
 seqreports_nxf_work: "{{ seqreports_data_path }}/nxf_work/"
 seqreports_nxf_logs: "{{ seqreports_data_path }}/nxf_logs/"
+seqreports_nf_profile: singularity,snpseq
+
+seqreports_config_root: "{{ ngi_pipeline_conf }}/seqreports/"
+seqreports_log_dir: "{{ ngi_pipeline_path }}/log/seqreports/"
 
 # When called from miarka, this is refering to the resource directory
 # to avoid duplicating the database for each new version.
@@ -28,6 +32,15 @@ seqreports_nxf_logs: "{{ seqreports_data_path }}/nxf_logs/"
 seqreports_fastq_screen_resource_path: "{{ deployment_remote_path }}/resources/seqreports"
 
 artifact_zip: "artifacts.zip"
-seqreports_artifacts_path: "/opt/seqreports/seqreports-artifacts"
+seqreports_artifacts_path: "/tmp/seqreports-artifacts"
+#seqreports_artifacts_path: "/home/adrienc/tmp/seqreports-artifacts"
 job_id: "22"
 git_version: "3e78fa611d5d5f5ddee49ab5c34e83c4d10bb5a3"
+
+seqreports_service_port: 9999
+seqreports_db_dir: /var/seqreports/
+seqreports_db_path: "{{ seqreports_db_path }}/seqreports.db"
+seqreports_output_dir: {DEFAULT:runfolder_path}/seqreports
+seqreports_result_dir: {DEFAULT:runfolder_path}/seqreports
+
+seqreports_monitored_directories: "{{ proj_root }}/{{ uppmax_project }}/incoming"
