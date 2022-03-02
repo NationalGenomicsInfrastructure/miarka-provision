@@ -7,20 +7,19 @@ nf_core_vars:
   SINGULARITY_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
   SINGULARITY_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
   NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
-  NXF_SINGULARITY_LIBRARY: "{{ container_dir }}"
+  NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
   NXF_LAUNCHER: "{{ nextflow_env.NXF_LAUNCHER }}"
   NXF_HOME: "{{ nextflow_env.NXF_HOME }}"
   NXF_WORK: "{{ nextflow_env.NXF_WORK }}"
   NXF_TEMP: "{{ nextflow_env.NXF_TEMP }}"
   NXF_VER: "{{ nextflow_env.NXF_VER }}"
   JAVA_HOME: "{{ nextflow_env.NXF_JAVA_HOME }}"
-  PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
+  PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}:{{ nextflow_dest }}"
 biocontainers_dirname: biocontainers
 pipelines:
   - name: rnaseq
     release: 3.3
     container_dir: "{{ biocontainers_dirname }}"
-    biocontainer_base_url: https://dl.dropboxusercontent.com/s/5venz3l2wihaqdp
   - name: sarek
     release: "{{ sarek_tag }}"
     pipeline_specific_containers:

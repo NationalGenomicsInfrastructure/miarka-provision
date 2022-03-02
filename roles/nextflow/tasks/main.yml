@@ -35,7 +35,7 @@
 - name: Add NextFlow to $PATH
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ root_path }}/sw/nextflow:$PATH"
+    line: "export PATH={{ nextflow_dest }}:$PATH"
     backup: no
 
 - name: Create miarka config
