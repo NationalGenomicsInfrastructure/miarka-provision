@@ -39,7 +39,6 @@
     - "{{ pipeline_genomes }}"
   loop_control:
     loop_var: container
-  when: container | length > 0
 
 - name: create nf-core {{ pipeline }} v{{ release }} config
   template:
