@@ -11,3 +11,8 @@ static_proj_root: /proj
 ngi_sw_group: ngi-sw
 ngi_group: ngi
 exclude_pattern: [ "*.swp", "miarka3/" ]
+
+proxy_env:
+  https_proxy: http://10.0.0.1:3128
+  http_proxy: http://10.0.0.1:3128
+  no_proxy: "localhost,127.0.0.1,0.0.0.0"

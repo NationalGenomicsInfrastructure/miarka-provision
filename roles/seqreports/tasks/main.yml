@@ -64,20 +64,63 @@
       executable: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/pip"
       state: present
       extra_args: "-U"
-  notify:
-    - restart seqreports
 
-- name: deploy seqreports systemd config
+- name: ensure seqreports config dir exists
+  file:
+    state: directory
+    path: "{{ seqreports_config_root }}"
+    owner: "{{ seqreports_user }}"
+    mode: "0755"
+
+- name: deploy seqreports app config
   template:
-    src: seqreports.service.j2
-    dest: /etc/systemd/system/seqreports.service
+    src: "templates/app.config.j2"
+    dest: "{{ seqreports_config_root }}/app.config"
+    owner: "{{ seqreports_user }}"
     mode: "0644"
-  notify: restart seqreports
 
-- name: enable seqreports
-  systemd:
-    enabled: yes
-    state: started
-    daemon_reload: yes
-    name: seqreports
+- name: deploy seqreports logger config
+  copy:
+    src: "{{ seqreports_src_path }}/config/logger.config"
+    dest: "{{ seqreports_config_root }}"
+    owner: "{{ seqreports_user }}"
+    mode: "0644"
+    remote_src: true
 
+- name: ensure seqreports log dir exists
+  file:
+    path: "{{ seqreports_log_dir }}"
+    state: directory
+    mode: u=rwx,g=rwx
+    owner: "{{ seqreports_user }}"
+
+- name: set log file path
+  lineinfile:
+    path: "{{ seqreports_config_root }}/logger.config"
+    backrefs: yes
+    regexp: '(^\s+filename:).*'
+    line: '\1 {{ seqreports_log_path }}'
+    mode: "0644"
+
+- name: ensure seqreports db dir exists
+  file:
+    path: "{{ seqreports_db_dir }}"
+    state: directory
+    mode: u=rwx,g=rwx
+    owner: "{{ seqreports_user }}"
+
+- name: modify Uppsala's supervisord conf to start sequencing-report-service
+  ini_file:
+    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    section: "program:sequencing-report-service-{{ deployment_environment }}"
+    option: command
+    value: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/sequencing-report-service --configroot={{ seqreports_config_root }}"
+    backup: no
+
+- name: modify Uppsala's supervisord conf to add autorestart sequencing-report-service attribute
+  ini_file:
+    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    section: "program:sequencing-report-service-{{ deployment_environment }}"
+    option: autorestart
+    value: true
+    backup: no
