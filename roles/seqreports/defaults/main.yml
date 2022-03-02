@@ -18,6 +18,9 @@ seqreports_nf_profile: singularity,snpseq
 
 seqreports_config_root: "{{ ngi_pipeline_conf }}/seqreports/"
 seqreports_log_dir: "{{ ngi_pipeline_path }}/log/seqreports/"
+seqreports_log_path: "{{ seqreports_log_dir }}/seqreports-ws.log"
+seqreports_db_dir: "{{ ngi_pipeline_path }}/db/seqreports/"
+seqreports_db_path: "{{ seqreports_db_path }}/seqreports.db"
 
 # When called from miarka, this is refering to the resource directory
 # to avoid duplicating the database for each new version.
@@ -34,8 +37,6 @@ job_id: "22"
 git_version: "3e78fa611d5d5f5ddee49ab5c34e83c4d10bb5a3"
 
 seqreports_service_port: 9999
-seqreports_db_dir: /var/seqreports/
-seqreports_db_path: "{{ seqreports_db_path }}/seqreports.db"
 seqreports_output_dir: {DEFAULT:runfolder_path}/seqreports
 seqreports_result_dir: {DEFAULT:runfolder_path}/seqreports
 
