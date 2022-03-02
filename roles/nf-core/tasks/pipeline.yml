@@ -4,6 +4,16 @@
     path: "{{ container_dir }}"
     state: directory
 
+- name: Create temp directories for singularity images
+  file:
+    path: "{{ cachedir }}"
+    state: directory
+  with_items:
+    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
+    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+  loop_control:
+    loop_var: cachedir
+
 - name: nf-core download {{ pipeline }} v{{ release }}
   command: "nf-core -v
     download {{ pipeline }}
@@ -29,6 +39,7 @@
     - "{{ pipeline_genomes }}"
   loop_control:
     loop_var: container
+  when: container | length > 0
 
 - name: create nf-core {{ pipeline }} v{{ release }} config
   template:
@@ -71,6 +82,16 @@
       dest: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
     when: not silva_stat.stat.exists
   when: pipeline == "ampliseq"
+
+- name: Remove singularity cache directories
+  file:
+    name: "{{ cachedir }}"
+    state: absent
+  with_items:
+    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
+    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+  loop_control:
+    loop_var: cachedir
 
 - name: store {{ pipeline }} version in deployment
   lineinfile:

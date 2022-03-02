@@ -25,7 +25,7 @@ deliver:
             - <STAGINGPATH>/01-RNA-Results
             - required: True
         -
-            - {{ ngi_site_softlinks }}/DELIVERY.README.RNASeq.txt
+            - {{ ngi_softlinks }}/DELIVERY.README.RNASeq.txt
             - <STAGINGPATH>
 {% elif "denovo" == item.item_type %}
             - <ANALYSISPATH>/nougat_ngi/02_QC_reports/

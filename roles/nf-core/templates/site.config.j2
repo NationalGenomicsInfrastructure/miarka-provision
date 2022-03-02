@@ -12,6 +12,8 @@ process {
         time = { 2.d * task.attempt }
   }
 
+}
+
   {% endif %}
 
   {% if pipeline == 'ampliseq' %}
@@ -22,10 +24,18 @@ process {
         time = 36.h
   }
 
-  {% endif %}
 }
 
+params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
+
+  {% endif %}
+
+{% endif %}
+
 singularity.cacheDir = '{{ container_dir }}'
+singularity.libraryDir = '{{ container_dir }}'
+
+params.seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"
 
 {% if pipeline == 'rnaseq' %}
 
@@ -33,10 +43,3 @@ params.reverseStranded = true
 
 {% endif %}
 
-{% if pipeline=='ampliseq' %}
-
-params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
-
-{% endif %}
-
-params.seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"

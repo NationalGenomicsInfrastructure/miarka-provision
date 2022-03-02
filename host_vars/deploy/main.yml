@@ -48,7 +48,7 @@ sarek_tag: "2.7"
 sarek_dest: "{{ sw_path }}/sarek"
 
 # File with tools/software version in the deployed env
-deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"
+deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.{{ site }}.version"
 
 # arteria-common configuration options
 arteria_service_env_root: "{{ anaconda_path }}/envs/{{ arteria_service_name }}"
