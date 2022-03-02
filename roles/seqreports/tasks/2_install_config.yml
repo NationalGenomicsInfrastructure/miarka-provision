@@ -4,30 +4,22 @@
   file:
     state: directory
     path: "{{ seqreports_config_root }}"
-    owner: "{{ seqreports_user }}"
-    mode: "0755"
 
 - name: deploy seqreports app config
   template:
     src: "templates/app.config.j2"
     dest: "{{ seqreports_config_root }}/app.config"
-    owner: "{{ seqreports_user }}"
-    mode: "0644"
 
 - name: deploy seqreports logger config
-  copy:
-    src: "{{ seqreports_src_path }}/config/logger.config"
+  template:
+    src: "templates/logger.config.j2"
     dest: "{{ seqreports_config_root }}"
-    owner: "{{ seqreports_user }}"
-    mode: "0644"
-    remote_src: true
 
 - name: ensure seqreports log dir exists
   file:
     path: "{{ seqreports_log_dir }}"
     state: directory
     mode: u=rwx,g=rwx
-    owner: "{{ seqreports_user }}"
 
 - name: set log file path
   lineinfile:
@@ -42,7 +34,6 @@
     path: "{{ seqreports_db_dir }}"
     state: directory
     mode: u=rwx,g=rwx
-    owner: "{{ seqreports_user }}"
 
 - name: modify Uppsala's supervisord conf to start sequencing-report-service
   ini_file:

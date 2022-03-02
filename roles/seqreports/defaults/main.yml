@@ -9,10 +9,6 @@ checkqc_bcl2fastq_output_path: Unaligned
 seqreports_data_path: "{{ sw_path }}/seqreports"
 
 seqreports_venv_name: seqreports-env
-seqreports_user: seqreports  # Only used in dev and local environment
-seqreports_user_uid: 506  # Only used in dev and local environment
-seqreports_group: 'MOLM-GG-BioInfo'  # Only used in dev and local environment
-seqreports_group_uid: 504
 
 seqreports_data_fastq_screen_db_path: "{{ seqreports_data_path }}/FastQ_Screen_Genomes"
 seqreports_nxf_temp: "{{ seqreports_data_path }}/nxf_tmp/"
