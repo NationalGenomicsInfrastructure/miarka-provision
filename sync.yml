@@ -96,4 +96,4 @@
         state: link
       when:
         - not deployment_environment == 'devel'
-        - not branch_name == 'bimonthly'
+        - not hostvars['deploy']['branch_name'] == 'bimonthly'
