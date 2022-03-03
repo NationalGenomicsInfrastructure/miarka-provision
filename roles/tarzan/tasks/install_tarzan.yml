@@ -23,6 +23,7 @@
   template:
     src: "start_kong.sh.j2"
     dest: "{{ tarzan_start_script }}"
+    mode: 0775
 
 - name: create tarzan singularity image dir
   file:
