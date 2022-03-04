@@ -40,6 +40,7 @@ git_version: "3e78fa611d5d5f5ddee49ab5c34e83c4d10bb5a3"
 seqreports_output_dir: ${DEFAULT:runfolder_path}/seqreports
 seqreports_result_dir: ${DEFAULT:runfolder_path}/seqreports
 
-seqreports_monitored_directories: "{{ proj_root }}/{{ uppmax_project }}/incoming"
+seqreports_monitored_directories:
+  - "{{ proj_root }}/{{ uppmax_project }}/incoming"
 
 seqreports_src_path: "/home/adrienc/source/sequencing-report-service"
