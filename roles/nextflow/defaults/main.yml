@@ -12,4 +12,3 @@ nextflow_env:
   NXF_JAVA_HOME: "{{ nextflow_java }}"
   NXF_VER: "{{ nextflow_version_tag }}"
   PATH: "{{ tools_path.PATH }}"
-
