@@ -1,6 +1,5 @@
 ---
 
 - block:
-  - include: pre_reqs.yml
   - include: 1_install.yml
   - include: 2_install_config.yml
