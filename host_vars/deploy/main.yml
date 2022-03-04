@@ -13,6 +13,10 @@ conda_tools_env: tools
 tools_path:
   PATH: "{{ anaconda_path }}/envs/{{ conda_tools_env }}/bin:{{ anaconda_env['PATH'] }}"
 
+# Python versions
+python2_version: 2.7
+python3_version: 3.8
+
 #Nextflow defauts
 nextflow_dest: "{{ sw_path }}/nextflow"
 
@@ -33,9 +37,9 @@ static_ngi_log_path: "{{ static_ngi_pipeline_path }}/log"
 ngi_softlinks: "{{ ngi_pipeline_workdir }}/softlinks"
 
 NGI_venv_name: "NGI"
-NGI_venv_py3_name: "NGI_py3"
+NGI_venv_py2_name: "NGI_py2"
 ngi_pipeline_venv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_name }}"
-ngi_pipeline_venv_py3: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py3_name }}"
+ngi_pipeline_venv_py2: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py2_name }}"
 
 ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"
@@ -44,7 +48,7 @@ sarek_tag: "2.7"
 sarek_dest: "{{ sw_path }}/sarek"
 
 # File with tools/software version in the deployed env
-deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"
+deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.{{ site }}.version"
 
 # arteria-common configuration options
 arteria_service_env_root: "{{ anaconda_path }}/envs/{{ arteria_service_name }}"
