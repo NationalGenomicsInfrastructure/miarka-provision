@@ -19,10 +19,6 @@ nextflow_config:
         NXF_TEMP: {{ seqreports_nxf_temp }}
         NXF_WORK: {{ seqreports_nxf_work }}
         NXF_VER: {{ nextflow_version }}
-{% if env_current == env_prod %}
-        HTTP_PROXY: {{ proxy_env.http_proxy }}
-        HTTPS_PROXY: {{ proxy_env.https_proxy }}
-{% endif %}
     parameters:
         run_folder: ${DEFAULT:runfolder_path}
         config_dir: {{ seqreports_src_path }}/seqreports/config/

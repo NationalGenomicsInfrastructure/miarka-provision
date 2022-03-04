@@ -13,7 +13,7 @@
 - name: deploy seqreports logger config
   template:
     src: "templates/logger.config.j2"
-    dest: "{{ seqreports_config_root }}"
+    dest: "{{ seqreports_config_root }}/logger.config"
 
 - name: ensure seqreports log dir exists
   file:

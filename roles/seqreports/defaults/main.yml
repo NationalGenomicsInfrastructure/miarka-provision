@@ -10,6 +10,7 @@ seqreports_data_path: "{{ sw_path }}/seqreports"
 
 seqreports_venv_name: seqreports-env
 
+nextflow_version: 21.04.1
 seqreports_data_fastq_screen_db_path: "{{ seqreports_data_path }}/FastQ_Screen_Genomes"
 seqreports_nxf_temp: "{{ seqreports_data_path }}/nxf_tmp/"
 seqreports_nxf_work: "{{ seqreports_data_path }}/nxf_work/"
@@ -20,7 +21,7 @@ seqreports_config_root: "{{ ngi_pipeline_conf }}/seqreports/"
 seqreports_log_dir: "{{ ngi_pipeline_path }}/log/seqreports/"
 seqreports_log_path: "{{ seqreports_log_dir }}/seqreports-ws.log"
 seqreports_db_dir: "{{ ngi_pipeline_path }}/db/seqreports/"
-seqreports_db_path: "{{ seqreports_db_path }}/seqreports.db"
+seqreports_db_path: "{{ seqreports_db_dir }}/seqreports.db"
 
 # When called from miarka, this is refering to the resource directory
 # to avoid duplicating the database for each new version.
@@ -41,3 +42,5 @@ seqreports_output_dir: ${DEFAULT:runfolder_path}/seqreports
 seqreports_result_dir: ${DEFAULT:runfolder_path}/seqreports
 
 seqreports_monitored_directories: "{{ proj_root }}/{{ uppmax_project }}/incoming"
+
+seqreports_src_path: "/home/adrienc/source/sequencing-report-service"
