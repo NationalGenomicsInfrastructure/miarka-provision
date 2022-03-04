@@ -1,0 +1,114 @@
+---
+
+- name: Deploy miarka software
+  hosts: deploy
+  connection: local
+
+  # These three variables needs to be overriden when calling ansible-playbook.
+  #
+  # Call with e.g. "ansible-playbook install.yml -e deployment_environment=staging -e deployment_version=foo".
+  # If devel then the version will always be set to USERNAME_BRANCHNAME.
+  # If staging or production then the playbook will halt if the folder version already exists.
+  # I.e. the user will then manually have to remove the directory, OR add "-e deployment_override=true"
+  # to deploy into an already existing folder.
+  #
+  # /vulpes/ngi/production/<latest|current> will link to /vulpes/ngi/production/<github release>
+  # /vulpes/ngi/staging/ will contain a folder wild-wild-west which will be world writeable ON THE RECIEVING end. I.e. the
+  # sync script will change the permissions? This is to make sure that not everyone that is able to login to miarka3 can
+  # upload data into the cluster.
+
+  pre_tasks:
+    - fail:
+        msg: "You must specify '-e site=<upps | sthlm>'"
+      when: site is not defined or site is not in [ "upps", "sthlm" ]
+
+    - include: tasks/set-paths.yml
+      tags: always
+
+    - include_vars:
+        dir: env_vars
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
+
+    - include_vars:
+        dir: env_secrets
+        files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
+      tags: always
+
+    - name: create {{ root_path }} folder and configure setgid
+      file:
+        path: "{{ root_path }}"
+        group: "{{ ngi_sw_group }}"
+        state: directory
+        recurse: no
+        mode: g+rwXs,o=rX
+      tags: always
+
+    - name: create {{ ngi_containers }} folder and configure setgid
+      file:
+        path: "{{ ngi_containers }}"
+        group: "{{ ngi_sw_group }}"
+        state: directory
+        recurse: no
+        mode: g+rwXs,o=rX
+      tags: always
+
+    - name: create {{ proj_root }} folder and configure setgid
+      file:
+        path: "{{ proj_root }}"
+        group: "{{ ngi_group }}"
+        state: directory
+        recurse: no
+        mode: g+rwXs,o-rwx
+      when: deployment_environment in ["staging", "devel"]
+      tags: always
+
+
+  environment:
+    "{{ tools_path }}"
+
+  roles:
+    - { role: ngi_pipeline, tags: ngi_pipeline }
+    - { role: func_accounts, tags: func_accounts }
+    - { role: nextflow, tags: nextflow }
+    - { role: tarzan, tags: tarzan }
+    - { role: taca, tags: taca }
+    - { role: ngi_reports, tags: ngi_reports }
+    - { role: multiqc, tags: multiqc }
+    - { role: arteria-checksum-ws, tags: arteria-checksum }
+    - { role: arteria-delivery-ws, tags: arteria-delivery }
+    - { role: standalone_scripts, tags: standalone_scripts }
+    - { role: delivery, tags: delivery }
+    - { role: misc-tools, tags: misc-tools }
+    - { role: archive-upload-ws, tags: archive-upload }
+    - { role: nf-core, tags: nf-core }
+    - { role: seqreports, tags: seqreports,snpseq-only }
+    - { role: dds_cli, tags: dds_cli }
+
+  tasks:
+
+    - name: Add miarka_provision version to deployed tools files
+      lineinfile:
+        dest: "{{ deployed_tool_versions }}"
+        line: "-- Deployed at {{ ansible_date_time.iso8601 }}, miarka_provision ({{ (branch_name, branch_tag, branch_hash) | join('.') }}), by {{ deploy_user }} --"
+
+    - name: set correct file permission for everything in the deployment
+      file:
+        path: "{{ root_path }}"
+        group: "{{ ngi_sw_group }}"
+        state: directory
+        recurse: yes
+        mode: g+rwX,o=rX
+
+    - name: make containers directory readable by anyone that can access miarka
+      file:
+        path: "{{ ngi_containers }}"
+        group: "{{ ngi_sw_group }}"
+        state: directory
+        recurse: yes
+        mode: g+rwX,o=rX
+
+  post_tasks:
+
+    - debug:
+        msg: Finished deploying to {{ root_path }}

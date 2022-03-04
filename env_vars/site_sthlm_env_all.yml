@@ -1,0 +1,33 @@
+
+# common variables
+uppmax_project: ngi2016003
+
+bash_env_script: sourceme_{{ site }}.sh
+ngi_pipeline_sequencing_center: NGI-S
+recipient_mail: ngi_pipeline_operators@scilifelab.se
+site_full: stockholm
+
+# ngi_pipeline
+tsm_config_file: /etc/dsm.opt.ngis
+
+# taca
+snic_sourceme_variable: SNIC_API_STOCKHOLM
+
+# multiqc
+multiqc_options:
+  plots_flat_numseries: 1000
+  push_statusdb: True
+  save_remote: True
+  template: ngi
+
+multiqc_swedac_accredited: True
+multiqc_sshkey: /path/to/ssh_key
+multiqc_destination: multiqc_user@multiqc_host:/path/to/mqc_reports/
+
+multiqc_port: 22
+megaqc_url: http://megaqc.scilifelab.se/api/upload_parse
+
+# standalone scripts
+standalone_scripts_repo: https://github.com/SciLifeLab/standalone_scripts.git
+standalone_scripts_version: master
+standalone_scripts_dest: "{{ sw_path }}/standalone_scripts"

@@ -1,0 +1,50 @@
+---
+
+- name: Fetch flowcell_parser from GitHub
+  git:
+    repo: "{{ flowcell_parser_repo }}"
+    dest: "{{ flowcell_parser_dest }}"
+    version: "{{ flowcell_parser_version }}"
+    force: yes
+
+- name: Install flowcell_parser requirements
+  pip:
+    requirements: "{{ flowcell_parser_dest }}/requirements.txt"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Install flowcell_parser
+  pip:
+    name: file:{{ flowcell_parser_dest }}
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Fetch TACA from GitHub
+  git:
+    repo: "{{ taca_repo }}"
+    dest: "{{ taca_dest }}"
+    version: "{{ taca_version }}"
+    force: yes
+
+- name: Install TACA requirements
+  pip:
+    requirements: "{{ taca_dest }}/requirements.txt"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Install TACA
+  pip:
+    name: file:{{ taca_dest }}
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- block:
+
+  - name: Deploy SNIC-SUPR credentials
+    template:
+      src: supr_credentials.yaml.j2
+      dest: "{{ ngi_pipeline_conf }}/{{ snic_creds }}"
+
+  - name: Add SUPR credentials envvar to sourceme
+    lineinfile:
+      dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+      line: "export {{ snic_sourceme_variable }}={{ ngi_pipeline_conf }}/{{ snic_creds }}"
+      backup: no
+
+  when: snic_creds is defined

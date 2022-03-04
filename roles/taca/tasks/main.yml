@@ -1,0 +1,62 @@
+- include: dependencies.yml
+
+- name: Fetch TACA-ngi-pipeline from GitHub
+  git:
+    repo: "{{ taca_ngi_repo }}"
+    dest: "{{ taca_ngi_dest }}"
+    version: "{{ taca_ngi_version }}"
+    force: yes
+
+- name: Install TACA-ngi-pipeline requirements
+  pip:
+    requirements: "{{ taca_ngi_dest }}/requirements.txt"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Install TACA-ngi-pipeline
+  pip:
+    name: file:{{ taca_ngi_dest }}
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Create TACA delivery configs directory
+  file:
+    path: "{{ ngi_pipeline_conf }}/TACA"
+    state: directory
+
+- name: Create TACA resources folders
+  file:
+    path: "{{ ngi_resources }}/TACA/{{ site }}"
+    state: directory
+
+# Deploy TACA configs
+- name: deploy TACA configs
+  include_tasks: deploy_config.yml
+  vars:
+    config_tpl: "{{ item.config_tpl }}"
+    config_dst: "{{ item.config_dst }}"
+    item_type: "{{ item.item_type | default('') }}"
+    config_site: "{{ item.config_site | default(['upps', 'sthlm']) }}"
+  with_items:
+    - { config_tpl: "taca_delivery", config_dst: "taca_delivery", config_site: ["upps"] }
+    - { config_tpl: "taca_delivery", config_dst: "taca_wgs_delivery", config_site: ["sthlm"] }
+    - { config_tpl: "taca_sarek_delivery", config_dst: "taca_sarek_delivery" }
+    - { config_tpl: "taca_sarek_wes_delivery", config_dst: "taca_sarek_wes_delivery", config_site: ["upps"] }
+    - { config_tpl: "taca_cleanup", config_dst: "taca_cleanup", item_type: cleanup, config_site: ["sthlm"] }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_fastq_delivery", item_type: fastq, config_site: ["sthlm"] }
+    - { config_tpl: "taca_runfolder_delivery", config_dst: "taca_runfolder_delivery", item_type: runfolder, config_site: ["sthlm"] }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_rna_delivery", item_type: rna, config_site: ["sthlm"] }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_denovo_delivery", item_type: denovo, config_site: ["sthlm"] }
+
+- name: Deploy script for softlinking delivery Readmes
+  template:
+    src: create_delivery_readme_softlinks.sh.j2
+    dest: "{{ ngi_resources }}/create_delivery_readme_softlinks.sh"
+
+- name: Store taca tools version on deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ item.tool_name }}: {{ item.tool_version }}"
+  with_items:
+    - { tool_name: "TACA", tool_version: "{{ taca_version }}" }
+    - { tool_name: "taca-ngi-pipeline", tool_version: "{{ taca_ngi_version }}" }
+    - { tool_name: "StatusDB", tool_version: "{{ statusdb_version }}" }
+    - { tool_name: "flowcell_parser", tool_version: "{{ flowcell_parser_version }}" }

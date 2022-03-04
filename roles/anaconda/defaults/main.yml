@@ -1,0 +1,4 @@
+anaconda_file: Anaconda3-2021.05-Linux-x86_64.sh
+anaconda_checksum: 2751ab3d678ff0277ae80f9e8a74f218cfc70fe9a9cdc7bb1c137d7e47e33d53
+anaconda_url: "http://repo.anaconda.com/archive/{{ anaconda_file }}"
+anaconda_src: "/scratch/{{ anaconda_file }}"

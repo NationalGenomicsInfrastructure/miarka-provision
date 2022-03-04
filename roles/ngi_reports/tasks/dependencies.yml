@@ -1,0 +1,22 @@
+---
+- name: Fetch ngi_visualizations from GitHub
+  git:
+    repo: "{{ ngi_visual_repo }}"
+    dest: "{{ ngi_visual_dest }}"
+    version: "{{ ngi_visual_version }}"
+    force: yes
+
+- name: Install ngi_visualizations requirements
+  pip:
+    requirements: "{{ ngi_visual_dest }}/requirements.txt"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Install ngi_visualizations
+  pip:
+    name: "file:{{ ngi_visual_dest }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Install couchDB (minimal version of statusDB)
+  pip:
+    name: "couchdb"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"

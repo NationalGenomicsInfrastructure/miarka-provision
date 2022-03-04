@@ -1,0 +1,14 @@
+
+# arteria-common
+static_runfolder_path: "{{ static_proj_root }}/{{ uppmax_project }}/incoming/{{ deployment_environment }}"
+
+# arteria archive upload
+archive_upload_monitored_path: "{{ static_ngi_pipeline_nobackup }}/arteria/tmp"
+
+# arteria delivery
+project_path: "{{ static_runfolder_path }}/projects"
+staging_path: "{{ static_runfolder_path }}/staged"
+db_path: "{{ static_ngi_pipeline_path }}/db/arteria/{{ deployment_environment }}"
+
+# taca
+snic_api_url: https://disposer.c3se.chalmers.se/supr-test/api

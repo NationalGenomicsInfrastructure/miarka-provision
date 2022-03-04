@@ -1,0 +1,39 @@
+
+- name: pull vep, snpeff genome-specific singularity images
+  command: "singularity pull --name nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg {{ nf_core_container_repo }}/{{ container.0 }}:{{ release }}.{{ container.1 }}"
+  environment: "{{ nf_core_vars }}"
+  args:
+    chdir: "{{ ngi_containers }}/{{ pipeline }}"
+    creates: "{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg"
+  ignore_errors: true
+  with_nested:
+    - "{{ pipeline_specific_containers }}"
+    - "{{ pipeline_genomes }}"
+  loop_control:
+    loop_var: container
+
+- name: update alias for pipeline
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    regexp: ^(alias {{ pipeline }}=.*)(')$
+    line: '\1 --project {{ uppmax_project }} --custom_config_base {{ sw_path }}/{{ pipeline }}/configs/ --igenomes_ignore\2'
+    state: present
+    backrefs: yes
+    backup: no
+
+- name: Create recalibration script and add to TACA resources
+  template:
+    src: "apply_recalibration.sh.j2"
+    dest: "{{ ngi_resources }}/TACA/apply_recalibration.sh"
+
+- name: Create Delivery READMEs and add to TACA resources
+  template:
+    src: "DELIVERY.README.SAREK.txt.j2"
+    dest: "{{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.txt"
+
+- name: Create Delivery READMEs for WES and add to TACA resources
+  template:
+    src: "DELIVERY.README.SAREK.WES.md.j2"
+    dest: "{{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.WES.md"
+  when: site == "upps"
+

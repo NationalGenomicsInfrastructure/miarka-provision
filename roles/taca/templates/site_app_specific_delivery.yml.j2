@@ -1,0 +1,46 @@
+log:
+    file: "{{ ngi_pipeline_path }}/log/taca.log"
+
+deliver:
+    rootpath: "{{ ngi_pipeline_workdir }}"
+    analysispath: <ROOTPATH>/ANALYSIS/<PROJECTID>
+    datapath: <ROOTPATH>/DATA/<PROJECTID>
+    stagingpath: <ROOTPATH>/DELIVERY/<PROJECTID>
+    stagingpathhard: <ROOTPATH>/DELIVERY_HARD/<PROJECTID>
+    deliverypath:
+    reportpath: <ANALYSISPATH>/piper_ngi
+    logpath: <REPORTPATH>/logs
+    deliverystatuspath: <REPORTPATH>/08_misc
+    operator: "{{ recipient_mail }}"
+    hash_algorithm: md5
+    files_to_deliver:
+        -
+            - <DATAPATH>/<SAMPLEID>/*/*
+            - <STAGINGPATH>/<SAMPLEID>/02-FASTQ
+            - required: True
+    misc_files_to_deliver:
+        -
+{% if "rna" == item.item_type %}
+            - <ANALYSISPATH>/rnaseq_ngi/results/
+            - <STAGINGPATH>/01-RNA-Results
+            - required: True
+{% elif "denovo" == item.item_type %}
+            - <ANALYSISPATH>/nougat_ngi/02_QC_reports/
+            - <STAGINGPATH>/01-QC-Results
+            - required: True
+{% elif "fastq" == item.item_type %}
+            - {{ ngi_softlinks }}/DELIVERY.README.RAW_DATA.txt
+            - <STAGINGPATH>
+{% endif %}
+        -
+            - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
+            - <STAGINGPATH>
+        -
+            - <ANALYSISPATH>/reports/*
+            - <STAGINGPATH>/00-Reports
+        -
+            - <ANALYSISPATH>/*multiqc_report.html
+            - <STAGINGPATH>/00-Reports
+{% if "sthlm" == site %}
+    save_meta_info: True
+{% endif %}

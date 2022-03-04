@@ -1,0 +1,17 @@
+# Kind of meager recipe, but will most likely grow from dependencies
+
+# Deploy scripts
+- name: Fetch standalone_scripts from GitHub
+  git:
+    repo: "{{ standalone_scripts_repo }}"
+    dest: "{{ standalone_scripts_dest }}"
+    version: "{{ standalone_scripts_version }}"
+    force: yes
+
+# Since the standalone repo is more free-form than others
+# putting PATH at end of $PATH as a safeguard from future problems
+- name: Add standalone scripts to end of $PATH via sourceme
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    line: export PATH="$PATH:{{ standalone_scripts_dest }}"
+    backup: no

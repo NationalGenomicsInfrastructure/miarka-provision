@@ -1,0 +1,19 @@
+---
+no_version_check: True
+export_plots: true
+
+swedac_location: {{ site_full }}
+swedac_accredited: {{ multiqc_swedac_accredited }}
+
+megaqc_url: {{ megaqc_url }}
+megaqc_access_token: {{ megaqc_access_token }}
+
+{% for key, value in multiqc_options | dictsort %}
+{{ key }}: {{ value }}
+{% endfor %}
+
+{% if site == "sthlm" %}
+remote_sshkey: {{ multiqc_sshkey }}
+remote_port: {{ multiqc_port }}
+remote_destination: {{ multiqc_destination }}
+{% endif %}

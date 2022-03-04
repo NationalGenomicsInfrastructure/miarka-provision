@@ -1,0 +1,42 @@
+---
+- name: "Check if {{ nf_core_env_name }} virtual env exists"
+  shell: "conda env list"
+  register: "nfcore_envs"
+
+- name: Setup {{ nf_core_env_name }} virtual env with python3 and nf-core v{{ nf_core_version }}
+  command: "conda create -n {{ nf_core_env_name }} -c conda-forge -c bioconda -c anaconda python=3.7 nf-core={{ nf_core_version }}"
+  when: not nf_core_env_name in nfcore_envs.stdout|split
+
+- name: Create temp directories for singularity images
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
+    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+
+# Setup pipelines
+- name: setup nf-core pipelines
+  include_tasks: pipeline.yml
+  vars:
+    pipeline: "{{ item.name }}"
+    release: "{{ item.release }}"
+    pipeline_specific_containers: "{{ item.pipeline_specific_containers | default('') }}"
+    pipeline_genomes: "{{ item.pipeline_genomes | default('') }}"
+    biocontainer_base_url: "{{ item.biocontainer_base_url | default('') }}"
+    silva_base_url: "{{ item.silva_base_url | default('') }}"
+    silva_zip: "{{ item.silva_zip | default('') }}"
+  with_items: "{{ pipelines }}"
+
+- name: Remove singularity cache directories
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
+    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+
+- name: Store nf-core version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "nf-core: {{ nf_core_version }}"

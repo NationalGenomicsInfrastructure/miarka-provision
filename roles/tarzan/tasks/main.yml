@@ -1,0 +1,2 @@
+- include: install_tarzan.yml
+  when: site in ["upps"]

@@ -1,0 +1,27 @@
+---
+
+# If deploying to staging one should call with
+# -e deployment_environment=staging
+# One can also override the default installed version
+# by overriding the arteria_delivery_version on the command line.
+#
+# This will set corresponding paths and use the appropriate port.
+arteria_delivery_repo: https://github.com/arteria-project/arteria-delivery.git
+arteria_delivery_version: v2.4.1
+
+arteria_service_name: arteria-delivery-ws
+
+# These values will be appended with production and staging specific
+# paths in the tasks.
+#
+# NB. The log dirs need to be created manually on destination cluster.
+#
+# NB 2. Hard coded root path for runfolders, because that path
+# needs to be reachable from outside world; i.e. have to be under /proj
+# And hard coded log paths because we do not want the log files
+# to disappear when the wildwest directory is cleaned out with every
+# staging sync.
+
+alembic_path: "{{ arteria_service_src_path }}/alembic/"
+delivery_links: "{{ static_ngi_pipeline_nobackup }}/arteria/delivery_project_links"
+mover_path: "/usr/local/bin/"

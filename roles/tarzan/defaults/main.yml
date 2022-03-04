@@ -1,0 +1,31 @@
+---
+# Versions
+tarzan_kong_version: "2.6.0"
+
+# Directories
+tarzan_root_dir: "{{ sw_path }}/tarzan"
+tarzan_conf_dir: "{{ ngi_pipeline_conf }}/tarzan"
+tarzan_log_dir:  "{{ tarzan_proj_dir }}/logs"
+
+# Config files
+tarzan_server_conf_file: "{{ tarzan_conf_dir }}/kong.conf"
+tarzan_entity_conf_file: "{{ tarzan_conf_dir }}/kong.yml"
+tarzan_singularity_def_file: "{{ tarzan_conf_dir }}/kong.def"
+
+# Scripts
+tarzan_start_script: "{{ tarzan_conf_dir }}/start_kong.sh"
+
+# Singularity image
+tarzan_singularity_image_file: "kong-{{ tarzan_kong_version }}-centos.sif"
+tarzan_singularity_image_file_src: "{{ deployment_static_resources }}/{{ tarzan_singularity_image_file }}"
+tarzan_singularity_image_file_dest: "{{ ngi_containers }}/kong/{{ tarzan_singularity_image_file }}"
+tarzan_singularity_image_sha1: "0a6ff9026711cbd5662af0c37dcdfab0611c5741"
+
+# Singularity container
+tarzan_singularity_container_name: "kong-{{ deployment_environment }}"
+tarzan_singularity_container_server_conf_file: "/kong.conf"
+tarzan_singularity_container_entity_conf_file: "/kong.yml"
+tarzan_singularity_container_cert_file: "/cert.pem"
+tarzan_singularity_container_key_file: "/key.pem"
+tarzan_singularity_container_log_dir: "/tarzan_logs"
+tarzan_singularity_container_port: 4444

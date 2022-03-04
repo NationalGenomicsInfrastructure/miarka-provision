@@ -1,0 +1,55 @@
+---
+# Empty placeholder that gets filled by env_vars and/or tasks/set_paths.yml
+root_path:
+ngi_containers:
+
+sw_path: "{{ root_path }}/sw"
+
+anaconda_path: "{{ sw_path }}/anaconda"
+default_env: "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sw/uppmax/bin"
+anaconda_env:
+  PATH: "{{ anaconda_path }}/bin:{{ default_env }}" # this hopefully gets updated by anaconda role
+conda_tools_env: tools
+tools_path:
+  PATH: "{{ anaconda_path }}/envs/{{ conda_tools_env }}/bin:{{ anaconda_env['PATH'] }}"
+
+#Nextflow defauts
+nextflow_dest: "{{ sw_path }}/nextflow"
+
+# Name of the script that should be sourced from the user to get the
+# relevant environment variables setup. Perhaps move this to defaults vars.
+bash_env_common_script: sourceme_common.sh
+
+ngi_pipeline_path: "{{ proj_root }}/{{ uppmax_project }}/private"
+ngi_pipeline_nobackup: "{{ proj_root }}/{{ uppmax_project }}/nobackup"
+ngi_pipeline_workdir: "{{ ngi_pipeline_nobackup }}/NGI"
+ngi_log_path: "{{ ngi_pipeline_path }}/log"
+
+# some roles may need to keep logs and resources under the ordinary /proj location, even for staging deployments
+static_ngi_pipeline_path: "{{ static_proj_root }}/{{ uppmax_project }}/private"
+static_ngi_pipeline_nobackup: "{{ static_proj_root }}/{{ uppmax_project }}/nobackup"
+static_ngi_log_path: "{{ static_ngi_pipeline_path }}/log"
+
+ngi_softlinks: "{{ ngi_pipeline_workdir }}/softlinks"
+
+NGI_venv_name: "NGI"
+NGI_venv_py3_name: "NGI_py3"
+ngi_pipeline_venv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_name }}"
+ngi_pipeline_venv_py3: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py3_name }}"
+
+ngi_pipeline_conf: "{{ root_path }}/conf/"
+ngi_resources: "{{ root_path }}/resources/"
+
+sarek_tag: "2.7"
+sarek_dest: "{{ sw_path }}/sarek"
+
+# File with tools/software version in the deployed env
+deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.version"
+
+# arteria-common configuration options
+arteria_service_env_root: "{{ anaconda_path }}/envs/{{ arteria_service_name }}"
+arteria_service_src_path: "{{ sw_path }}/arteria/{{ arteria_service_name }}"
+arteria_service_config_root: "{{ ngi_pipeline_conf }}/arteria/{{ arteria_service_name }}"
+
+# supervisord
+supervisord_conf: "{{ ngi_pipeline_conf }}/supervisord_{{ site }}.conf"

@@ -1,0 +1,11 @@
+
+# arteria-common
+static_runfolder_path: "{{ static_proj_root }}/{{ uppmax_project }}/incoming"
+
+# arteria archive upload
+archive_upload_monitored_path: "{{ ngi_pipeline_workdir }}/ANALYSIS/"
+
+# arteria delivery
+project_path: "{{ ngi_pipeline_workdir }}/DELIVERY"
+staging_path: "{{ ngi_pipeline_workdir }}/DELIVERY/arteria-staged"
+db_path: "{{ static_ngi_pipeline_path }}/db/arteria"

@@ -1,0 +1,16 @@
+---
+
+- name: create misc tools bin folder
+  file:
+    path: "{{ misc_tools_bin_path }}"
+    state: directory
+
+- name: add misc tools bin folder to path
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ misc_tools_bin_path }}:$PATH"
+    backup: no
+
+- name: deploy tools
+  include_tasks: deploy_tool.yml
+  with_items: "{{ tools }}"

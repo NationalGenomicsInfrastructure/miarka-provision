@@ -1,0 +1,2 @@
+dependencies:
+  - { role: statusdb, tags: statusdb }

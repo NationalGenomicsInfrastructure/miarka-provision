@@ -1,0 +1,18 @@
+---
+
+archive_upload_repo: https://github.com/Molmed/snpseq-archive-upload.git
+archive_upload_version: v1.0.4
+
+arteria_service_name: archive-upload-ws
+archive_upload_cores_to_use: 2
+
+# We want to fake a successful return code for the dsmc subprocess for some certain warnings.
+# Otherwise the Arteria workflow in Stackstorm would be marked as failed when it actually suceeded.
+#
+# ANS1809W = a session with the TSM server has been disconnected: will retry again
+# ANS2042W = a symblic link to a file on other fs has been uploaded: acls/extended attributes might not be backed up
+# ANS2250W = a TSM core file or crash report was found
+archive_upload_whitelisted_warnings: ["ANS1809W", "ANS2042W", "ANS2250W"]
+archive_upload_exclude_dirs: []
+archive_upload_exclude_extensions: [".bam"]
+archive_upload_exclude_from_tarball: []

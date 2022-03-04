@@ -1,0 +1,4 @@
+---
+
+ngi_resources: "{{ root_path }}/resources"
+supervisord_log_dest: "{{ ngi_log_path }}/supervisord"

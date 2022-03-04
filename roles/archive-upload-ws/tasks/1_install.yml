@@ -1,0 +1,29 @@
+---
+
+- name: create virtual python env for archive-upload
+  shell: "conda create --name {{ arteria_service_name }} python=2.7"
+  args: 
+    creates: "{{ arteria_service_env_root }}"
+
+- name: get archive-upload from git
+  git:
+    repo: "{{ archive_upload_repo }}"
+    dest: "{{ arteria_service_src_path }}"
+    version: "{{ archive_upload_version }}"
+
+- name: install archive-upload requirements
+  pip:
+    requirements: "{{ arteria_service_src_path }}/requirements/prod"
+    chdir: "{{ arteria_service_src_path }}"
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    state: present
+    extra_args: "-U"
+
+- name: install archive-upload
+  pip:
+    name: .
+    chdir: "{{ arteria_service_src_path }}"
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    state: present
+    extra_args: "-U"
+

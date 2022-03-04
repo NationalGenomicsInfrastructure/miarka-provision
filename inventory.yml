@@ -1,0 +1,7 @@
+all:
+  hosts:
+    deploy:
+      ansible_host: 127.0.0.1
+    target:
+      ansible_host: miarka2.uppmax.uu.se
+      ansible_port: 22

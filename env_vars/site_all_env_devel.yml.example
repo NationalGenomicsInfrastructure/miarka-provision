@@ -1,0 +1,10 @@
+
+# Environment-dependent paths
+deployment_target: "{{ deployment_remote_path }}/{{ deployment_environment }}-{{ deploy_user }}"
+deployment_version: "{{ [branch_name, deploy_date, branch_hash] | join('.') }}"
+root_path: "{{ deployment_target }}/{{ deployment_version }}"
+proj_root: "{{ deployment_target }}/wildwest/"
+ngi_containers: "{{ proj_root }}/containers/"
+
+# Ports
+tarzan_port: 4443

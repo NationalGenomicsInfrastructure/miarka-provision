@@ -1,0 +1,46 @@
+---
+- name: Fetch MultiQC from GitHub
+  git:
+    repo: "{{ multiqc_repo }}"
+    dest: "{{ multiqc_dest }}"
+    version: "{{ multiqc_version }}"
+    force: yes
+
+#Remember to use --upgrade flag if using commit-id
+- name: Install MultiQC
+  pip:
+    name: file:{{ multiqc_dest }}
+    executable: "{{ ngi_pipeline_venv_py3 }}/bin/pip"
+
+- name: Fetch MultiQC NGI plugin from GitHub
+  git:
+    repo: "{{ multiqc_ngi_repo }}"
+    dest: "{{ multiqc_ngi_dest }}"
+    version: "{{ multiqc_ngi_version }}"
+    force: yes
+
+#Remember to use --upgrade flag if using commit-id
+#Using the python3 env
+- name: Install MultiQC NGI submodule
+  pip:
+    name: file:{{ multiqc_ngi_dest }}
+    executable: "{{ ngi_pipeline_venv_py3 }}/bin/pip"
+
+- name: Deploy multiqc configs
+  template:
+    src: multiqc_config.yml.j2
+    dest: "{{ ngi_pipeline_conf }}/multiqc_{{ site }}_config.yml"
+
+- name: Force multiqc to autorun config
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    line: alias multiqc="{{ ngi_pipeline_venv_py3 }}/bin/multiqc -c {{ ngi_pipeline_conf }}/multiqc_{{ site }}_config.yml"
+    backup: no
+
+- name: Store MultiQC tool version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ NGI_venv_py3_name }}, {{ item.tool_name }}: {{ item.tool_version }}"
+  with_items:
+    - { tool_name: "MultiQC", tool_version: "{{ multiqc_version }}" }
+    - { tool_name: "MultiQC_NGI", tool_version: "{{ multiqc_ngi_version }}" }

@@ -1,0 +1,10 @@
+---
+
+- block:
+  - include: 1_install.yml
+  - include: 2_install_config.yml
+  - name: Store {{ arteria_service_name }} tool version in deployment
+    lineinfile:
+      dest: "{{ deployed_tool_versions }}"
+      line: "{{ arteria_service_name }}: {{ arteria_checksum_version }}"
+  when: site in ["upps"]

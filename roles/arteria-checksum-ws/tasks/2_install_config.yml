@@ -1,0 +1,32 @@
+---
+
+- name: ensure {{ arteria_service_name }} conf dir exists
+  file:
+    state: directory
+    path: "{{ arteria_service_config_root }}"
+
+- name: deploy {{ arteria_service_name }} app config
+  template:
+    src: checksum_app.config.j2
+    dest: "{{ arteria_service_config_root }}/app.config"
+
+- name: deploy {{ arteria_service_name }} logger config
+  template:
+    src: checksum_logger.config.j2
+    dest: "{{ arteria_service_config_root }}/logger.config"
+
+- name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
+  ini_file: 
+    dest: "{{ supervisord_conf }}"
+    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
+    option: command
+    value: "{{ arteria_service_env_root }}/bin/checksum-ws --configroot={{ arteria_service_config_root }} --port={{ arteria_checksum_port }}"
+    backup: no
+ 
+- name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
+  ini_file: 
+    dest: "{{ supervisord_conf }}"
+    section: "program:{{ arteria_service_name }}-{{ deployment_environment }}"
+    option: autorestart
+    value: true
+    backup: no

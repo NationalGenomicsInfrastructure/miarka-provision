@@ -1,0 +1,34 @@
+---
+
+  # These tasks need to run before any other roles, to setup proper
+  # environment variables depending on we're deploying to production,
+  # staging, or development/test purposes.
+
+  - name: get repo branch
+    shell: echo $(git rev-parse --abbrev-ref HEAD)
+    register: repo_branch
+
+  - name: get repo hash
+    shell: echo $(git rev-parse --short HEAD)
+    register: repo_hash
+
+  - name: get git tags
+    shell: echo $(git describe --tags)
+    register: git_tag
+    ignore_errors: true
+
+  - name: get current date
+    shell: echo $(date +'%y%m%d')
+    register: current_date
+
+  - name: get current user
+    shell: echo $(whoami)
+    register: playbook_user
+
+  - name: set playbook and git facts
+    set_fact:
+      branch_name: "{{ repo_branch.stdout }}"
+      branch_hash: "{{ repo_hash.stdout }}"
+      branch_tag: "{{ git_tag.stdout }}"
+      deploy_date: "{{ current_date.stdout }}"
+      deploy_user: "{{ playbook_user.stdout }}"

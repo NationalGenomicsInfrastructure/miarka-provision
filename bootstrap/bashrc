@@ -1,0 +1,6 @@
+# Group ngi-sw MUST have rw or else all hell breaks loose! 
+umask 0002
+
+# Force the user to have ngi-sw as gid (inherits the parent environment)
+# This needs to be the last thing to run 
+newgrp ngi-sw 

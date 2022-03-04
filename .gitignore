@@ -1,0 +1,12 @@
+*.DS_store
+*.swp
+*.retry
+pontus.larsson_medsci.uu.se.key
+charon_credentials.yml
+orderportal_credentials.yml
+snic_credentials_sthlm.yml
+statusdb_creds_prod.yml
+statusdb_creds_stage.yml
+tarzan_cert.pem
+tarzan_key.pem
+megaqc_token.yml
