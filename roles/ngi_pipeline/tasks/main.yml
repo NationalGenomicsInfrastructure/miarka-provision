@@ -4,13 +4,13 @@
   shell: "conda env list"
   register: py_venv_exists
 
-- name: Setup virtual env and install dependencies
-  shell: "conda create -n {{ NGI_venv_name }} pip python=2.7"
+- name: Setup virtual env with python{{ python3_version }} and install dependencies
+  shell: "conda create -n {{ NGI_venv_name }} pip python={{ python3_version }}"
   when: not NGI_venv_name in py_venv_exists.stdout|split
 
-- name: Setup virtual env with python3 and install dependencies
-  shell: "conda create -n {{ NGI_venv_py3_name }} -c anaconda python=3.8"
-  when: not NGI_venv_py3_name in py_venv_exists.stdout|split
+- name: Setup virtual env with python{{ python2_version }} and install dependencies
+  shell: "conda create -n {{ NGI_venv_py2_name }} -c anaconda python={{ python2_version }}"
+  when: not NGI_venv_py2_name in py_venv_exists.stdout|split
 
 - name: Fetch ngi_pipeline from github
   git:
@@ -18,12 +18,6 @@
     dest: "{{ ngi_pipeline_dest }}"
     version: "{{ ngi_pipeline_version }}"
     force: yes
-
-- name: (Temporary until everything is updated) Install click7.0 as click7.1 breaks everything
-  pip:
-    name: click
-    version: "7.0"
-    executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
 - name: Install ngi_pipeline requirements
   pip:
@@ -55,10 +49,16 @@
     name: "{{ ngi_resources }}/piper"
     state: directory
 
+- name: stat {{ deployed_tool_versions }}
+  stat:
+    path: "{{ deployed_tool_versions }}"
+  register: stat_result
+
 - name: Create deployed tools version file
   copy:
     dest: "{{ deployed_tool_versions }}"
     content: "-- {{ deployment_environment }} ({{ deployment_version }}) --"
+  when: not stat_result.stat.exists
 
 - name: Deploy GATK license key
   copy:
@@ -102,12 +102,6 @@
   template:
     src: "{{ bash_env_site_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
-
-- name: Add py3 anaconda env path to sourceme script for {{ site }}
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ anaconda_path }}/envs/{{ NGI_venv_py3_name }}/bin:$PATH"
-    backup: no
 
 - name: Try getting anaconda version
   shell: "conda --version"

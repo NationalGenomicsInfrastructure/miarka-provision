@@ -27,8 +27,3 @@ export PS1="$MIARKA_PROMPT [\u@\h \w]$ "
 
 # Default SNIC_TMP as /scratch
 export SNIC_TMP="/scratch"
-
-export NXF_SINGULARITY_CACHEDIR="{{ ngi_containers }}/biocontainers/"
-
-# alias to get versions for tools installed in the current deployment
-alias deployed_env="cat {{ deployed_tool_versions }}"

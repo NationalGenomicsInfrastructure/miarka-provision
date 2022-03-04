@@ -14,6 +14,11 @@
     path: "{{ nextflow_dest }}/workfiles"
     state: directory
 
+- name: Create NextFlow installation plugins subdirectory
+  file:
+    path: "{{ nextflow_dest }}/workfiles/plugins"
+    state: directory
+
 - name: Download NextFlow
   get_url:
     url: "{{ nextflow_download_url }}"
@@ -27,14 +32,10 @@
   args:
     chdir: "{{ nextflow_dest }}"
 
-- name: Grab Nextflow version number
-  shell: "ls {{ nextflow_dest }}/workfiles/framework/ | tail -1"
-  register: nextflow_ver
-
 - name: Add NextFlow to $PATH
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ root_path }}/sw/nextflow:$PATH"
+    line: "export PATH={{ nextflow_dest }}:$PATH"
     backup: no
 
 - name: Create miarka config
@@ -62,4 +63,4 @@
 - name: Store nextflow version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "Nextflow: {{ nextflow_ver.stdout }}"
+    line: "Nextflow: {{ nextflow_version_tag }}"

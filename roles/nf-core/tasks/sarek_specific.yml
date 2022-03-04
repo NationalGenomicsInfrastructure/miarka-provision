@@ -1,17 +1,4 @@
 
-- name: pull vep, snpeff genome-specific singularity images
-  command: "singularity pull --name nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg {{ nf_core_container_repo }}/{{ container.0 }}:{{ release }}.{{ container.1 }}"
-  environment: "{{ nf_core_vars }}"
-  args:
-    chdir: "{{ ngi_containers }}/{{ pipeline }}"
-    creates: "{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg"
-  ignore_errors: true
-  with_nested:
-    - "{{ pipeline_specific_containers }}"
-    - "{{ pipeline_genomes }}"
-  loop_control:
-    loop_var: container
-
 - name: update alias for pipeline
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
