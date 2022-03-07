@@ -87,4 +87,3 @@
     src: miarka_ngi_config.yaml.j2
     dest: "{{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}"
 
-- include_tasks: configuration.yml

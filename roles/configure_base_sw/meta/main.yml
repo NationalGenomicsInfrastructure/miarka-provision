@@ -1,0 +1,3 @@
+dependencies:
+  - { role: nextflow, tags: nextflow }
+  - { role: anaconda, tags: anaconda }

@@ -1,3 +1,2 @@
 dependencies:
-  - { role: anaconda, tags: anaconda }
-  - { role: nextflow, tags: nextflow }
+  - { role: configure_base_sw, tags: configure_base_sw }
