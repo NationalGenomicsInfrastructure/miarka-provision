@@ -54,7 +54,6 @@
 - name: Make sure pip is up to date
   pip:
     name: pip
-    #virtualenv: "{{ seqreports_venv_name }}"
     executable: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/pip"
     state: latest
 
