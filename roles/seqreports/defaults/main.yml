@@ -33,7 +33,6 @@ seqreports_fastq_screen_resource_path: "{{ deployment_remote_path }}/resources/s
 
 artifact_zip: "artifacts.zip"
 seqreports_artifacts_path: "/tmp/seqreports-artifacts"
-#seqreports_artifacts_path: "/home/adrienc/tmp/seqreports-artifacts"
 job_id: "22"
 git_version: "3e78fa611d5d5f5ddee49ab5c34e83c4d10bb5a3"
 
