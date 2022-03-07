@@ -1,0 +1,39 @@
+
+- name: Create ngi_pipeline conf directory
+  file:
+    path: "{{ ngi_pipeline_conf }}"
+    state: directory
+
+- name: Deploy common bash environment variables
+  template:
+    src: "{{ bash_env_common_script }}.j2"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+
+- name: Add anaconda path to sourceme script
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ anaconda_path }}/bin:$PATH"
+    backup: no
+
+- name: Deploy bash environment variables for {{ site }}
+  template:
+    src: "{{ bash_env_site_script }}.j2"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+
+- name: Add py3 anaconda env path to sourceme script for {{ site }}
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ anaconda_path }}/envs/{{ NGI_venv_py3_name }}/bin:$PATH"
+    backup: no
+
+- name: Try getting anaconda version
+  shell: "conda --version"
+  register: conda_version
+  ignore_errors: true
+
+- name: Store anaconda version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "Anaconda: {{ conda_version.stderr }}"
+  when: conda_version.stderr #for some reason saved as stderr
+

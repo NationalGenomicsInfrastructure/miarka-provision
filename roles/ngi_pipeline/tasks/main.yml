@@ -29,10 +29,10 @@
     name: "file:{{ ngi_pipeline_dest }}"
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
-- name: Create ngi_pipeline conf directory
-  file:
-    path: "{{ ngi_pipeline_conf }}"
-    state: directory
+- name: Store ngi_pipeline version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "NGI Pipeline: {{ ngi_pipeline_version }}"
 
 - name: Install PyVCF for joint calling
   pip:
@@ -76,17 +76,6 @@
     src: create_ngi_pipeline_dirs.sh.j2
     dest: "{{ ngi_resources }}/create_ngi_pipeline_dirs.sh"
 
-- name: Deploy common bash environment variables
-  template:
-    src: "{{ bash_env_common_script }}.j2"
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-
-- name: Add anaconda path to sourceme script
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ anaconda_path }}/bin:$PATH"
-    backup: no
-
 - name: Create ngi_pipeline wildwest directory
   file:
     path: "{{ proj_root }}"
@@ -98,25 +87,5 @@
     src: miarka_ngi_config.yaml.j2
     dest: "{{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}"
 
-- name: Deploy bash environment variables for {{ site }}
-  template:
-    src: "{{ bash_env_site_script }}.j2"
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
-
-- name: Try getting anaconda version
-  shell: "conda --version"
-  register: conda_version
-  ignore_errors: true
-
-- name: Store anaconda version in deployment
-  lineinfile:
-    dest: "{{ deployed_tool_versions }}"
-    line: "Anaconda: {{ conda_version.stderr }}"
-  when: conda_version.stderr #for some reason saved as stderr
-
-- name: Store ngi_pipeline version in deployment
-  lineinfile:
-    dest: "{{ deployed_tool_versions }}"
-    line: "NGI Pipeline: {{ ngi_pipeline_version }}"
-
+- include_tasks: configuration.yml
 - include_tasks: configure_nextflow.yml
