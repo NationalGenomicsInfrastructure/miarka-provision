@@ -1,4 +1,9 @@
 
+- name: Create deployed tools version file
+  copy:
+    dest: "{{ deployed_tool_versions }}"
+    content: "-- {{ deployment_environment }} ({{ deployment_version }}) --"
+
 - name: Create ngi_pipeline conf directory
   file:
     path: "{{ ngi_pipeline_conf }}"
