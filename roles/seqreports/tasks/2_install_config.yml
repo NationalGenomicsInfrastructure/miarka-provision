@@ -19,7 +19,6 @@
   file:
     path: "{{ seqreports_log_dir }}"
     state: directory
-    mode: u=rwx,g=rwx
 
 - name: set log file path
   lineinfile:
