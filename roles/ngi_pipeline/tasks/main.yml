@@ -89,4 +89,3 @@
 
 
 - include_tasks: configuration.yml
-- include_tasks: configure_nextflow.yml
