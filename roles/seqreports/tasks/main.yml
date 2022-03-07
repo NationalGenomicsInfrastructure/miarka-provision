@@ -1,5 +1,5 @@
 ---
 
 - block:
-  - include: 1_install.yml
-  - include: 2_install_config.yml
+  - include_tasks: 1_install.yml
+  - include_tasks: 2_install_config.yml
