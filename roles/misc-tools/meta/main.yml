@@ -1,0 +1,3 @@
+dependencies:
+  - { role: configure_base_sw, tags: configure_base_sw }
+
