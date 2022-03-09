@@ -1,5 +1,11 @@
 ---
 
+- name: Add py3 anaconda env path to sourceme script for {{ site }}
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ anaconda_path }}/envs/{{ NGI_venv_py3_name }}/bin:$PATH"
+    backup: no
+
 - name: "Get list of conda environments"
   shell: "conda env list"
   register: py_venv_exists

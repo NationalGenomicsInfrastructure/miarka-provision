@@ -14,67 +14,8 @@
     src: "{{ bash_env_common_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
 
-- name: Add anaconda path to sourceme script
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ anaconda_path }}/bin:$PATH"
-    backup: no
-
 - name: Deploy bash environment variables for {{ site }}
   template:
     src: "{{ bash_env_site_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
 
-- name: Add py3 anaconda env path to sourceme script for {{ site }}
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ anaconda_path }}/envs/{{ NGI_venv_py3_name }}/bin:$PATH"
-    backup: no
-
-- name: Try getting anaconda version
-  shell: "conda --version"
-  register: conda_version
-  ignore_errors: true
-
-- name: Store anaconda version in deployment
-  lineinfile:
-    dest: "{{ deployed_tool_versions }}"
-    line: "Anaconda: {{ conda_version.stderr }}"
-  when: conda_version.stderr #for some reason saved as stderr
-
-- name: Grab Nextflow version number
-  shell: "ls {{ nextflow_dest }}/workfiles/framework/ | tail -1"
-  register: nextflow_ver
-
-- name: Add NextFlow to $PATH
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ root_path }}/sw/nextflow:$PATH"
-    backup: no
-
-- name: Create miarka config
-  template:
-    src: "nextflow_miarka_site.config.j2"
-    dest: "{{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config"
-
-# Change target to {{ ngi_rnaseq_dest }} when using module system
-# NXF_WORK is omitted, which puts them under current directory
-- name: Add Nextflow module vars to sourceme
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "{{ item }}"
-    backup: no
-  with_items:
-    - export NXF_OPTS={{ nextflow_env.NXF_OPTS }}
-    - export NXF_VER={{ nextflow_env.NXF_VER }}
-    - export NXF_HOME={{ nextflow_env.NXF_HOME }}
-    - export NXF_LAUNCHBASE={{ nextflow_env.NXF_LAUNCHBASE }}
-  # Defines where the classpath file ends up
-    - export NXF_LAUNCHER={{ nextflow_env.NXF_LAUNCHER }}
-  # Path to java to be used for nextflow
-    - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
-
-- name: Store nextflow version in deployment
-  lineinfile:
-    dest: "{{ deployed_tool_versions }}"
-    line: "Nextflow: {{ nextflow_ver.stdout }}"
