@@ -2,3 +2,4 @@
 
 dependencies:
   - { role: anaconda, tags: anaconda }
+  - { role: configure_base_sw, tags: configure_base_sw }
