@@ -19,3 +19,21 @@
 - name: Setup virtual env and install dependencies
   shell: "{{ anaconda_path }}/bin/conda create -n {{ conda_tools_env }} -c conda-forge git perl"
   when: not conda_tools_env in tools_venv_exists.stdout|split
+
+- name: Add anaconda path to sourceme script
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ anaconda_path }}/bin:$PATH"
+    backup: no
+
+- name: Try getting anaconda version
+  shell: "conda --version"
+  register: conda_version
+  ignore_errors: true
+
+- name: Store anaconda version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "Anaconda: {{ conda_version.stderr }}"
+  when: conda_version.stderr #for some reason saved as stderr
+
