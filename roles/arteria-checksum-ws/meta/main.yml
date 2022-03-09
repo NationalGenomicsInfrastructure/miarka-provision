@@ -2,4 +2,4 @@
 
 dependencies:
   - { role: anaconda, tags: anaconda }
-  - { role: configure_base_sw, tags: configure_base_sw }
+  - { role: setup_base_config, tags: setup_base_config }

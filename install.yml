@@ -68,7 +68,7 @@
     "{{ tools_path }}"
 
   roles:
-    - { role: configure_base_sw, tags: configure_base_sw }
+    - { role: setup_base_config, tags: setup_base_config }
     - { role: ngi_pipeline, tags: ngi_pipeline }
     - { role: func_accounts, tags: func_accounts }
     - { role: nextflow, tags: nextflow }

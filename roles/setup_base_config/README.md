@@ -1,4 +1,4 @@
-configure_base_sw
+setup_base_config
 =========
 
 Creates file for deployed_tool_versions, which is used by most other roles. Deploys sourceme_common.sh and sourceme_site.sh.
