@@ -36,7 +36,7 @@
     dest: "{{ tarzan_singularity_image_file_dest }}"
     checksum: "{{ tarzan_singularity_image_sha1 }}"
 
-# FIXME: Couldn't get this to work properly with supervisord because
+# Couldn't get this to work properly with supervisord because
 # it demands that the program under control doesn't daemonize.
 - name: modify crontab to start kong
   lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_{{ site }}"
