@@ -3,8 +3,8 @@ singularity.libraryDir = '{{ nf_core_vars.NXF_SINGULARITY_LIBRARYDIR }}'
 singularity.cacheDir = '{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}'
 
 params.seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"
-params.igenomes_base = '{{ genomes_basedir }}/igenomes'
-params.genomes_base = params.genome == 'GRCh37' ? '{{ genomes_basedir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37' : '{{ genomes_basedir }}/ToolBox/hg38bundle'
+params.igenomes_base = '{{ reference_data_dir }}/igenomes'
+params.genomes_base = params.genome == 'GRCh37' ? '{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37' : '{{ reference_data_dir }}/ToolBox/hg38bundle'
 
 {% if pipeline == 'methylseq' or pipeline == 'ampliseq' %}
 process {

@@ -39,8 +39,8 @@ sarek:
       - haplotypecaller
       - snpeff
     genomes_base_paths:
-        GRCh37: "{{ genomes_basedir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37/"
-        GRCh38: "{{ genomes_basedir }}/ToolBox/hg38bundle/"
+        GRCh37: "{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37/"
+        GRCh38: "{{ reference_data_dir }}/ToolBox/hg38bundle/"
     project: {{ uppmax_project }}
     custom_config_base: {{ sarek_dest }}/configs/
     igenomes_ignore: " "

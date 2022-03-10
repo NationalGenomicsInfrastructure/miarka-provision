@@ -3,11 +3,9 @@ nextflow_java: "{{ java_home }}"
 nextflow_version_tag: 21.04.3
 nextflow_download_url: https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow
 nextflow_env:
-  NXF_LAUNCHER: $HOME/.nextflow/work
-  NXF_LAUNCHBASE: $HOME/.nextflow/work
   NXF_HOME: "{{ nextflow_dest }}/workfiles"
-  NXF_TEMP: $HOME/.nextflow/work
-  NXF_WORK: $HOME/.nextflow/work
+  NXF_TEMP: "{{ ngi_pipeline_nobackup }}/nextflow/tmp"
+  NXF_WORK: "{{ ngi_pipeline_nobackup }}/nextflow/work"
   NXF_OPTS: -Xms1g -Xmx4g
   NXF_JAVA_HOME: "{{ nextflow_java }}"
   NXF_VER: "{{ nextflow_version_tag }}"

@@ -28,7 +28,7 @@ ngi_pipeline_path: "{{ proj_root }}/{{ uppmax_project }}/private"
 ngi_pipeline_nobackup: "{{ proj_root }}/{{ uppmax_project }}/nobackup"
 ngi_pipeline_workdir: "{{ ngi_pipeline_nobackup }}/NGI"
 ngi_log_path: "{{ ngi_pipeline_path }}/log"
-genomes_basedir: "{{ deployment_root }}/common/data/uppnex/"
+reference_data_dir: "{{ deployment_root }}/common/data/uppnex/"
 
 # some roles may need to keep logs and resources under the ordinary /proj location, even for staging deployments
 static_ngi_pipeline_path: "{{ static_proj_root }}/{{ uppmax_project }}/private"
