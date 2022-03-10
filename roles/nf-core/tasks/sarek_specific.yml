@@ -8,6 +8,11 @@
     backrefs: yes
     backup: no
 
+- name: add genomes_base parameter to {{ pipeline }}_{{ site }}.config
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config"
+    line: "params.genomes_base = params.genome == 'GRCh37' ? '{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37' : '{{ reference_data_dir }}/ToolBox/hg38bundle'"
+
 - name: Create recalibration script and add to TACA resources
   template:
     src: "apply_recalibration.sh.j2"
