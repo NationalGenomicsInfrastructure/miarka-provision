@@ -36,21 +36,22 @@
     dest: "{{ tarzan_singularity_image_file_dest }}"
     checksum: "{{ tarzan_singularity_image_sha1 }}"
 
-- name: modify uppsala's supervisord conf to add start kong command attribute
-  ini_file:
-    dest: "{{ supervisord_conf }}"
-    section: "program:tarzan-{{ deployment_environment }}"
-    option: command
-    value: "{{ tarzan_start_script }}"
-    backup: no
+# FIXME: Couldn't get this to work properly with supervisord because
+# it demands that the program under control doesn't daemonize.
+- name: modify crontab to start kong
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_{{ site }}"
+              line='# restart kong if it has died for some reason'
+              backup=no
 
-- name: modify uppsala's supervisord conf to add autorestart kong attribute
-  ini_file:
-    dest: "{{ supervisord_conf }}"
-    section: "program:tarzan-{{ deployment_environment }}"
-    option: autorestart
-    value: true
-    backup: no
+- name: modify crontab to start kong
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_{{ site }}"
+              line='@reboot source $HOME/.bash_profile && {{ tarzan_start_script }}'
+              backup=no
+
+- name: modify uppsala's crontab to start kong
+  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
+              line='38 * * * *      source $HOME/.bash_profile && {{ tarzan_start_script }}'
+              backup=no
 
 - name: Store tarzan tools version in deployment
   lineinfile:
