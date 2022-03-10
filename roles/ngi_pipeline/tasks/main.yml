@@ -1,11 +1,5 @@
 ---
 
-- name: Add py3 anaconda env path to sourceme script for {{ site }}
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    line: "export PATH={{ anaconda_path }}/envs/{{ NGI_venv_py3_name }}/bin:$PATH"
-    backup: no
-
 - name: "Get list of conda environments"
   shell: "conda env list"
   register: py_venv_exists
@@ -17,6 +11,12 @@
 - name: Setup virtual env with python3 and install dependencies
   shell: "conda create -n {{ NGI_venv_py3_name }} -c anaconda python=3.8"
   when: not NGI_venv_py3_name in py_venv_exists.stdout|split
+
+- name: Add py3 anaconda env path to sourceme script for {{ site }}
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ anaconda_path }}/envs/{{ NGI_venv_name }}/bin:$PATH"
+    backup: no
 
 - name: Fetch ngi_pipeline from github
   git:
