@@ -1,3 +1,2 @@
 dependencies:
-  - { role: statusdb, tags: statusdb }
   - { role: setup_base_config, tags: setup_base_config }
