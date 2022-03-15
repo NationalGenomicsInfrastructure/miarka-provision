@@ -19,11 +19,9 @@
   template:
     src: "{{ bash_env_common_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
-    force: no
 
 - name: Deploy bash environment variables for {{ site }}
   template:
     src: "{{ bash_env_site_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
-    force: no
 
