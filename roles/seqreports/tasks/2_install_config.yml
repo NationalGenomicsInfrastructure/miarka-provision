@@ -1,0 +1,51 @@
+---
+
+- name: ensure seqreports config dir exists
+  file:
+    state: directory
+    path: "{{ seqreports_config_root }}"
+
+- name: deploy seqreports app config
+  template:
+    src: "templates/app.config.j2"
+    dest: "{{ seqreports_config_root }}/app.config"
+
+- name: deploy seqreports logger config
+  template:
+    src: "templates/logger.config.j2"
+    dest: "{{ seqreports_config_root }}/logger.config"
+
+- name: ensure seqreports log dir exists
+  file:
+    path: "{{ seqreports_log_dir }}"
+    state: directory
+
+- name: set log file path
+  lineinfile:
+    path: "{{ seqreports_config_root }}/logger.config"
+    backrefs: yes
+    regexp: '(^\s+filename:).*'
+    line: '\1 {{ seqreports_log_path }}'
+    mode: "0644"
+
+- name: ensure seqreports db dir exists
+  file:
+    path: "{{ seqreports_db_dir }}"
+    state: directory
+    mode: u=rwx,g=rwx
+
+- name: modify Uppsala's supervisord conf to start sequencing-report-service
+  ini_file:
+    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    section: "program:sequencing-report-service-{{ deployment_environment }}"
+    option: command
+    value: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/sequencing-report-service --configroot={{ seqreports_config_root }}"
+    backup: no
+
+- name: modify Uppsala's supervisord conf to add autorestart sequencing-report-service attribute
+  ini_file:
+    dest: "{{ ngi_pipeline_conf }}/supervisord_upps.conf"
+    section: "program:sequencing-report-service-{{ deployment_environment }}"
+    option: autorestart
+    value: true
+    backup: no

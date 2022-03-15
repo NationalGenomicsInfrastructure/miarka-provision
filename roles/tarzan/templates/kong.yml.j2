@@ -26,6 +26,14 @@ services:
       - /arteria_archive
       strip_path: true
 
+  - name: seqreports
+    host: localhost
+    port: {{ seqreports_service_port }}
+    routes:
+    - paths:
+      - /seqreports
+      strip_path: true
+
 plugins:
   - name: key-auth
     config:
