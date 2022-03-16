@@ -6,7 +6,7 @@
 
 - name: fetch value for virtual env exists
   set_fact:
-    has_virtual_env: "{{ virtual_env != 'noenv' | bool }}"
+    has_virtual_env: "{{ virtual_env != 'noenv' }}"
 
 # If this playbook was triggered from sysman, we download the fastq_screen_reference genomes
 # to the orchestration/local machine and then transfer them to the
@@ -41,4 +41,3 @@
     dest: "{{ seqreports_data_fastq_screen_db_path }}"
     state: link
   when: miarka_deployment | bool
-
