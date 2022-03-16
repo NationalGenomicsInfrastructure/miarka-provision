@@ -6,7 +6,7 @@
 
 - name: fetch value for virtual env exists
   set_fact:
-    has_virtual_env: "{{ virtual_env != 'noenv' | bool }}"
+    has_virtual_env: "{{ virtual_env != 'noenv' }}"
 
 # If this playbook was triggered from sysman, we download the fastq_screen_reference genomes
 # to the orchestration/local machine and then transfer them to the
@@ -26,14 +26,14 @@
   args:
     creates: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
   delegate_to: localhost
-  when: has_virtual_env == true | bool
+  when: has_virtual_env
 
 - name: download fastq_screen genomes (please note this will be very slow), without virtual_env
   shell: "python roles/seqreports/files/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_resource_path }}"
   args:
     creates: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
   delegate_to: localhost
-  when: has_virtual_env == false | bool
+  when: not has_virtual_env
 
 - name: Create symlink to FastQ_Screen_Genomes (miarka only)
   file:
@@ -41,4 +41,3 @@
     dest: "{{ seqreports_data_fastq_screen_db_path }}"
     state: link
   when: miarka_deployment | bool
-
