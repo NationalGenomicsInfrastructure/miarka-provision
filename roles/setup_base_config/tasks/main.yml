@@ -1,14 +1,9 @@
 
-- name: stat {{ deployed_tool_versions }}
-  stat:
-    path: "{{ deployed_tool_versions }}"
-  register: stat_result
-
 - name: Create deployed tools version file
   copy:
     dest: "{{ deployed_tool_versions }}"
     content: "-- {{ deployment_environment }} ({{ deployment_version }}) --"
-  when: not stat_result.stat.exists
+    force: no
 
 - name: Create ngi_pipeline conf directory
   file:
@@ -19,9 +14,11 @@
   template:
     src: "{{ bash_env_common_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    force: no
 
 - name: Deploy bash environment variables for {{ site }}
   template:
     src: "{{ bash_env_site_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    force: no
 
