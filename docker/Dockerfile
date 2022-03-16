@@ -1,4 +1,4 @@
-FROM centos:8
+FROM rockylinux:8.5
 
 RUN \
   curl -L https://cpanmin.us -o /usr/bin/cpanm && \
