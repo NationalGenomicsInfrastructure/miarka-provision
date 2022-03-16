@@ -1,3 +1,7 @@
+
+cleanup = true
+env.NXF_TEMP = "{{ nextflow_env.NXF_TEMP | regex_replace('^\$?', '$$') }}"
+
 params {
     project = "{{ uppmax_project }}"
     multiqc_config = "{{ ngi_pipeline_conf }}/multiqc_{{ site }}_config.yml"

@@ -9,6 +9,7 @@ archive_upload_monitored_path: "{{ static_ngi_pipeline_nobackup }}/arteria/tmp"
 project_path: "{{ static_runfolder_path }}/projects"
 staging_path: "{{ static_runfolder_path }}/staged"
 db_path: "{{ static_ngi_pipeline_path }}/db/arteria/{{ deployment_environment }}"
+delivery_links: "{{ static_ngi_pipeline_nobackup }}/arteria/{{ deployment_environment }}/delivery_project_links"
 
 # taca
 snic_api_url: https://disposer.c3se.chalmers.se/supr-test/api
