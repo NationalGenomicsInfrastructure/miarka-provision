@@ -2,7 +2,7 @@
 
 - name: fetch value for virtual env environment variable
   set_fact:
-    virtual_env: "{{ lookup('env', 'VIRTUAL_ENV') | default('noenv', True) }}"
+    virtual_env: "{{ lookup('env', 'VIRTUAL_ENV') | default('noenv', true) }}"
 
 - name: fetch value for virtual env exists
   set_fact:
@@ -26,14 +26,14 @@
   args:
     creates: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
   delegate_to: localhost
-  when: has_virtual_env == true | bool
+  when: has_virtual_env
 
 - name: download fastq_screen genomes (please note this will be very slow), without virtual_env
   shell: "python roles/seqreports/files/get_fastq_screen_reference_genomes.py {{ seqreports_fastq_screen_resource_path }}"
   args:
     creates: "{{ seqreports_fastq_screen_resource_path }}/FastQ_Screen_Genomes"
   delegate_to: localhost
-  when: has_virtual_env == false | bool
+  when: not has_virtual_env
 
 - name: Create symlink to FastQ_Screen_Genomes (miarka only)
   file:
