@@ -49,17 +49,6 @@
     name: "{{ ngi_resources }}/piper"
     state: directory
 
-- name: stat {{ deployed_tool_versions }}
-  stat:
-    path: "{{ deployed_tool_versions }}"
-  register: stat_result
-
-- name: Create deployed tools version file
-  copy:
-    dest: "{{ deployed_tool_versions }}"
-    content: "-- {{ deployment_environment }} ({{ deployment_version }}) --"
-  when: not stat_result.stat.exists
-
 - name: Deploy GATK license key
   copy:
     src: files/{{ gatk_key }}
@@ -86,8 +75,3 @@
   template:
     src: miarka_ngi_config.yaml.j2
     dest: "{{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}"
-
-- name: Store ngi_pipeline version in deployment
-  lineinfile:
-    dest: "{{ deployed_tool_versions }}"
-    line: "NGI Pipeline: {{ ngi_pipeline_version }}"
