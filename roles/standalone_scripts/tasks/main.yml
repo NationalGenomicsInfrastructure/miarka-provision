@@ -15,3 +15,15 @@
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: export PATH="$PATH:{{ standalone_scripts_dest }}"
     backup: no
+
+# get the commit hash so that we can properly document the version
+- name: get repo hash
+  shell: echo $(git rev-parse HEAD)
+  args:
+    chdir: "{{ standalone_scripts_dest }}"
+  register: standalone_scripts_hash
+
+- name: Store standalone_scripts version and hash in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ standalone_scripts_dest | basename }}: {{ standalone_scripts_version }}, {{ standalone_scripts_hash.stdout }}"

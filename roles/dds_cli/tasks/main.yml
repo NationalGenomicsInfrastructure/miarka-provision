@@ -1,0 +1,12 @@
+---
+
+- name: install dds-cli
+  pip:
+    name: dds-cli=={{ dds_cli_version }}
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+    state: present
+
+- name: Store DDS CLI version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "dds-cli: {{ dds_cli_version }}"

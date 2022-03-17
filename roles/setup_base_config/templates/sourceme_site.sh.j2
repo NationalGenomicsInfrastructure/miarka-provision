@@ -8,9 +8,14 @@ export NGI_CONFIG={{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}
 export CHARON_API_TOKEN={{ charon_api_token }}
 export DSM_CONFIG={{ tsm_config_file }}
 
+
+# alias to get versions for tools installed in the current deployment
+alias deployed_env="cat {{ deployed_tool_versions }}"
+
 {% if site == "upps" %}
 export PATH={{ sw_path }}:$PATH
 {% endif %}
+
 # Common settings shared for both sites
 source {{ ngi_pipeline_conf }}/{{ bash_env_common_script }}
 

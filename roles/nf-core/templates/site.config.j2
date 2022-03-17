@@ -1,6 +1,9 @@
-process {
 
-  container = '{{ ngi_containers }}/{{ pipeline }}/nf-core-{{ pipeline }}-{{ release }}.simg'
+singularity.libraryDir = '{{ nf_core_vars.NXF_SINGULARITY_LIBRARYDIR }}'
+params.seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"
+
+{% if pipeline == 'methylseq' or pipeline == 'ampliseq' %}
+process {
 
   {% if pipeline == 'methylseq' %}
 
@@ -13,35 +16,24 @@ process {
         time = { 2.d * task.attempt }
   }
 
-  {% endif %}
+}
 
-  {% if pipeline == 'ampliseq' %}
+  {% elif pipeline == 'ampliseq' %}
 
-  withName:classifier {
+  withName:QIIME2_CLASSIFY {
         cpus = 20
         memory = 120.GB
         time = 36.h
   }
 
-  {% endif %}
 }
 
-{% if pipeline == 'sarek' %}
+params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
 
-singularity.cacheDir = '{{ ngi_containers }}/{{ pipeline }}'
+  {% endif %}
 
-{% endif %}
-
-{% if pipeline == 'rnaseq' %}
+{% elif pipeline == 'rnaseq' %}
 
 params.reverseStranded = true
 
 {% endif %}
-
-{% if pipeline=='ampliseq' %}
-
-params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
-
-{% endif %}
-
-params.seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"

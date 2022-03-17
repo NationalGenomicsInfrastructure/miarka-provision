@@ -1,6 +1,6 @@
 #!/bin/bash
 
-singularity instance stop -F {{ tarzan_singularity_container_name }} 2>/dev/null
+singularity instance stop -F {{ tarzan_singularity_container_name }} 2>/dev/null || echo "No singularity instance '{{ tarzan_singularity_container_name }}' running... ignoring"
 
 singularity instance start \
 --bind "{{ tarzan_server_conf_file }}:{{ tarzan_singularity_container_server_conf_file }}" \
