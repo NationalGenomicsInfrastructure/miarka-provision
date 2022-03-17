@@ -40,3 +40,26 @@ params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}
 params.reverseStranded = true
 
 {% endif %}
+
+
+{% if pipeline=='ampliseq' %}
+
+params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
+
+{% endif %}
+
+{$ if pipeline=='sarek' %}
+
+params {
+    igenomes_ignore = true
+}
+
+{% endif %}
+
+## Common parameters to override nf-core uppmax profile parameters
+params {
+    seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"
+    max_memory = 357.GB
+    max_cpus = 48
+    max_time = 480.h
+}

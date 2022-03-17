@@ -1,4 +1,3 @@
-
 - name: create directories for {{ pipeline }} singularity images
   file:
     path: "{{ container_dir }}"
@@ -49,10 +48,11 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/ \
-          -profile uppmax \
-          -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
-          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
+      alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/ \
+      --custom_config_base {{ sw_path }}/{{ pipeline }}/configs/ \
+      -profile uppmax \
+      -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
+      -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
     backup: no
 
 - name: download sarek additional images
@@ -61,25 +61,24 @@
 
 - name: download ampliseq requirements
   block:
+    - name: create directory for {{ pipeline }}  resources
+      file:
+        path: "{{ ngi_containers }}/{{ pipeline }}"
+        state: directory
 
-  - name: create directory for {{ pipeline }}  resources
-    file:
-      path: "{{ ngi_containers }}/{{ pipeline }}"
-      state: directory
+    - name: check if SILVA zip exists
+      stat:
+        get_attributes: no
+        get_checksum: no
+        get_mime: no
+        path: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
+      register: silva_stat
 
-  - name: check if SILVA zip exists
-    stat:
-      get_attributes: no
-      get_checksum: no
-      get_mime: no
-      path: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
-    register: silva_stat
-
-  - name: download SILVA classifier data
-    get_url:
-      url: "{{ silva_base_url }}/{{ silva_zip }}"
-      dest: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
-    when: not silva_stat.stat.exists
+    - name: download SILVA classifier data
+      get_url:
+        url: "{{ silva_base_url }}/{{ silva_zip }}"
+        dest: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
+      when: not silva_stat.stat.exists
   when: pipeline == "ampliseq"
 
 - name: Remove singularity cache directories
