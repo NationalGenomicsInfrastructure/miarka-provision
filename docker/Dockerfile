@@ -1,11 +1,11 @@
-FROM centos:8
+FROM rockylinux:8.5
 
 RUN \
   curl -L https://cpanmin.us -o /usr/bin/cpanm && \
   chmod +x /usr/bin/cpanm && \
   yum install -y epel-release && \
   yum update -y && \
-  yum -y install python38-devel python38-pip git tar gzip bzip2 rsync singularity-runtime
+  yum -y install python38-devel python38-pip git tar gzip unzip bzip2 rsync singularity-runtime wget findutils
 
 RUN \
   python3 -m pip install ansible pexpect
