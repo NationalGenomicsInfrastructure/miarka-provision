@@ -1,18 +1,4 @@
 
-- name: update alias for pipeline
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
-    regexp: ^(alias {{ pipeline }}=.*)(')$
-    line: '\1 --project {{ uppmax_project }} --custom_config_base {{ sw_path }}/{{ pipeline }}/configs/ --igenomes_ignore\2'
-    state: present
-    backrefs: yes
-    backup: no
-
-- name: add genomes_base parameter to {{ pipeline }}_{{ site }}.config
-  lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config"
-    line: "params.genomes_base = params.genome == 'GRCh37' ? '{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37' : '{{ reference_data_dir }}/ToolBox/hg38bundle'"
-
 - name: Create recalibration script and add to TACA resources
   template:
     src: "apply_recalibration.sh.j2"
@@ -28,4 +14,3 @@
     src: "DELIVERY.README.SAREK.WES.md.j2"
     dest: "{{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.WES.md"
   when: site == "upps"
-
