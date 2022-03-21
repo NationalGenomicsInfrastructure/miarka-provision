@@ -32,7 +32,7 @@ params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}
 
   {% endif %}
 
-{$ elif pipeline == 'sarek' %}
+{% elif pipeline == 'sarek' %}
 params.igenomes_ignore = true
 params.genomes_base = params.genome == 'GRCh37' ? '{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37' : '{{ reference_data_dir }}/ToolBox/hg38bundle'
 {% endif %}
