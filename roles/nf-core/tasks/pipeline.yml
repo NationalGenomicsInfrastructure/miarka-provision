@@ -28,11 +28,11 @@
     creates: "{{ sw_path }}/{{ pipeline }}"
 
 - name: pull pipeline-specific images for {{ pipeline }} v{{ release }}
-  command: "singularity pull --name nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg {{ nf_core_container_repo }}/{{ container.0 }}:{{ release }}.{{ container.1 }}"
+  command: "singularity pull --name nfcore-{{ container.0 }}-{{ release }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 }}:{{ release }}.{{ container.1 }}"
   environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ container_dir }}"
-    creates: "{{ container_dir }}/nf-core-{{ container.0 }}-{{ release }}.{{ container.1 }}.simg"
+    creates: "{{ container_dir }}/nfcore-{{ container.0 }}-{{ release }}.{{ container.1 }}.img"
   ignore_errors: true
   with_nested:
     - "{{ pipeline_specific_containers }}"
@@ -50,9 +50,10 @@
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
           alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/ \
-          -profile uppmax \
+          --custom_config_base {{ sw_path }}/{{ pipeline }}/configs/ \
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
-          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
+          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config \
+          --igenomes_base {{ reference_data_dir }}/igenomes'
     backup: no
 
 - name: download sarek additional images

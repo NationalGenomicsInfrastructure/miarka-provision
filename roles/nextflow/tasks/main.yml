@@ -28,7 +28,7 @@
 # Resolved any problems. Run-time files are pushed to scratch
 - name: Install NextFlow
   shell: "./nextflow"
-  environment: "{{ nextflow_env }}"
+  environment: "{{ nextflow_local_env }}"
   args:
     chdir: "{{ nextflow_dest }}"
 
@@ -53,9 +53,9 @@
   with_items:
     - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
     - export NXF_VER={{ nextflow_env.NXF_VER }}
-    - export NXF_HOME="{{ nextflow_env.NXF_HOME }}"
     - export NXF_TEMP="{{ nextflow_env.NXF_TEMP }}"
     - export NXF_WORK="{{ nextflow_env.NXF_WORK }}"
+    - export NXF_LAUNCHER="{{ nextflow_env.NXF_LAUNCHER }}"
   # Path to java to be used for nextflow
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
 

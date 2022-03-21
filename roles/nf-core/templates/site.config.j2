@@ -2,9 +2,6 @@
 singularity.libraryDir = '{{ nf_core_vars.NXF_SINGULARITY_LIBRARYDIR }}'
 singularity.cacheDir = '{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}'
 
-params.seq_center = "SciLifeLab National Genomics Infrastructure {{ site_full | capitalize }}"
-params.igenomes_base = '{{ reference_data_dir }}/igenomes'
-
 {% if pipeline == 'methylseq' or pipeline == 'ampliseq' %}
 process {
 
@@ -35,8 +32,7 @@ params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}
 
   {% endif %}
 
-{% elif pipeline == 'rnaseq' %}
-
-params.reverseStranded = true
-
+{% elif pipeline == 'sarek' %}
+params.igenomes_ignore = true
+params.genomes_base = params.genome == 'GRCh37' ? '{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37' : '{{ reference_data_dir }}/ToolBox/hg38bundle'
 {% endif %}

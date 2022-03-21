@@ -2,10 +2,17 @@ java_home: /sw/comp/java/x86_64/sun_jdk1.8.0_151
 nextflow_java: "{{ java_home }}"
 nextflow_version_tag: 21.04.3
 nextflow_download_url: https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow
-nextflow_env:
+nextflow_local_env:
   NXF_HOME: "{{ nextflow_dest }}/workfiles"
-  NXF_TEMP: $SNIC_TMP
+  NXF_OPTS: -Xms1g -Xmx4g
+  NXF_JAVA_HOME: "{{ nextflow_java }}"
+  NXF_VER: "{{ nextflow_version_tag }}"
+  PATH: "{{ tools_path.PATH }}"
+nextflow_env:
+  NXF_HOME: "{{ ngi_pipeline_nobackup }}/nextflow"
+  NXF_TEMP: "{{ ngi_pipeline_nobackup }}/nextflow/temp"
   NXF_WORK: "{{ ngi_pipeline_nobackup }}/nextflow/work"
+  NXF_LAUNCHER: "{{ nextflow_dest }}/workfiles"
   NXF_OPTS: -Xms1g -Xmx4g
   NXF_JAVA_HOME: "{{ nextflow_java }}"
   NXF_VER: "{{ nextflow_version_tag }}"
