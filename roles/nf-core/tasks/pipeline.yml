@@ -23,6 +23,7 @@
     --container singularity
     --singularity-cache-only"
   environment: "{{ nf_core_vars }}"
+  ignore_errors: true
   args:
     chdir: "{{ sw_path }}"
     creates: "{{ sw_path }}/{{ pipeline }}"
