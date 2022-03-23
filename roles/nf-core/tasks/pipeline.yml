@@ -50,8 +50,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/ \
-          --custom_config_base {{ sw_path }}/{{ pipeline }}/configs/ \
+          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
     backup: no
