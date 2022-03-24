@@ -2,10 +2,10 @@
 singularity.libraryDir = '{{ nf_core_vars.NXF_SINGULARITY_LIBRARYDIR }}'
 singularity.cacheDir = '{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}'
 
-{% if pipeline == 'methylseq' or pipeline == 'ampliseq' %}
+{% if pipeline == 'methylseq' %}
+
 process {
 
-  {% if pipeline == 'methylseq' %}
 
   memory = { 15.GB * task.attempt }
   time = { 6.h * task.attempt }
@@ -18,7 +18,11 @@ process {
 
 }
 
-  {% elif pipeline == 'ampliseq' %}
+{% elif pipeline == 'ampliseq' %}
+
+params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
+
+process {
 
   withName:QIIME2_CLASSIFY {
         cpus = 20
@@ -28,8 +32,16 @@ process {
 
 }
 
-params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
 
-  {% endif %}
+{% elif pipeline == 'sarek' %}
+
+process {
+
+  withName:MapReads {
+    cpus = { params.max_cpus }
+    memory = { params.max_memory }
+  }
+
+}
 
 {% endif %}

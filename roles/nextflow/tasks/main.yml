@@ -47,13 +47,11 @@
 # NXF_WORK is omitted, which puts them under current directory
 - name: Add Nextflow module vars to sourceme
   lineinfile:
-    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
     line: "{{ item }}"
     backup: no
   with_items:
     - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
-    - export NXF_TEMP="{{ nextflow_env.NXF_TEMP }}"
-    - export NXF_WORK="{{ nextflow_env.NXF_WORK }}"
   # Path to java to be used for nextflow
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
 
