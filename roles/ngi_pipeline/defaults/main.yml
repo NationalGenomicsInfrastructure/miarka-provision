@@ -1,7 +1,7 @@
 ---
 ngi_pipeline_repo: https://github.com/NationalGenomicsInfrastructure/ngi_pipeline.git
 ngi_pipeline_dest: "{{ sw_path }}/ngi_pipeline"
-ngi_pipeline_version: a26ca88f0e487b3b8caf914ed95b90f3c65cca82
+ngi_pipeline_version: c45b61a4ffc246745a558774f4ca74167eec8767
 
 ngi_pipeline_log: "{{ ngi_log_path }}/ngi_pipeline.log"
 ngi_pipeline_db: "{{ ngi_pipeline_path }}/db/records_db.sql"
@@ -10,8 +10,8 @@ rna_seq_conf: "{{ ngi_pipeline_conf }}/rnaseq_{{ site }}.config"
 bash_env_site_script: sourceme_site.sh
 
 piper_module_version: 1.5.1
-gatk_bundle_b37: "/sw/data/uppnex/piper_references/2016-04-07/gatk_bundle/2.8/b37/"
-igenomes_path: /sw/data/uppnex/igenomes
+gatk_bundle_b37: "{{ reference_data_dir }}/piper_references/2016-04-07/gatk_bundle/2.8/b37/"
+igenomes_path: "{{ reference_data_dir }}/igenomes"
 
 gatk_key: pontus.larsson_medsci.uu.se.key
 charon_base_url: https://charon-dev.scilifelab.se
