@@ -3,7 +3,7 @@
     url: "{{ anaconda_url }}"
     dest: "{{ anaconda_src }}"
     checksum: sha256:{{ anaconda_checksum }}
-    mode: "0755"
+    mode: 0755
 
 - name: Install anaconda
   shell: "{{ anaconda_src }} -b -p {{ anaconda_path }}"
