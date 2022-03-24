@@ -51,6 +51,7 @@
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
           alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/
+          -profile uppmax \
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
     backup: no
