@@ -23,5 +23,4 @@ arteria_service_name: arteria-delivery-ws
 # staging sync.
 
 alembic_path: "{{ arteria_service_src_path }}/alembic/"
-delivery_links: "{{ static_ngi_pipeline_nobackup }}/arteria/delivery_project_links"
 mover_path: /usr/local/bin/
