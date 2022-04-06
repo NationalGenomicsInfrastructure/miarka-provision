@@ -1,33 +1,5 @@
 ---
 
-- name: create conda environment for seqreports
-  shell: "{{ anaconda_path }}/bin/conda create -n {{ seqreports_venv_name }} -c anaconda python=3.8"
-  args:
-    creates: "{{ anaconda_path }}/envs/{{ seqreports_venv_name }}/bin/python3"
-
-- name: Set host fact boolean for miarka deployment
-  set_fact:
-    miarka_deployment: "{{ miarka_deployment | default(true) }}"
-
-- name: ensure seqreports data path exists
-  file:
-    path: "{{ seqreports_data_path }}"
-    state: directory
-
-- name: ensure nextflow directories exist
-  file:
-    path: "{{ item }}"
-    state: directory
-  loop:
-    - "{{ seqreports_nxf_temp }}"
-    - "{{ seqreports_nxf_work }}"
-    - "{{ seqreports_nxf_logs }}"
-
-- import_tasks: pre_reqs.yml
-
-- import_tasks: seqreports_dev.yml
-  when: not miarka_deployment | bool
-
-- name: Update and deploy checkQC config
-  import_tasks: deploy_config.yml
-
+- block:
+  - include_tasks: 1_install.yml
+  - include_tasks: 2_install_config.yml

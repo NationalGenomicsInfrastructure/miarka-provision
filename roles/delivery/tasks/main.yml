@@ -21,7 +21,7 @@
     src: "{{ delivery_dest }}/deliver.py"
     dest: "{{ delivery_env_path }}/bin/"
 
-- name: ensure conf dir exists 
+- name: ensure conf dir exists
   file:
     path: "{{ ngi_pipeline_conf }}"
     state: directory

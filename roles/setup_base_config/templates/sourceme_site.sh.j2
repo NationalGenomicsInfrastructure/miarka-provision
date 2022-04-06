@@ -1,9 +1,9 @@
-# This file should be sourced from the user's local bash init files 
+# This file should be sourced from the user's local bash init files
 {% if site == "sthlm" %}
 # module load mover/1.0.0
 {% endif %}
 
-# Unique settings per site 
+# Unique settings per site
 export NGI_CONFIG={{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}
 export CHARON_API_TOKEN={{ charon_api_token }}
 export DSM_CONFIG={{ tsm_config_file }}

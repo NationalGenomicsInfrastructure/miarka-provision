@@ -51,4 +51,10 @@ cd ansible-env/bin
 curl -L https://cpanmin.us -o cpanm
 chmod +x ./cpanm
 
+echo "Installing click, for local python script"
+pip install click
+
+echo "Installing requests, for local python script"
+pip install requests
+
 cd "$ORIGIN"
