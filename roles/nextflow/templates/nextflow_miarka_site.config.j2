@@ -10,6 +10,12 @@ params {
 
 }
 
+tower {
+    workspaceId = '{{ tower_workspace_id }}'
+    endpoint = 'https://ngi-tower.scilifelab.se/api'
+    enabled = true
+}
+
 {% if site == "sthlm" %}
 process {
     withName: 'multiqc|MultiQC|MULTIQC' {
