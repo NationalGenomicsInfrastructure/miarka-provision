@@ -50,7 +50,7 @@
 
 - name: modify uppsala's crontab to start kong
   lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
-              line='38 * * * *      source $HOME/.bash_profile && {{ tarzan_start_script }}'
+              line='38 * * * *      source $HOME/.bash_profile && {{ tarzan_start_script }} &> /dev/null'
               backup=no
 
 - name: Store tarzan tools version in deployment
