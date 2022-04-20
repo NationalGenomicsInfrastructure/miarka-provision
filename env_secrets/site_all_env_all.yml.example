@@ -13,6 +13,9 @@ snic_api_password: secret
 # ngi_pipeline
 charon_api_token: secret
 
+# Nextflow Tower (should be site-specific)
+tower_workspace_id: secret
+
 # multiqc
 megaqc_access_token: secret
 
