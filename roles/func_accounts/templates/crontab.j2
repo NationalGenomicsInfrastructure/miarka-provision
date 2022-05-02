@@ -13,3 +13,10 @@ SHELL=/bin/bash
 
 # meta crontab: load itself all the time so we do not have to manually load the rules when updated 
 10 * * * * /usr/bin/crontab {{ ngi_pipeline_conf }}/crontab_{{ site }}
+
+{% if site == "sthlm" %}
+
+# transfer latest tools versions to NGI website
+5 0 * * * rsync -e "ssh" {{ ngi_resources }}deployed_tools.*.version ngi-external:/var/www/html/ngisweden-dev.scilifelab.se/wp-content/themes/ngisweden/cache/
+
+{% endif %}
