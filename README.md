@@ -34,7 +34,11 @@ ansible-playbook -i inventory.yml install.yml -e deployment_environment=[staging
 ssh miarka2.uppmax.uu.se exit
 ansible-playbook -i inventory.yml sync.yml -e deployment_environment=[staging / production]
 
-# reload services and crontab on the miarka nodes
+# create site-specific directories on the "real" vulpes file system
+# run on the appropriate login node using the funk account
+/vulpes/ngi/[staging / production]/latest/resources/create_static_contents_[upps / sthlm].sh
+
+# restart services as needed
 ```
 
 ## Repo layout
@@ -233,6 +237,7 @@ megaqc_access_token
 snic_api_password
 snic_api_user
 tarzan_api_key
+tower_workspace_id
 ```
 
 In addition, valid SSL certificates for the web proxy need to be available on the main `vulpes` file system (i.e. 
@@ -251,6 +256,7 @@ snic_api_password
 snic_api_user
 statusdb_password
 statusdb_username
+tower_workspace_id
 ```
 
 ### Development deployment
@@ -372,32 +378,21 @@ where `deployment_version` is the git production release tag.
 
 You should now skip down to the procedures for reloading services.
 
-### Reload services
+### Create project directories, symlinks and reload services
 
-After the deployment has been synced, each facility need to update the crontab and reload any running services in order
-to run these from the new deployment.
+After the deployment has been synced, each facility need to update the crontab and update project-specific symlinks and 
+paths. Also, any running services need to be restarted in order to run these from the new deployment.
 
 On the node where the crontab and services are running (e.g. `miarka1` for production instances and `miarka2` for 
 staging instances) and as the user currently having the crontab installed, run:
 ```
-    crontab /vulpes/ngi/<deployment_environment>/latest/conf/crontab_<site>
+    /vulpes/ngi/<deployment_environment>/latest/resources/create_static_contents_<site>.sh
 ```
-
 Then, as the user running the services needing a reboot, shut down the running instances of the services and re-start 
 the new versions of the services.
 
-### First deployment
-
-The first time a deployment is made to the cluster, or when modifications to the project directory structure have been 
-made, each site needs to run:
-
-```
-    /vulpes/ngi/<deployment_environment>/latest/resources/create_ngi_pipeline_dirs.sh <project_name>
-    crontab /vulpes/ngi/<deployment_environment>/latest/conf/crontab_<site>
-```
-
-This should be run once per project (i.e. ngi2016003) to create the log, db and softlink directories for NGI pipeline 
-(and generate the softlinks) and initialize the crontab.
+This should be run once per project (i.e. ngi2016001 and ngi2016003) by a member of each project (probably as the funk 
+user).
 
 ## Miarka user
 

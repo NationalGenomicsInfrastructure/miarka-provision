@@ -111,6 +111,13 @@
         line: "-- Deployed at {{ ansible_date_time.iso8601 }}, miarka_provision ({{ (branch_name, branch_tag, branch_hash) | join('.') }}), by {{ deploy_user }} --"
       tags: always
 
+    - name: create script for creating static folders
+      template:
+        src: create_static_contents.sh.j2
+        dest: "{{ ngi_resources }}/create_static_contents_{{ site }}.sh"
+        mode: +x
+      tags: always
+
     - name: set correct file permission for everything in the deployment
       file:
         path: "{{ root_path }}"
@@ -127,12 +134,6 @@
         state: directory
         recurse: yes
         mode: g+rwX,o=rX
-      tags: always
-
-    - name: create script for creating static folders
-      template:
-        src: create_static_contents.sh.j2
-        dest: "{{ ngi_resources }}/create_static_contents_{{ site }}.sh"
       tags: always
 
   post_tasks:
