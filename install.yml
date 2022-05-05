@@ -132,7 +132,7 @@
     - name: create script for creating static folders
       template:
         src: create_static_contents.sh.j2
-        dest: "{{ ngi_pipeline_conf }}/create_static_contents_{{ site }}.sh"
+        dest: "{{ ngi_resources }}/create_static_contents_{{ site }}.sh"
       tags: always
 
   post_tasks:
