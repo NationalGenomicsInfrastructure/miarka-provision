@@ -3,6 +3,11 @@
 - block:
   - include: 1_install.yml
   - include: 2_install_config.yml
+
+  - name: add static folders to be created
+    set_fact:
+      static_folders: "{{ static_folders + [arteria_service_log_dir, archive_upload_monitored_path, archive_upload_path_to_archive_root] }}"
+
   - name: Store {{ arteria_service_name }} tool version in deployment
     lineinfile:
       dest: "{{ deployed_tool_versions }}"

@@ -71,11 +71,6 @@
     src: fastq_screen.miarka.conf.j2
     dest: "{{ ngi_pipeline_conf }}/fastq_screen.miarka.conf"
 
-- name: Deploy script for creating site specific ngi_pipeline dirs for logs and db
-  template:
-    src: create_ngi_pipeline_dirs.sh.j2
-    dest: "{{ ngi_resources }}/create_ngi_pipeline_dirs.sh"
-
 - name: Deploy common bash environment variables
   template:
     src: "{{ bash_env_common_script }}.j2"
@@ -102,6 +97,24 @@
   template:
     src: "{{ bash_env_site_script }}.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+
+- name: Deploy script for creating site specific ngi_pipeline deliverables
+  template:
+    src: create_ngi_pipeline_deliverables.sh.j2
+    dest: "{{ ngi_resources }}/create_ngi_pipeline_deliverables_{{ site }}.sh"
+
+- name: add static folders to be created
+  set_fact:
+    static_folders: "{{ static_folders + [ngi_log_path, ngi_pipeline_db_path, ngi_softlinks] }}"
+
+- name: add {{ site }}-specific folders to be created
+  set_fact:
+    static_folders: "{{ static_folders + [[proj_root, uppmax_project, 'genotype_data', 'incoming'] | join('/'), [proj_root, uppmax_project, 'genotype_data', 'archive'] | join('/')] }}"
+  when: site == 'sthlm'
+
+- name: add static commands to be run
+  set_fact:
+    static_commands: "{{ static_commands + ['. ' ~ ngi_resources ~ '/create_ngi_pipeline_deliverables_' ~ site ~ '.sh'] }}"
 
 - name: Try getting anaconda version
   shell: "conda --version"

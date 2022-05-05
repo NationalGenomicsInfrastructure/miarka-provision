@@ -1,19 +1,17 @@
 #!/bin/bash
 
-# Minimalistic script that initiates project/site specific
-# directories for delivery readmes under respective
-# site's project dirs. Currently only used by sthlm
+# Minimalistic script that initiates {{ site }}-specific
+# directories for ngi_pipeline logs and dbs under the project dir
 
-# To be run as func account:
+# To be run as respective func account:
 #
+# funk_004 -> ngi2016001
 # funk_006 -> ngi2016003
 
-if [ $# -ne 1 ]; then
-        echo "$0: usage: create_delivery_readme_softlinks.sh <project id>"
-        exit 1
-fi
-
-ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.RAW_DATA.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.RAW_DATA.txt
-ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.MethylSeq.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.MethylSeq.txt
-ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.RNASeq.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.RNASeq.txt
-ln -s {{ deployment_target }}/latest/sw/taca-ngi-pipeline/delivery_readmes/DELIVERY.README.Sarek.txt {{ proj_root }}/$1/nobackup/NGI/softlinks/DELIVERY.README.SAREK.txt
+{% for readme in delivery_readmes | default([]) | sort %}
+# remove existing link (including checksum)
+rm -f {{ ngi_softlinks }}/{{ readme }}
+rm -f {{ ngi_softlinks }}/{{ readme }}.md5
+# create symlink
+ln -s {{ taca_ngi_dest }}/delivery_readmes/{{ readme }} {{ ngi_softlinks }}/{{ readme }}
+{% endfor %}

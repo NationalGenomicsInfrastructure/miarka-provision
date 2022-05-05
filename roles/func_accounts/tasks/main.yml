@@ -22,3 +22,7 @@
   template:
     src: start_supervisord_site.sh.j2
     dest: "{{ ngi_resources }}/start_supervisord_{{ site }}.sh"
+
+- name: add static folders to be created
+  set_fact:
+    static_folders: "{{ static_folders + [supervisord_log_dest] }}"
