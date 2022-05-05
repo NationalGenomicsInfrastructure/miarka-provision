@@ -26,3 +26,7 @@
 - name: add static folders to be created
   set_fact:
     static_folders: "{{ static_folders + [supervisord_log_dest] }}"
+
+- name: add static commands to be run
+  set_fact:
+    static_commands: "{{ static_commands + ['crontab ' ~ ngi_pipeline_conf ~ '/crontab_' ~ site] }}"

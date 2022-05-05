@@ -3,11 +3,6 @@
 # Minimalistic script that initiates {{ site }}-specific
 # directories for ngi_pipeline logs and dbs under the project dir
 
-# To be run as respective func account:
-#
-# funk_004 -> ngi2016001
-# funk_006 -> ngi2016003
-
 {% for readme in delivery_readmes | default([]) | sort %}
 # remove existing link (including checksum)
 rm -f {{ ngi_softlinks }}/{{ readme }}

@@ -3,12 +3,6 @@
 # Minimalistic script that initiates {{ site }}-specific
 # deliverables for ngi_pipeline
 
-# To be run as respective func account:
-#
-# funk_004 -> ngi2016001
-# funk_006 -> ngi2016003
-
-
 {% for deliverable in ngi_pipeline_deliverables | sort %}
 # remove existing link (including checksum)
 rm -f {{ ngi_softlinks }}/{{ deliverable | last }}
