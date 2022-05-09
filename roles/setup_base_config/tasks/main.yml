@@ -1,10 +1,4 @@
 
-- name: Create deployed tools version file
-  copy:
-    dest: "{{ deployed_tool_versions }}"
-    content: "-- {{ deployment_environment }} ({{ deployment_version }}) --"
-    force: no
-
 - name: Create ngi_pipeline conf directory
   file:
     path: "{{ ngi_pipeline_conf }}"
@@ -14,6 +8,12 @@
   file:
     name: "{{ ngi_resources }}"
     state: directory
+
+- name: Create deployed tools version file
+  copy:
+    dest: "{{ deployed_tool_versions }}"
+    content: "-- {{ deployment_environment }} ({{ deployment_version }}) --"
+    force: no
 
 - name: Deploy common bash environment variables
   template:
