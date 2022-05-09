@@ -10,6 +10,11 @@
     path: "{{ ngi_pipeline_conf }}"
     state: directory
 
+- name: Create ngi_resources folder
+  file:
+    name: "{{ ngi_resources }}"
+    state: directory
+
 - name: Deploy common bash environment variables
   template:
     src: "{{ bash_env_common_script }}.j2"

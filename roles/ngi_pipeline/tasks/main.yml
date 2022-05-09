@@ -39,11 +39,6 @@
     name: "PyVCF"
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
 
-- name: Create ngi_resources folder
-  file:
-    name: "{{ ngi_resources }}"
-    state: directory
-
 - name: Create ngi_resources/piper folder
   file:
     name: "{{ ngi_resources }}/piper"
