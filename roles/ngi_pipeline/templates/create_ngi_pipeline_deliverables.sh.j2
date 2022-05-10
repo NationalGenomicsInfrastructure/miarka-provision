@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Minimalistic script that initiates {{ site }}-specific
+# deliverables for ngi_pipeline
+
+{% for deliverable in ngi_pipeline_deliverables | sort %}
+# remove existing link (including checksum)
+rm -f {{ ngi_softlinks }}/{{ deliverable | last }}
+rm -f {{ ngi_softlinks }}/{{ deliverable | last }}.md5
+# create symlink
+ln -s {{ ngi_pipeline_dest }}/{{ deliverable | first }} {{ ngi_softlinks }}/{{ deliverable | last }}
+{% endfor %}

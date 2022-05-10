@@ -4,7 +4,8 @@ ngi_pipeline_dest: "{{ sw_path }}/ngi_pipeline"
 ngi_pipeline_version: c45b61a4ffc246745a558774f4ca74167eec8767
 
 ngi_pipeline_log: "{{ ngi_log_path }}/ngi_pipeline.log"
-ngi_pipeline_db: "{{ ngi_pipeline_path }}/db/records_db.sql"
+ngi_pipeline_db_path: "{{ ngi_pipeline_path }}/db"
+ngi_pipeline_db: "{{ ngi_pipeline_db_path }}/records_db.sql"
 ngi_pipeline_config: miarka_ngi_config_{{ site }}.yaml
 rna_seq_conf: "{{ ngi_pipeline_conf }}/rnaseq_{{ site }}.config"
 bash_env_site_script: sourceme_site.sh
@@ -15,3 +16,10 @@ igenomes_path: "{{ reference_data_dir }}/igenomes"
 
 gatk_key: pontus.larsson_medsci.uu.se.key
 charon_base_url: https://charon-dev.scilifelab.se
+
+ngi_pipeline_deliverables:
+  -
+    - DELIVERY.README.txt
+  -
+    - "{{ 'ACKNOWLEDGEMENTS_' ~ site | capitalize | first ~ '.txt' }}"
+    - ACKNOWLEDGEMENTS.txt

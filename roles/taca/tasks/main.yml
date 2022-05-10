@@ -49,7 +49,15 @@
 - name: Deploy script for softlinking delivery Readmes
   template:
     src: create_delivery_readme_softlinks.sh.j2
-    dest: "{{ ngi_resources }}/create_delivery_readme_softlinks.sh"
+    dest: "{{ ngi_resources }}/create_delivery_readme_softlinks_{{ site }}.sh"
+
+- name: add static folders to be created
+  set_fact:
+    static_folders: "{{ static_folders + [ngi_softlinks, ngi_log_path, ngi_pipeline_analysisdir, ngi_pipeline_datadir, ngi_pipeline_deliverydir] }}"
+
+- name: add static commands to be run
+  set_fact:
+    static_commands: "{{ static_commands + ['. ' ~ ngi_resources ~ '/create_delivery_readme_softlinks_' ~ site ~ '.sh'] }}"
 
 - name: Store taca tools version on deployment
   lineinfile:

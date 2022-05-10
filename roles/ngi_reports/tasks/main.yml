@@ -33,6 +33,10 @@
           alias make_report="{{ ngi_pipeline_venv }}/bin/ngi_reports project_summary -md"
     backup: no
 
+- name: add static folders to be created
+  set_fact:
+    static_folders: "{{ static_folders + [ngi_log_path] }}"
+
 - name: Store ngi_reports tool version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
