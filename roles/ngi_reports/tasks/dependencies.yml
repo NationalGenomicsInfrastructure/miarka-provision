@@ -20,3 +20,15 @@
   pip:
     name: "couchdb"
     executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+- name: Fetch mdx_outline from GitHub
+  git:
+    repo: "{{ ngi_mdx_outline_repo }}"
+    dest: "{{ ngi_mdx_outline_dest }}"
+    version: "{{ ngi_mdx_outline_version }}"
+    force: yes
+
+- name: Install mdx_outline
+  pip:
+    name: "file:{{ ngi_mdx_outline_dest }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"

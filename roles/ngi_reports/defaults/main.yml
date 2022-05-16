@@ -1,9 +1,13 @@
 ---
 ngi_reports_repo: https://github.com/NationalGenomicsInfrastructure/ngi_reports.git
 ngi_reports_dest: "{{ sw_path }}/ngi_reports"
-ngi_reports_version: ea0b67c6ff62224b866f888596399ce4725d15ec
+ngi_reports_version: af571e7ebf05e743e6afd7de0d3c27b79d928fbf
 ngi_reports_log: "{{ ngi_log_path }}/ngi_reports.log"
 
 ngi_visual_repo: https://github.com/NationalGenomicsInfrastructure/ngi_visualizations.git
 ngi_visual_dest: "{{ sw_path }}//ngi_visualization"
 ngi_visual_version: bf1892faf5ebe16ad0979cfc83f9c72b90e2a5a0
+
+ngi_mdx_outline_repo: https://github.com/NationalGenomicsInfrastructure/mdx_outline.git
+ngi_mdx_outline_dest: "{{ sw_path }}//mdx_outline"
+ngi_mdx_outline_version: 07fae9d91c348818a1627b5ecb560f52e9153d33
