@@ -40,34 +40,29 @@ deliver:
           -
             required: True
         -
-            - <ANALYSISPATH>/results/Preprocessing/<SAMPLEID>/DuplicatesMarked/*
-            - <STAGINGPATH>/Preprocessing/<SAMPLEID>/DuplicatesMarked/
-            -
-              required: True
+          - <ANALYSISPATH>/results/Preprocessing/<SAMPLEID>/DuplicatesMarked/*
+          - <STAGINGPATH>/Preprocessing/<SAMPLEID>/DuplicatesMarked/
+          -
+            required: True
         -
-            - <ANALYSISPATH>/results/Reports/<SAMPLEID>/
-            - <STAGINGPATH>/Reports/<SAMPLEID>/
-            -
-              required: True
+          - <ANALYSISPATH>/results/Reports/<SAMPLEID>/
+          - <STAGINGPATH>/Reports/<SAMPLEID>/
+          -
+            required: True
         -
-            - <ANALYSISPATH>/results/Reports/HsMetrics/<SAMPLEID>*
-            - <STAGINGPATH>/Reports/HsMetrics/<SAMPLEID>/
-            -
-              required: True
+          - <ANALYSISPATH>/results/VariantCalling/<SAMPLEID>/
+          - <STAGINGPATH>/VariantCalling/<SAMPLEID>/
+          -
+            required: True
         -
-            - <ANALYSISPATH>/results/VariantCalling/<SAMPLEID>/
-            - <STAGINGPATH>/VariantCalling/<SAMPLEID>/
-            -
-              required: True
+          - {{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.WES.md
+          - <STAGINGPATH>/
+          -
+            required: True
+            no_digest_cache: True
         -
-            - {{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.WES.md
-            - <STAGINGPATH>/
-            -
-              required: True
-              no_digest_cache: True
-        -
-            - {{ ngi_resources }}/TACA/apply_recalibration.sh
-            - <STAGINGPATH>/Resources/
-            -
-              required: True
-              no_digest_cache: True
+          - {{ ngi_resources }}/TACA/apply_recalibration.sh
+          - <STAGINGPATH>/Resources/
+          -
+            required: True
+            no_digest_cache: True
