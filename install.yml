@@ -63,11 +63,30 @@
       when: deployment_environment in ["staging", "devel"]
       tags: always
 
+    - name: initiate list of static folders that must be created on the target, after deployment
+      set_fact:
+        static_folders:
+          - "{{ proj_root }}/{{ uppmax_project }}"
+          - "{{ ngi_pipeline_path }}"
+          - "{{ ngi_pipeline_nobackup }}"
+          - "{{ ngi_pipeline_workdir }}"
+          - "{{ ngi_log_path }}"
+          - "{{ static_ngi_pipeline_path }}"
+          - "{{ static_ngi_pipeline_nobackup }}"
+          - "{{ static_ngi_log_path }}"
+          - "{{ ngi_softlinks }}"
+      tags: always
+
+    - name: initiate list of static commands that must be run on the target, after deployment
+      set_fact:
+        static_commands: []
+      tags: always
 
   environment:
     "{{ tools_path }}"
 
   roles:
+    - { role: setup_base_config, tags: setup_base_config }
     - { role: ngi_pipeline, tags: ngi_pipeline }
     - { role: func_accounts, tags: func_accounts }
     - { role: nextflow, tags: nextflow }
@@ -91,6 +110,14 @@
       lineinfile:
         dest: "{{ deployed_tool_versions }}"
         line: "-- Deployed at {{ ansible_date_time.iso8601 }}, miarka_provision ({{ (branch_name, branch_tag, branch_hash) | join('.') }}), by {{ deploy_user }} --"
+      tags: always
+
+    - name: create script for creating static folders
+      template:
+        src: create_static_contents.sh.j2
+        dest: "{{ ngi_resources }}/create_static_contents_{{ site }}.sh"
+        mode: +x
+      tags: always
 
     - name: set correct file permission for everything in the deployment
       file:
@@ -99,6 +126,7 @@
         state: directory
         recurse: yes
         mode: g+rwX,o=rX
+      tags: always
 
     - name: make containers directory readable by anyone that can access miarka
       file:
@@ -107,6 +135,7 @@
         state: directory
         recurse: yes
         mode: g+rwX,o=rX
+      tags: always
 
   post_tasks:
 

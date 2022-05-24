@@ -12,6 +12,11 @@ tsm_config_file: /etc/dsm.opt.ngis
 
 # taca
 snic_sourceme_variable: SNIC_API_STOCKHOLM
+delivery_readmes:
+  - DELIVERY.README.RAW_DATA.txt
+  - DELIVERY.README.MethylSeq.txt
+  - DELIVERY.README.RNASeq.txt
+  - DELIVERY.README.Sarek.txt
 
 # multiqc
 multiqc_options:

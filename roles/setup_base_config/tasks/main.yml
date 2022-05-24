@@ -1,0 +1,29 @@
+
+- name: Create ngi_pipeline conf directory
+  file:
+    path: "{{ ngi_pipeline_conf }}"
+    state: directory
+
+- name: Create ngi_resources folder
+  file:
+    name: "{{ ngi_resources }}"
+    state: directory
+
+- name: Create deployed tools version file
+  copy:
+    dest: "{{ deployed_tool_versions }}"
+    content: "-- {{ deployment_environment }} ({{ deployment_version }}) --"
+    force: no
+
+- name: Deploy common bash environment variables
+  template:
+    src: "{{ bash_env_common_script }}.j2"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    force: no
+
+- name: Deploy bash environment variables for {{ site }}
+  template:
+    src: "{{ bash_env_site_script }}.j2"
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
+    force: no
+

@@ -51,6 +51,7 @@
     line: "{{ item }}"
     backup: no
   with_items:
+    - export NXF_LAUNCHER="{{ nextflow_env.NXF_LAUNCHER }}"
     - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
   # Path to java to be used for nextflow
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}

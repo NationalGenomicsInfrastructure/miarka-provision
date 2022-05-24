@@ -34,19 +34,14 @@ piper:
 
 sarek:
     command: {{ sarek_dest }}/workflow/main.nf
-    tag: {{ sarek_tag }}
     tools:
       - haplotypecaller
       - snpeff
     genomes_base_paths:
         GRCh37: "{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37/"
         GRCh38: "{{ reference_data_dir }}/ToolBox/hg38bundle/"
-    project: {{ uppmax_project }}
-    custom_config_base: {{ sarek_dest }}/configs/
-    igenomes_ignore: " "
     no_gatk_spark: " "
     generate_gvcf: " "
-    sequencing_center: {{ ngi_pipeline_sequencing_center }}
 
 nextflow:
     command: {{ nextflow_dest }}/nextflow
