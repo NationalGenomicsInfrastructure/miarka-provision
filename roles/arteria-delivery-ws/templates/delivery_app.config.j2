@@ -12,3 +12,4 @@ path_to_mover: "{{ mover_path }}"
 project_links_directory: "{{ delivery_links }}"
 dds_conf:
   log_path: "{{ arteria_service_log_dir }}/dds.log"
+  mount_dir: "{{ lookup('env', 'SNIC_TMP') }}"$
