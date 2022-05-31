@@ -4,6 +4,17 @@ README
 The README describes the content of the delivered data.
 -----------------------------------------------------------------
 
+Samples were analysed with the Sarek pipeline release {{ release }}. In short, the pipeline does the following:
+Reads from fastq-files were mapped to a reference genome using BWA.
+Bam-files were de-duplicated with GATK MarkDuplicates.
+Base quality score recalibration tables were created with GATK BaseRecalibrator. 
+The tables were then used in GATK ApplyBQSR to create recalibrated bam-files.
+SNVs and small indels were called with GATK HaplotypeCaller.
+Variants were annoted with SnpEff.
+
+For details on the pipeline, folder structure and how to interpret results, please refer to the Sarek documentation:
+https://nf-co.re/sarek/{{ release }}
+
 Root level
 ----------
 The root folder, which is named by the project id, contains one report folder,
