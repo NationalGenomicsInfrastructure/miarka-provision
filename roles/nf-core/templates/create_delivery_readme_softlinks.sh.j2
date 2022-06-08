@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Minimalistic script that links {{ site }}-specific
+# delivery readmes for taca and nextflow pipelines
+
+{% for readme in nf_core_delivery_readmes | default([]) | sort %}
+if [ -e "{{ ngi_resources }}/TACA/{{ site }}/{{ readme }}" ]
+then
+  # remove existing link (including checksum)
+  rm -f {{ ngi_softlinks }}/{{ readme }}
+  rm -f {{ ngi_softlinks }}/{{ readme }}.md5
+  # create symlink
+  ln -s {{ ngi_resources }}/TACA/{{ site }}/{{ readme }} {{ ngi_softlinks }}/{{ readme }}
+fi
+{% endfor %}

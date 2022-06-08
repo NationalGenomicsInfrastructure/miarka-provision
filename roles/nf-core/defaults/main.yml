@@ -41,3 +41,7 @@ pipelines:
     release: 2.0.0
   - name: nanoseq
     release: 1.1.0
+
+nf_core_delivery_readmes:
+  - DELIVERY.README.SAREK.txt
+  - DELIVERY.README.SAREK.WES.md
