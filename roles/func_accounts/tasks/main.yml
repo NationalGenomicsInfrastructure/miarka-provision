@@ -18,10 +18,20 @@
     src: supervisord_site.conf.j2
     dest: "{{ supervisord_conf }}"
 
-- name: Deploy start supervisord start script for {{ site }}
+- name: Deploy supervisord start script for {{ site }}
   template:
     src: start_supervisord_site.sh.j2
     dest: "{{ ngi_resources }}/start_supervisord_{{ site }}.sh"
+
+- name: Deploy supervisord stop script for {{ site }}
+  template:
+    src: stop_supervisord_site.sh.j2
+    dest: "{{ ngi_resources }}/stop_supervisord_{{ site }}.sh"
+
+- name: Deploy supervisord restart script for {{ site }}
+  template:
+    src: restart_supervisord_site.sh.j2
+    dest: "{{ ngi_resources }}/restart_supervisord_{{ site }}.sh"
 
 - name: add static folders to be created
   set_fact:
