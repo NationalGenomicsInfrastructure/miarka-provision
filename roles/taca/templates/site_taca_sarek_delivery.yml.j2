@@ -63,13 +63,13 @@ deliver:
             - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
             - <STAGINGPATH>
         -
-            - {{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.txt
+            - {{ ngi_softlinks }}/DELIVERY.README.SAREK.txt
             - <STAGINGPATH>
             - 
               required: True
               no_digest_cache: True
         -
-            - {{ ngi_resources }}/TACA/apply_recalibration.sh
+            - {{ ngi_softlinks }}/apply_recalibration.sh
             - <STAGINGPATH>/01-Resources/
             -
               required: True

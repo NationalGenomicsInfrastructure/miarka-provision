@@ -55,13 +55,13 @@ deliver:
           -
             required: True
         -
-          - {{ ngi_resources }}/TACA/{{ site }}/DELIVERY.README.SAREK.WES.md
+          - {{ ngi_softlinks }}/DELIVERY.README.SAREK.WES.md
           - <STAGINGPATH>/
           -
             required: True
             no_digest_cache: True
         -
-          - {{ ngi_resources }}/TACA/apply_recalibration.sh
+          - {{ ngi_softlinks }}/apply_recalibration.sh
           - <STAGINGPATH>/Resources/
           -
             required: True
