@@ -2,3 +2,5 @@
 
 ngi_resources: "{{ root_path }}/resources"
 supervisord_log_dest: "{{ ngi_log_path }}/supervisord"
+supervisord_pidfile: "{{ supervisord_log_dest }}/supervisord.pid"
+supervisord_logfile: "{{ supervisord_log_dest }}/supervisord.log"
