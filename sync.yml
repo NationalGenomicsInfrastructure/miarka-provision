@@ -97,3 +97,6 @@
       when:
         - not deployment_environment == 'devel'
         - not hostvars['deploy']['branch_name'] == 'bimonthly'
+
+    - debug:
+        msg: Done! Each site should now execute {{ hostvars['deploy']['ngi_resources'] }}/create_static_contents_[upps | sthlm].sh
