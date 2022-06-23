@@ -42,6 +42,8 @@ pipelines:
   - name: nanoseq
     release: 3.0.0
     container_dir: "{{ biocontainers_dirname }}"
+  - name: scrnaseq
+    release: 2.0.0
 
 nf_core_delivery_readmes:
   sarek:
