@@ -5,6 +5,7 @@
 
 {% for pipeline, readmes in nf_core_delivery_readmes.items() | default([]) | sort %}
   {% for readme in readmes %}
+
 if [ -e "{{ ngi_resources }}/TACA/{{ site }}/{{ readme }}" ]
 then
   # remove existing link (including checksum)
@@ -12,6 +13,8 @@ then
   rm -f {{ ngi_softlinks }}/{{ readme }}.md5
   # create symlink
   ln -s {{ ngi_resources }}/TACA/{{ site }}/{{ readme }} {{ ngi_softlinks }}/{{ readme }}
+  md5sum {{ ngi_softlinks }}/{{ readme }} > {{ ngi_softlinks }}/{{ readme }}.md5
 fi
+
   {% endfor %}
 {% endfor %}
