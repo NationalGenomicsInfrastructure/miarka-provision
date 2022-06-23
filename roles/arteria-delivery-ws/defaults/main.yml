@@ -9,6 +9,7 @@
 arteria_delivery_repo: https://github.com/arteria-project/arteria-delivery.git
 arteria_delivery_version: v2.6.0
 
+
 arteria_service_name: arteria-delivery-ws
 
 # These values will be appended with production and staging specific
