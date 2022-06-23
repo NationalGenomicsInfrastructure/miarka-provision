@@ -1,0 +1,45 @@
+# DELIVERY OF RESULTS FROM RNASEQ ANALYSIS WITH NF-CORE RNASEQ PIPELINE
+
+## Analysis
+Samples were analysed with the nf-core rnaseq pipeline release {{ release }}. In short, the pipeline does the following:
+
+The workflow processes raw data from FastQ inputs, aligns the reads, generates counts relative to genes or transcripts and performs extensive quality-control on the results.
+
+For information regarding the pipeline, folder structure and how to interpret results, please refer to the pipeline documentation:
+[https://nf-co.re/rnaseq/{{ release }}](https://nf-co.re/rnaseq/{{ release }})
+
+Detailed information about standard outputs from the pipeline can be found [here](https://nf-co.re/rnaseq/{{ release }}/output).
+
+The directory also contains the file checksums.md5 and you should always use it to verify the integrity of the files after transfer.
+
+
+## Delivery structure
+
+```
+├── checksums.md5
+├── RNASEQ_README.md
+└── results
+    ├── fastqc
+    ├── genome
+    │   └── rsem
+    ├── multiqc
+    │   └── star_salmon
+    ├── pipeline_info
+    ├── star_salmon
+    │   ├── bigwig
+    │   ├── deseq2_qc
+    │   ├── dupradar
+    │   ├── featurecounts
+    │   ├── log
+    │   ├── picard_metrics
+    │   ├── preseq
+    │   ├── qualimap.tar.gz
+    │   ├── rseqc
+    │   ├── samtools_stats
+    │   └── stringtie
+    └── trimgalore
+        └── fastqc
+```
+
+## Known issues
+
