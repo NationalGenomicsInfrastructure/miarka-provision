@@ -93,11 +93,11 @@
   template:
     src: "{{ readme }}.j2"
     dest: "{{ ngi_resources }}/TACA/{{ site }}/{{ readme }}"
+  when: site == "upps"
   with_items:
     - "{{ nf_core_delivery_readmes[pipeline] | default([]) }}"
   loop_control:
     loop_var: readme
-  when: site == "upps"
 
 - name: store {{ pipeline }} version in deployment
   lineinfile:
