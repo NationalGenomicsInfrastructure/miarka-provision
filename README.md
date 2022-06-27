@@ -24,7 +24,7 @@ miarkaenv
 cd /path/to/deployment/resources/miarka-provision
 git fetch --tags origin
 git checkout [monthly / bimonthly / tags/vX.Y]
-git pull
+git pull origin
 
 # do deployment to local file system for each site
 ansible-playbook -i inventory.yml install.yml -e deployment_environment=[staging / production] -e site=upps
@@ -381,7 +381,8 @@ You should now skip down to the procedures for reloading services.
 ### Create project directories, symlinks and reload services
 
 After the deployment has been synced, each facility need to update the crontab and update project-specific symlinks and 
-paths. Also, any running services need to be restarted in order to run these from the new deployment.
+paths. This should be run once per project (i.e. ngi2016001 and ngi2016003) by a member of each project (probably as the funk 
+user). Also, any running services need to be restarted in order to run these from the new deployment.
 
 On the node where the crontab and services are running (e.g. `miarka1` for production instances and `miarka2` for 
 staging instances) and as the user currently having the crontab installed, run:
@@ -391,8 +392,32 @@ staging instances) and as the user currently having the crontab installed, run:
 Then, as the user running the services needing a reboot, shut down the running instances of the services and re-start 
 the new versions of the services.
 
-This should be run once per project (i.e. ngi2016001 and ngi2016003) by a member of each project (probably as the funk 
-user).
+#### Arteria services
+
+Specifically, the Arteria services are under control by `supervisord` and in order to restart these, 
+it is usually sufficient to restart `supervisord`. This can be done by running 
+`restart_supervisord_upps.sh`, or preferably `stop_supervisord_upps.sh` and let `cron` start the service again. These 
+scripts are located in `/vulpes/ngi/<deployment_environment>/latest/resources/`.
+
+If needed, you can verify the source the arteria services are running from with the command and inspect the command 
+arguments listed in the output.  
+```
+$ ps -eo ppid,pid,user,group,args |grep -e archive-upload-ws -e arteria-checksum-ws -e arteria-delivery-ws
+```
+
+You can also verify that the arteria services are running as a subprocess to supervisord by checking that all arteria 
+services listed by the command above have the same value in the first column (the `ppid` field). You can also run
+```
+$ pstree -u funk_004
+```
+and expect to see the Arteria services ordered under the supervisord process:
+```
+supervisord─┬─archive-upload-───{archive-upload-}
+            ├─checksum-ws───{checksum-ws}
+            └─delivery-ws
+```
+Again, ensure that you are working on the correct login node (`miarka1` for production and `miarka2` for staging) and 
+as the user running the services and having the `crontab` installed (probably `funk_004`). 
 
 ## Miarka user
 

@@ -1,0 +1,8 @@
+#! /bin/bash -l
+
+# grab the process id from the pid-file and kill it if possible
+pid=$(cat {{ supervisord_pidfile }})
+kill -0 $pid && kill $pid
+
+# sleep for a couple of seconds to allow the processes to terminate
+sleep 5
