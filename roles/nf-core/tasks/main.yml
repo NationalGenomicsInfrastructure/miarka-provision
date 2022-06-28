@@ -4,7 +4,7 @@
   register: "nfcore_envs"
 
 - name: Setup {{ nf_core_env_name }} virtual env with python3 and nf-core v{{ nf_core_version }}
-  command: "conda create -n {{ nf_core_env_name }} -c conda-forge -c bioconda -c anaconda python={{ python3_version }} nf-core={{ nf_core_version }}"
+  command: "conda create -n {{ nf_core_env_name }} -c conda-forge -c bioconda -c anaconda python={{ python3_version }} nf-core={{ nf_core_version }} nextflow={{ nextflow_version_tag }}"
   when: not nf_core_env_name in nfcore_envs.stdout|split
 
 # Setup pipelines
@@ -19,6 +19,19 @@
     silva_zip: "{{ item.silva_zip | default('') }}"
     container_dir: "{{ ngi_containers }}/{{ item.container_dir | default(item.name) }}"
   with_items: "{{ pipelines }}"
+
+- name: Deploy script for softlinking delivery Readmes
+  template:
+    src: create_delivery_readme_softlinks.sh.j2
+    dest: "{{ ngi_resources }}/create_nfcore_delivery_readme_softlinks_{{ site }}.sh"
+
+- name: add static folders to be created
+  set_fact:
+    static_folders: "{{ static_folders + [ngi_softlinks] }}"
+
+- name: add static commands to be run
+  set_fact:
+    static_commands: "{{ static_commands + ['. ' ~ ngi_resources ~ '/create_nfcore_delivery_readme_softlinks_' ~ site ~ '.sh'] }}"
 
 - name: Store nf-core version in deployment
   lineinfile:

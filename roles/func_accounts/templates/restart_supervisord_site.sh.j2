@@ -1,0 +1,7 @@
+#! /bin/bash -l
+
+# stop the supervisord process
+bash {{ ngi_resources }}/stop_supervisord_{{ site }}.sh
+
+# start the supervisord process
+bash {{ ngi_resources }}/start_supervisord_{{ site }}.sh

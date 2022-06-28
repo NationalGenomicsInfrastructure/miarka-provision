@@ -9,7 +9,7 @@ nf_core_vars:
   NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
   NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
   JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
-  PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}:{{ nextflow_dest }}"
+  PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 biocontainers_dirname: biocontainers
 pipelines:
   - name: rnaseq
@@ -38,6 +38,10 @@ pipelines:
     release: 2.2
     container_dir: "{{ biocontainers_dirname }}"
   - name: rnafusion
-    release: 1.2.0
+    release: 2.0.0
   - name: nanoseq
     release: 1.1.0
+
+nf_core_delivery_readmes:
+  - DELIVERY.README.SAREK.txt
+  - DELIVERY.README.SAREK.WES.md
