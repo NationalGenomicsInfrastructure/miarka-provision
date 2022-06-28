@@ -43,5 +43,12 @@ pipelines:
     release: 1.1.0
 
 nf_core_delivery_readmes:
-  - DELIVERY.README.SAREK.txt
-  - DELIVERY.README.SAREK.WES.md
+  sarek:
+    - DELIVERY.README.SAREK.txt
+    - DELIVERY.README.SAREK.WES.md
+    - apply_recalibration.sh
+  rnaseq:
+    - DELIVERY.README.RNASEQ.md
+  methylseq:
+    - DELIVERY.README.METHYLSEQ.md
+
