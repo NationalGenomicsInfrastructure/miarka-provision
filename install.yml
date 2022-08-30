@@ -102,7 +102,6 @@
     - { role: archive-upload-ws, tags: archive-upload }
     - { role: nf-core, tags: nf-core }
     - { role: seqreports, tags: seqreports,snpseq-only }
-    - { role: dds_cli, tags: dds_cli }
 
   tasks:
 
