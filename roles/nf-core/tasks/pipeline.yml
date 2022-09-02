@@ -56,10 +56,6 @@
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
     backup: no
 
-- name: download sarek additional images
-  import_tasks: sarek_specific.yml
-  when: pipeline == "sarek"
-
 - name: download ampliseq requirements
   block:
 
@@ -92,6 +88,16 @@
     - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
   loop_control:
     loop_var: cachedir
+
+- name: Create Delivery READMEs for {{ pipeline }} and add to TACA resources
+  template:
+    src: "{{ readme }}.j2"
+    dest: "{{ ngi_resources }}/TACA/{{ site }}/{{ readme }}"
+  when: site == "upps"
+  with_items:
+    - "{{ nf_core_delivery_readmes[pipeline] | default([]) }}"
+  loop_control:
+    loop_var: readme
 
 - name: store {{ pipeline }} version in deployment
   lineinfile:

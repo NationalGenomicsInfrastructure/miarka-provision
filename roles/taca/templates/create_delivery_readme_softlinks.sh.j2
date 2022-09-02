@@ -9,4 +9,5 @@ rm -f {{ ngi_softlinks }}/{{ readme }}
 rm -f {{ ngi_softlinks }}/{{ readme }}.md5
 # create symlink
 ln -s {{ taca_ngi_dest }}/delivery_readmes/{{ readme }} {{ ngi_softlinks }}/{{ readme }}
+md5sum {{ ngi_softlinks }}/{{ readme }} > {{ ngi_softlinks }}/{{ readme }}.md5
 {% endfor %}
