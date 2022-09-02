@@ -34,11 +34,6 @@
     dest: "{{ deployed_tool_versions }}"
     line: "NGI Pipeline: {{ ngi_pipeline_version }}"
 
-- name: Install PyVCF for joint calling
-  pip:
-    name: "PyVCF"
-    executable: "{{ ngi_pipeline_venv }}/bin/pip"
-
 - name: Create ngi_resources/piper folder
   file:
     name: "{{ ngi_resources }}/piper"
