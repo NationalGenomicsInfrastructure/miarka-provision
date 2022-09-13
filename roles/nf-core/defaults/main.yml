@@ -1,6 +1,6 @@
 nf_core_env_name: nf-core-env
 nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
-nf_core_version: 2.1
+nf_core_version: 2.4.1
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
@@ -8,6 +8,7 @@ nf_core_vars:
   SINGULARITY_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
   NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
   NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
+  NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
   JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
   PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 biocontainers_dirname: biocontainers
@@ -38,10 +39,22 @@ pipelines:
     release: 2.2
     container_dir: "{{ biocontainers_dirname }}"
   - name: rnafusion
-    release: 2.0.0
+    release: 2.1.0
+    container_dir: "{{ biocontainers_dirname }}"
   - name: nanoseq
-    release: 1.1.0
+    release: 3.0.0
+    container_dir: "{{ biocontainers_dirname }}"
+  - name: scrnaseq
+    release: 2.0.0
+    container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
-  - DELIVERY.README.SAREK.txt
-  - DELIVERY.README.SAREK.WES.md
+  sarek:
+    - DELIVERY.README.SAREK.txt
+    - DELIVERY.README.SAREK.WES.md
+    - apply_recalibration.sh
+  rnaseq:
+    - DELIVERY.README.RNASEQ.md
+  methylseq:
+    - DELIVERY.README.METHYLSEQ.md
+
