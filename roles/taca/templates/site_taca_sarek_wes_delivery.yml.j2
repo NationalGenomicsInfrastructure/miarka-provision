@@ -29,7 +29,12 @@ deliver:
               required: True
               no_digest_cache: True
         -
-            - <ANALYSISPATH>/multiqc_ngi/*multiqc_report*
+            - <ANALYSISPATH>/multiqc_ngi/*multiqc_report.html
+            - <STAGINGPATH>/00-Reports
+            -
+              required: True
+        -
+            - <ANALYSISPATH>/multiqc_ngi/*multiqc_report_data.zip
             - <STAGINGPATH>/00-Reports
             -
               required: True

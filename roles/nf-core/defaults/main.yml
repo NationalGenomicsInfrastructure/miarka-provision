@@ -51,10 +51,10 @@ pipelines:
 nf_core_delivery_readmes:
   sarek:
     - DELIVERY.README.SAREK.txt
+    - DELIVERY.README.SAREK.BATCH.txt
     - DELIVERY.README.SAREK.WES.md
     - apply_recalibration.sh
   rnaseq:
     - DELIVERY.README.RNASEQ.md
   methylseq:
     - DELIVERY.README.METHYLSEQ.md
-
