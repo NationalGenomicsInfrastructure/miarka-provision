@@ -1,0 +1,27 @@
+---
+
+# If deploying to staging one should call with
+# -e deployment_environment=staging
+# One can also override the default installed version
+# by overriding the arteria_delivery_version on the command line.
+#
+# This will set corresponding paths and use the appropriate port.
+seqreport_service_repo: https://github.com/arteria-project/sequencing-report-service.git
+seqreport_service_version: v1.3.0
+
+
+arteria_service_name: sequencing-report-ws
+
+# These values will be appended with production and staging specific
+# paths in the tasks.
+#
+# NB. The log dirs need to be created manually on destination cluster.
+#
+# NB 2. Hard coded root path for runfolders, because that path
+# needs to be reachable from outside world; i.e. have to be under /proj
+# And hard coded log paths because we do not want the log files
+# to disappear when the wildwest directory is cleaned out with every
+# staging sync.
+
+seqreports_nf_profile: singularity,snpseq
+fastq_ref_genomes_path: /sw/data/uppnex/igenomes/

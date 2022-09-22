@@ -1,0 +1,57 @@
+# Default configuration file for delivery service
+
+---
+
+# Default configuration file for the sequencing report service
+---
+
+port: {{ seqreport_service_port }}
+db_connection_string: sqlite:///{{ db_path }}/sequencing_reports.db
+reports_dir: ./tests/resources/reports/ # Should be something like runfolder path
+monitored_directories:
+    - {{ static_runfolder_path }}
+alembic_scripts: {{ arteria_service_src_path }}/alembic/
+alembic_log_config_path: {{ arteria_service_config_root}}/logger.config
+process_queue_check_interval: 5 # in seconds
+nextflow_log_dirs: /path/to/nextflow_log_dirs
+
+nextflow_config:
+    main_workflow_path: {{ arteria_service_src_path }}/seqreports/main.nf
+    nf_config: {{ arteria_service_src_path }}/seqreports/config/nextflow.config
+    nf_profile: {{ seqreports_nf_profile }}
+    environment:
+        NXF_TEMP: {{ nextflow_env.NXF_TEMP }}
+        NXF_WORK: {{ nextflow_env.NXF_WORK }}
+    # Note that in the parameters section it is possible to do variable
+    # subsitution on the following variables.
+    # loading the config.
+    # - ${DEFAULT:runfolder_name}
+    # - ${DEFAULT:runfolder_path}
+    # - ${DEFAULT:current_year}
+    parameters:
+        run_folder: ${DEFAULT:runfolder_path}
+        config_dir: {{ arteria_service_src_path }}/seqreports/config/
+        fastqscreen_databases: /opt/FastQ_Screen_Genomes/ # TODO
+        checkqc_config: /etc/checkqc/config.yaml # TODO
+        result_dir: ${DEFAULT:runfolder_path}/reports # TODO
+        script_dir: {{ arteria_service_src_path }}/seqreports/bin/
+
+#db_connection_string: 'sqlite:///{{ db_path }}/arteria-delivery.db'
+#runfolder_directory: "{{ runfolder_path }}"
+#general_project_directory: "{{ project_path }}"
+#staging_directory: "{{ staging_path }}"
+#port: "{{ arteria_delivery_port }}"
+#alembic_path: "{{ alembic_path }}"
+#path_to_mover: "{{ mover_path }}"
+#project_links_directory: "{{ delivery_links }}"
+#dds_conf:
+#  log_path: "{{ arteria_service_log_dir }}/dds.log"
+#
+#nextflow_env:
+#  NXF_LAUNCHER: "$PWD/work"
+#  NXF_TEMP: "{{ ngi_pipeline_nobackup }}/nextflow/temp"
+#  NXF_WORK: "{{ ngi_pipeline_nobackup }}/nextflow/work"
+#  NXF_OPTS: -Xms1g -Xmx3500m
+#  NXF_JAVA_HOME: "{{ nextflow_java }}"
+#  PATH: "{{ tools_path.PATH }}"
+
