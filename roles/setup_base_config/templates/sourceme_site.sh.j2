@@ -17,6 +17,7 @@ alias deployed_env="cat {{ deployed_tool_versions }}"
 
 {% if site == "upps" %}
 export PATH={{ sw_path }}:$PATH
+module load bioinfo-tools bowtie2 fastq_screen
 {% endif %}
 
 # Common settings shared for both sites
