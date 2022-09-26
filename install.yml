@@ -91,13 +91,13 @@
     - { role: multiqc, tags: multiqc }
     - { role: arteria-checksum-ws, tags: arteria-checksum }
     - { role: arteria-delivery-ws, tags: arteria-delivery }
+    - { role: sequencing-report-ws, tags: sequencing-report }
     - { role: standalone_scripts, tags: standalone_scripts }
     - { role: delivery, tags: delivery }
     - { role: misc-tools, tags: misc-tools }
     - { role: archive-upload-ws, tags: archive-upload }
     - { role: archive-verify-ws, tags: archive-verify }
     - { role: nf-core, tags: nf-core }
-    - { role: seqreports, tags: seqreports,snpseq-only }
 
   tasks:
 
