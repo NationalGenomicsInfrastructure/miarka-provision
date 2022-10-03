@@ -12,16 +12,11 @@
 
 - name: install sequencing report service requirements
   pip:
-    #requirements: "{{ arteria_service_src_path }}/requirements/dev" TODO check if this is needed
+    requirements: "{{ arteria_service_src_path }}/requirements/prod"
     chdir: "{{ arteria_service_src_path }}"
     executable: "{{ arteria_service_env_root }}/bin/pip"
     state: present
     extra_args: "-U"
-
-- name: install CheckQC
-  pip:
-    name: "checkqc"
-    executable: "{{ arteria_service_env_root }}/bin/pip"
 
 - name: install sequencing report service
   pip:
