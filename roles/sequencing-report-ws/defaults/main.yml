@@ -7,7 +7,7 @@
 #
 # This will set corresponding paths and use the appropriate port.
 seqreport_service_repo: https://github.com/arteria-project/sequencing-report-service.git
-seqreport_service_version: v1.3.1-rc1
+seqreport_service_version: v1.3.1-rc2
 
 
 arteria_service_name: sequencing-report-ws
