@@ -14,6 +14,11 @@
     src: seqreport_logger.config.j2
     dest: "{{ arteria_service_config_root }}/logger.config"
 
+- name: deploying {{ arteria_service_name }} checkqc config
+  template:
+    src: checkqc.config.j2
+    dest: "{{ arteria_service_config_root }}/checkqc.config"
+
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
   ini_file:
     dest: "{{ supervisord_conf }}"
