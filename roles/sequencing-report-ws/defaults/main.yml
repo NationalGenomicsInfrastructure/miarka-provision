@@ -23,5 +23,5 @@ arteria_service_name: sequencing-report-ws
 # to disappear when the wildwest directory is cleaned out with every
 # staging sync.
 
-seqreports_nf_profile: singularity,snpseq
+seqreports_nf_profile: singularity,uppmax
 fastq_ref_genomes_path: /sw/data/uppnex/igenomes/ # TODO update after genomes are uploaded
