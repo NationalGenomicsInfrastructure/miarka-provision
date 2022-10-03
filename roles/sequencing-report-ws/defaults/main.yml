@@ -7,7 +7,7 @@
 #
 # This will set corresponding paths and use the appropriate port.
 seqreport_service_repo: https://github.com/arteria-project/sequencing-report-service.git
-seqreport_service_version: v1.3.0
+seqreport_service_version: v1.3.1-rc1
 
 
 arteria_service_name: sequencing-report-ws
@@ -24,4 +24,4 @@ arteria_service_name: sequencing-report-ws
 # staging sync.
 
 seqreports_nf_profile: singularity,snpseq
-fastq_ref_genomes_path: /sw/data/uppnex/igenomes/
+fastq_ref_genomes_path: /sw/data/uppnex/igenomes/ # TODO update after genomes are uploaded
