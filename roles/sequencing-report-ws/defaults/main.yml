@@ -24,4 +24,4 @@ arteria_service_name: sequencing-report-ws
 # staging sync.
 
 seqreports_nf_profile: singularity,uppmax
-fastq_ref_genomes_path: /sw/data/uppnex/igenomes/ # TODO update after genomes are uploaded
+fastq_ref_genomes_path: $FASTQ_SCREEN_DATA
