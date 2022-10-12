@@ -14,6 +14,12 @@
     src: delivery_logger.config.j2
     dest: "{{ arteria_service_config_root }}/logger.config"
 
+- name: Deploy arteria-delivery wrapper
+  template:
+    src: arteria-delivery_wrapper.sh.j2
+    dest: "{{ arteria_delivery_wrapper }}"
+    mode: o+x
+
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
   ini_file:
     dest: "{{ supervisord_conf }}"

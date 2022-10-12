@@ -25,9 +25,3 @@
     executable: "{{ arteria_service_env_root }}/bin/pip"
     state: present
     extra_args: "-U"
-
-- name: Deploy arteria-delivery wrapper
-  template:
-    src: arteria-delivery_wrapper.sh.j2
-    dest: "{{ arteria_delivery_wrapper }}"
-    mode: o+x
