@@ -1,6 +1,9 @@
 # This file should be sourced from the user's local bash init files
 {% if site == "sthlm" %}
 # module load mover/1.0.0
+
+# Load latest version of dds-cli
+module load bioinfo-tools dds-cli
 {% endif %}
 
 # Unique settings per site
@@ -18,4 +21,3 @@ export PATH={{ sw_path }}:$PATH
 
 # Common settings shared for both sites
 source {{ ngi_pipeline_conf }}/{{ bash_env_common_script }}
-
