@@ -19,7 +19,7 @@
     dest: "{{ supervisord_conf }}"
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: command
-    value: "{{ arteria_service_env_root }}/bin/delivery-ws --configroot={{ arteria_service_config_root }} --port={{ arteria_delivery_port }}"
+    value: "{{ arteria_delivery_wrapper }}"
     backup: no
 
 - name: modify uppsala's supervisord conf to autostart {{ arteria_service_name }}
