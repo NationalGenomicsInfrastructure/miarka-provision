@@ -1,0 +1,150 @@
+README
+=======
+
+The README describes the content of the delivered data.
+-----------------------------------------------------------------
+
+Samples were analysed with the Sarek pipeline release {{ release }}. In short, the pipeline does the following:
+Reads from fastq-files were mapped to a reference genome using BWA.
+Bam-files were de-duplicated with GATK MarkDuplicates.
+Base quality score recalibration tables were created with GATK BaseRecalibrator. 
+The tables were then used in GATK ApplyBQSR to create recalibrated bam-files.
+SNVs and small indels were called with GATK HaplotypeCaller.
+Variants were annoted with SnpEff.
+
+For details on the pipeline, folder structure and how to interpret results, please refer to the Sarek documentation:
+https://nf-co.re/sarek/{{ release }}
+
+Root level
+----------
+The root folder, which is named by the project id, contains one report folder,
+one resource folder and one folder for each sample. Each sample folder is
+accompanied by a .lst-file containing a list of the files in the folder and
+a .md5-file containing the MD5-checksums of the files in the folder.
+Use the MD5-checksums to verify the integrity of the files after transfer.
+
+|--ProjectID
+   |--00-Reports
+   |--01-Resources
+   |--Sample1
+   |--Sample1.lst
+   |--Sample1.md5
+   |--Sample2
+   |--Sample2.lst
+   |--Sample2.md5
+   ...
+   ...
+   |--SampleN
+   |--SampleN.lst
+   |--SampleN.md5
+
+====================================================================
+ProjectID -> 00-Reports
+====================================================================
+00-Reports contain sequence QC for flowcells and a project report.
+
+|--ProjectID
+   |--00-Reports
+      |--ProjectID_multiqc_report.html
+{% if site == "upps" %}
+      |--ProjectID_multiqc_report_data.zip
+      |--SequenceQC
+{% endif %}
+
+--ProjectID_multiqc_report.html
+A project report summarizing the included samples and results from the sequencing and analysis.
+
+{% if site == "upps" %}
+--ProjectID_multiqc_report_data.zip
+Source data for the project report.
+
+--SequenceQC
+The SequenceQC folder contain sequence QC data, which provide information about the
+quality and other features of the fastq-files. The reports are organized by sequence run.
+
+{% endif %}
+====================================================================
+ProjectID -> 01-Resources
+====================================================================
+01-Resources contain helper scripts and other resources
+
+|--ProjectID
+   |--01-Resources
+      |--apply_recalibration.sh
+
+--apply_recalibration.sh
+Variant calling has been performed after recalibrating the base quality
+scores of this BAM file (BQSR). However, due to the drastic increase in file
+size during base quality recalibration, the BAM file without recalibrated
+base quality scores is delivered. If recalibrated base qualities are required
+for downstream applications, this script can be used to obtain a recalibrated BAM file.
+
+Note: The BAM file and recalibration table can be found among the sarek results,
+read more below.
+
+====================================================================
+ProjectID -> SampleN
+====================================================================
+Each sample will contain a results folder:
+
+{% if "sthlm" == site %}
+|--ProjectID
+   |--SampleN
+      |--results
+         |--PipelineTool1
+         |--PipelineTool2
+         ...
+         ...
+         |--PipelineToolN
+{% endif %}
+{% if "upps" == site %}
+SampleN
+└── results
+    ├── Annotation
+    │   └── snpEff
+    ├── pipeline_info
+    │   ├── results_description.html
+    │   └── software_versions.csv
+    ├── Preprocessing
+    │   ├── DuplicatesMarked
+    │   │   ├── SampleN.md.bam
+    │   │   ├── SampleN.md.bam.bai
+    │   │   └── SampleN.recal.table
+    │   └── TSV
+    │       ├── duplicates_marked_SampleN.tsv
+    │       └── duplicates_marked_no_table_SampleN.tsv
+    ├── Reports
+    │   └── SampleN
+    │       ├── bamQC
+    │       ├── BCFToolsStats
+    │       ├── FastQC
+    │       ├── MarkDuplicates
+    │       ├── SamToolsStats
+    │       ├── snpEff
+    │       └── VCFTools
+    └── VariantCalling
+        ├── HaplotypeCaller
+        │   ├── HaplotypeCaller_SampleN.vcf.gz
+        │   └── HaplotypeCaller_SampleN.vcf.gz.tbi
+        └── HaplotypeCallerGVCF
+            ├── HaplotypeCaller_SampleN.g.vcf.gz
+            └── HaplotypeCaller_SampleN.g.vcf.gz.tbi
+{% endif %}
+
+Top level folders:
+
+Annotation:     Variant calls annotated with e.g. transcript information and predicted variant effects
+pipeline_info:  Information about pipeline and software versions
+Preprocessing:  BAM files with duplicates marked and tables for performing recalibration with GATK
+Reports:        Statistics and QC from various tools. 
+VariantCalling: VCF and GVCF files containing e.g. SNVs, CNVs, small indels and structural variants.   
+
+This folder contains output from the sarek pipeline. Refer to
+https://nf-co.re/sarek/{{ release }}/docs/output for more detailed output description.
+
+====================================================================
+FASTQS
+====================================================================
+FASTQ files are not included in the delivery, but can be regenerated from the BAM files.
+We recommend using https://github.com/qbic-pipelines/bamtofastq, refer to its documentation
+for usage.

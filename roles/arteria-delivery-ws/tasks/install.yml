@@ -1,7 +1,7 @@
 
 - name: create virtual python env for arteria-delivery
   shell: "conda create --name {{ arteria_service_name }} python=3.8"
-  args: 
+  args:
     creates: "{{ arteria_service_env_root }}"
 
 - name: get arteria-delivery from git

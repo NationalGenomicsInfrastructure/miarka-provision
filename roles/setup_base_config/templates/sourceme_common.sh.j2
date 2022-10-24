@@ -7,9 +7,6 @@ export CHARON_BASE_URL={{ charon_base_url }}
 # Hopefully possible to remove dependency in a later version
 # module load bioinfo-tools piper/{{ piper_module_version }}
 
-# Load latest version of dds-cli
-module load bioinfo-tools dds-cli
-
 # Force English locale as e.g. some downstream scripts depend on the
 # pipeline outputing data with "." as decimal output instead of Swedish ",".
 export LC_ALL=en_US.UTF-8
