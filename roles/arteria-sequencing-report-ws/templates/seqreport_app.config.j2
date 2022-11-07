@@ -9,7 +9,7 @@ monitored_directories:
 alembic_scripts: {{ arteria_service_src_path }}/alembic/
 alembic_log_config_path: {{ arteria_service_config_root}}/logger.config
 process_queue_check_interval: 5 # in seconds
-nextflow_log_dirs: {{ arteria_service_log_dir }}/nextflow.log
+nextflow_log_dirs: {{ arteria_service_log_dir }}/nxf_logs
 
 nextflow_config:
     main_workflow_path: {{ arteria_service_src_path }}/seqreports/main.nf
