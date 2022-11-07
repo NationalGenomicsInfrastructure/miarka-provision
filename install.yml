@@ -91,7 +91,7 @@
     - { role: multiqc, tags: multiqc }
     - { role: arteria-checksum-ws, tags: arteria-checksum }
     - { role: arteria-delivery-ws, tags: arteria-delivery }
-    - { role: sequencing-report-ws, tags: sequencing-report }
+    - { role: arteria-sequencing-report-ws, tags: arteria-sequencing-report }
     - { role: standalone_scripts, tags: standalone_scripts }
     - { role: delivery, tags: delivery }
     - { role: misc-tools, tags: misc-tools }
