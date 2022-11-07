@@ -10,7 +10,7 @@ seqreport_service_repo: https://github.com/arteria-project/sequencing-report-ser
 seqreport_service_version: v1.3.1-rc2
 
 
-arteria_service_name: sequencing-report-ws
+arteria_service_name: arteria-sequencing-report-ws
 
 # These values will be appended with production and staging specific
 # paths in the tasks.
