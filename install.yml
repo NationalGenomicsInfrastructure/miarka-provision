@@ -35,23 +35,18 @@
         files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
-    - name: create {{ root_path }} folder and configure setgid
+    - name: create folder and configure setgid
       file:
-        path: "{{ root_path }}"
+        path: "{{ item }}"
         group: "{{ ngi_sw_group }}"
         state: directory
         recurse: no
         mode: g+rwXs,o=rX
       tags: always
-
-    - name: create {{ ngi_containers }} folder and configure setgid
-      file:
-        path: "{{ ngi_containers }}"
-        group: "{{ ngi_sw_group }}"
-        state: directory
-        recurse: no
-        mode: g+rwXs,o=rX
-      tags: always
+      with_items:
+        - root_path
+        - ngi_containers
+        - igenomes_dir
 
     - name: create {{ proj_root }} folder and configure setgid
       file:
@@ -120,21 +115,16 @@
 
     - name: set correct file permission for everything in the deployment
       file:
-        path: "{{ root_path }}"
+        path: "{{ item }}"
         group: "{{ ngi_sw_group }}"
         state: directory
         recurse: yes
         mode: g+rwX,o=rX
       tags: always
-
-    - name: make containers directory readable by anyone that can access miarka
-      file:
-        path: "{{ ngi_containers }}"
-        group: "{{ ngi_sw_group }}"
-        state: directory
-        recurse: yes
-        mode: g+rwX,o=rX
-      tags: always
+      with_items:
+        - root_path
+        - ngi_containers
+        - igenomes_dir
 
   post_tasks:
 

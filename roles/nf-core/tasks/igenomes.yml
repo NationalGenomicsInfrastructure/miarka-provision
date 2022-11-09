@@ -1,0 +1,19 @@
+
+- name: get AWS-igenomes from git
+  git:
+    repo: "{{ aws_igenomes_repo }}"
+    dest: "{{ aws_igenomes_dest }}"
+    version: "{{ aws_igenomes_commit }}"
+
+- name: download iGenome {{ item.genome }}/{{ item.source }}/{{ item.build }}:{{ item.type }}
+  command: "{{ aws_igenomes_dest }}/aws-igenomes.sh 
+    -g {{ item.genome }}
+    -s {{ item.source }}
+    -b {{ item.build }}
+    -t {{ item.type }}
+    -q"
+  environment: "{{ nf_core_vars }}"
+  args:
+    chdir: "{{ igenomes_dir }}"
+    creates: "{{ igenomes_dir }}/references/{{ item.genome }}/{{ item.source }}/{{ item.build }}"
+  with_items: "{{ igenomes }}"
