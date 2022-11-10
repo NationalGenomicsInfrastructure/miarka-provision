@@ -2,9 +2,6 @@ nf_core_env_name: nf-core-env
 nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
 nf_core_version: 2.4.1
 nf_core_container_repo: docker://nfcore
-nf_core_module_versions:
-  snpeff: 5.1
-  vep: 106.1
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
   SINGULARITY_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
@@ -23,8 +20,8 @@ pipelines:
     release: "{{ sarek_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
     pipeline_specific_containers:
-      - vep
-      - snpeff
+      - vep-106.1
+      - snpeff-5.1
     pipeline_genomes:
       - GRCh38
       - GRCh37
