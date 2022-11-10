@@ -19,6 +19,7 @@
     silva_zip: "{{ item.silva_zip | default('') }}"
     container_dir: "{{ ngi_containers }}/{{ item.container_dir | default(item.name) }}"
   with_items: "{{ pipelines }}"
+  tags: pipelines
 
 # Setup iGenomes
 - name: setup iGenomes
