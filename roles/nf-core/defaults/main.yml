@@ -18,14 +18,17 @@ pipelines:
     container_dir: "{{ biocontainers_dirname }}"
   - name: sarek
     release: "{{ sarek_tag }}"
+    container_dir: "{{ biocontainers_dirname }}"
     pipeline_specific_containers:
-      - sarekvep
-      - sareksnpeff
+      - vep-106.1
+      - snpeff-5.1
     pipeline_genomes:
       - GRCh38
       - GRCh37
       - GRCm38
+      - GRCm39
       - CanFam3.1
+      - WBcel235
   - name: methylseq
     release: 1.6.1
   - name: ampliseq
