@@ -16,7 +16,7 @@
     -g {{ item.genome }}
     -s {{ item.source }}
     -b {{ item.build }}
-    {{ ['-t', item.type] | join if type else '' }}
+    {{ ['-t', item.type] | join if item.type else '' }}
     -q"
   environment:
     PATH: "{{ nf_core_env }}/bin"
