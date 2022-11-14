@@ -2,6 +2,10 @@
 singularity.libraryDir = '{{ nf_core_vars.NXF_SINGULARITY_LIBRARYDIR }}'
 singularity.cacheDir = '{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}'
 
+/* this is commented out by default in order to not override the default uppmax path
+   if necessary to use the custom location, uncomment this parameter */
+//igenomes_base = '{{ igenomes_dir }}/references'
+
 {% if pipeline == 'methylseq' %}
 
 process {
