@@ -25,3 +25,12 @@
     executable: "{{ arteria_service_env_root }}/bin/pip"
     state: present
     extra_args: "-U"
+
+- name: download seqreports singularity images
+  ansible.builtin.shell: |
+    module load bioinfo-tools Nextflow/21.04
+    nextflow run main.nf -profile test,singularity
+  args:
+    chdir: "{{ arteria_service_src_path }}/seqreports"
+  environment:
+    NXF_SINGULARITY_CACHEDIR: "{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}"
