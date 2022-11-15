@@ -19,12 +19,18 @@
     src: checkqc.config.j2
     dest: "{{ arteria_service_config_root }}/checkqc.config"
 
+- name: Deploy arteria-delivery wrapper
+  template:
+    src: arteria-sequencing-report_wrapper.sh.j2
+    dest: "{{ arteria_sequencing_report_wrapper }}"
+    mode: o+x
+
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
   ini_file:
     dest: "{{ supervisord_conf }}"
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: command
-    value: "{{ arteria_service_env_root }}/bin/sequencing-report-service --configroot={{ arteria_service_config_root }} --port={{ seqreport_service_port }}"
+    value: "{{ arteria_sequencing_report_wrapper }}"
     backup: no
 
 - name: modify uppsala's supervisord conf to autostart {{ arteria_service_name }}

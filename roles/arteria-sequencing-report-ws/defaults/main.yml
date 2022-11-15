@@ -4,6 +4,7 @@ seqreport_service_repo: https://github.com/arteria-project/sequencing-report-ser
 seqreport_service_version: v1.3.1-rc2
 
 arteria_service_name: arteria-sequencing-report-ws
+arteria_sequencing_report_wrapper: "{{ arteria_service_config_root }}/arteria_sequencing_report_wrapper.sh"
 
 seqreports_nf_profile: singularity,irma  # Should be updated to uppmax with the next seqreports release
 fastq_ref_genomes_path: /sw/data/fastq_screen_data/20220330/miarka/FastQ_Screen_Genomes
