@@ -6,4 +6,4 @@ seqreport_service_version: v1.3.1-rc2
 arteria_service_name: arteria-sequencing-report-ws
 
 seqreports_nf_profile: singularity,irma  # Should be updated to uppmax with the next seqreports release
-fastq_ref_genomes_path: $FASTQ_SCREEN_DATA
+fastq_ref_genomes_path: /sw/data/fastq_screen_data/20220330/miarka/FastQ_Screen_Genomes
