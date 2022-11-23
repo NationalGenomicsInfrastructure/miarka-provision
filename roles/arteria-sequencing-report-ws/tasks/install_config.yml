@@ -15,8 +15,8 @@
     dest: "{{ arteria_service_config_root }}/logger.config"
 
 - name: deploying {{ arteria_service_name }} checkqc config
-  template:
-    src: checkqc.config.j2
+  copy:
+    src: checkqc.config
     dest: "{{ arteria_service_config_root }}/checkqc.config"
 
 - name: Deploy arteria-delivery wrapper
