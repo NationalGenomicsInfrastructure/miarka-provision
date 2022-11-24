@@ -27,10 +27,11 @@
     extra_args: "-U"
 
 - name: download seqreports singularity images
-  ansible.builtin.shell: |
+  shell: |
     module load bioinfo-tools Nextflow/21.04
-    nextflow run main.nf -profile test,singularity
+    nextflow -log /scratch run {{ arteria_service_src_path }}/seqreportsmain.nf -profile test,singularity
   args:
-    chdir: "{{ arteria_service_src_path }}/seqreports"
+    chdir: /scratch
   environment:
     NXF_SINGULARITY_CACHEDIR: "{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}"
+    NXF_HOME: "/scratch"
