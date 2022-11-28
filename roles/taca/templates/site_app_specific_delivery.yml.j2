@@ -32,19 +32,11 @@ deliver:
             - <STAGINGPATH>/01-QC-Results
             - required: True
 {% elif "fastq" == item.item_type %}
-{% if "sthlm" == site %}
-            - DELIVERY.README.RAW_DATA.txt
-{% else %}
             - {{ ngi_softlinks }}/DELIVERY.README.RAW_DATA.txt
-{% endif %}
             - <STAGINGPATH>
 {% endif %}
         -
-{% if "sthlm" == site %}
-            - ACKNOWLEDGEMENTS.txt
-{% else %}
             - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
-{% endif %}
             - <STAGINGPATH>
         -
             - <ANALYSISPATH>/reports/*
