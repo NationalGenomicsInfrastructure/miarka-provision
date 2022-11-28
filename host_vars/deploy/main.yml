@@ -2,6 +2,7 @@
 # Empty placeholder that gets filled by env_vars and/or tasks/set_paths.yml
 root_path:
 ngi_containers:
+igenomes_dir:
 
 sw_path: "{{ root_path }}/sw"
 
