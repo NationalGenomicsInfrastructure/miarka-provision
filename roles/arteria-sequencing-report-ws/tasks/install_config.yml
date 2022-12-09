@@ -6,18 +6,23 @@
 
 - name: deploying {{ arteria_service_name }} app config
   template:
-    src: delivery_app.config.j2
+    src: seqreport_app.config.j2
     dest: "{{ arteria_service_config_root }}/app.config"
 
 - name: deploying {{ arteria_service_name }} logger config
   template:
-    src: delivery_logger.config.j2
+    src: seqreport_logger.config.j2
     dest: "{{ arteria_service_config_root }}/logger.config"
+
+- name: deploying {{ arteria_service_name }} checkqc config
+  copy:
+    src: checkqc.config
+    dest: "{{ arteria_service_config_root }}/checkqc.config"
 
 - name: Deploy arteria-delivery wrapper
   template:
-    src: arteria-delivery_wrapper.sh.j2
-    dest: "{{ arteria_delivery_wrapper }}"
+    src: arteria-sequencing-report_wrapper.sh.j2
+    dest: "{{ arteria_sequencing_report_wrapper }}"
     mode: o+x
 
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
@@ -25,7 +30,7 @@
     dest: "{{ supervisord_conf }}"
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: command
-    value: "{{ arteria_delivery_wrapper }}"
+    value: "{{ arteria_sequencing_report_wrapper }}"
     backup: no
 
 - name: modify uppsala's supervisord conf to autostart {{ arteria_service_name }}

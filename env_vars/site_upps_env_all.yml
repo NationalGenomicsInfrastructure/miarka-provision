@@ -48,3 +48,6 @@ arteria_checksum_port: 10420
 # arteria-delivery
 runfolder_path: "{{ static_runfolder_path }}"
 arteria_delivery_port: 10440
+
+# sequencing-report-service
+seqreport_service_port: 10460
