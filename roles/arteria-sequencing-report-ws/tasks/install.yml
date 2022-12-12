@@ -28,10 +28,9 @@
 
 - name: download seqreports singularity images
   shell: |
-    module load bioinfo-tools Nextflow/21.04
-    nextflow -log {{ lookup('env', 'SNIC_TMP') }} run {{ arteria_service_src_path }}/seqreports/main.nf -profile test,singularity
+    {{ sw_path }}/nextflow/nextflow -log {{ lookup('env', 'SNIC_TMP') }} run {{ arteria_service_src_path }}/seqreports/main.nf -profile test,singularity
   args:
     chdir: "{{ lookup('env', 'SNIC_TMP') }}"
   environment:
-    NXF_SINGULARITY_CACHEDIR: "{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}"
+    NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/seqreports"
     NXF_HOME: "{{ lookup('env', 'SNIC_TMP') }}"
