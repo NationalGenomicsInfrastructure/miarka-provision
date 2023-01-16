@@ -27,7 +27,7 @@ pipelines:
       - GRCm38
       - CanFam3.1
   - name: methylseq
-    release: 1.6.1
+    release: 2.3.0
   - name: ampliseq
     release: 2.4.1
     silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
