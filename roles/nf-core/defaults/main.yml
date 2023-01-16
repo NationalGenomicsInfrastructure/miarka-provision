@@ -27,16 +27,16 @@ pipelines:
       - GRCm38
       - CanFam3.1
   - name: methylseq
-    release: 1.6.1
+    release: 2.3.0
   - name: ampliseq
-    release: 2.0.0
+    release: 2.4.1
     silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
     silva_zip: Silva_132_release.zip
     container_dir: "{{ biocontainers_dirname }}"
   - name: atacseq
-    release: 1.2.1
+    release: 2.0
   - name: viralrecon
-    release: 2.2
+    release: 2.5
     container_dir: "{{ biocontainers_dirname }}"
   - name: rnafusion
     release: 2.1.0
@@ -45,7 +45,7 @@ pipelines:
     release: 3.0.0
     container_dir: "{{ biocontainers_dirname }}"
   - name: scrnaseq
-    release: 2.0.0
+    release: 2.1.0
     container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
