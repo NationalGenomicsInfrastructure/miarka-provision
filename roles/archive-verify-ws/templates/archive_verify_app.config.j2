@@ -1,0 +1,29 @@
+---
+
+port: {{ archive_verify_port }}
+base_url: "/api/1.0"
+verify_root_dir: {{ archive_verify_path_to_verify_root }}
+pdc_root_dir: "{}/"
+dsmc_log_dir: {{ arteria_service_log_dir }}
+# maximum run-time for a job
+job_timeout: "48h"
+# maximum time to keep a job in the queue
+job_ttl: "72h"
+# maximum time to keep job result; -1 never expires
+job_result_ttl: "-1"
+
+# Whitelisted DSMC warnings.
+#
+# ANS1809W = a session with the TSM server has been disconnected: will retry again
+# ANS2042W = a symblic link to a file on other fs has been uploaded: acls/extended attributes might not be backed up
+# ANS2250W = a TSM core file or crash report was found
+#
+# See full list at e.g. https://www.ibm.com/support/knowledgecenter/en/SSGSG7_7.1.1/com.ibm.itsm.msgs.client.doc/msgs_client_list_intro.html
+whitelisted_warnings: {{ archive_verify_whitelisted_warnings | to_json }}
+
+{% if deployment_environment == "devel" %}
+
+# For local use; remove this in environments where the dsmc client is installed
+pdc_client: "MockPdcClient"
+
+{% endif %}
