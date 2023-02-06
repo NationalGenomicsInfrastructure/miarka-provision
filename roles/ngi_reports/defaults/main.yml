@@ -1,7 +1,7 @@
 ---
 ngi_reports_repo: https://github.com/NationalGenomicsInfrastructure/ngi_reports.git
 ngi_reports_dest: "{{ sw_path }}/ngi_reports"
-ngi_reports_version: 27df71e46045aa90e6d2384ea1a27243eca43df5
+ngi_reports_version: 7f7fbb3e5c9dda9779062b083f9f766430303fd1
 ngi_reports_log: "{{ ngi_log_path }}/ngi_reports.log"
 
 ngi_visual_repo: https://github.com/NationalGenomicsInfrastructure/ngi_visualizations.git
