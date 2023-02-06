@@ -35,24 +35,6 @@
         files_matching: site_(all|{{ site }})_env_(all|{{ deployment_environment }}).yml$
       tags: always
 
-    - name: create {{ root_path }} folder and configure setgid
-      file:
-        path: "{{ root_path }}"
-        group: "{{ ngi_sw_group }}"
-        state: directory
-        recurse: no
-        mode: g+rwXs,o=rX
-      tags: always
-
-    - name: create {{ ngi_containers }} folder and configure setgid
-      file:
-        path: "{{ ngi_containers }}"
-        group: "{{ ngi_sw_group }}"
-        state: directory
-        recurse: no
-        mode: g+rwXs,o=rX
-      tags: always
-
     - name: create {{ proj_root }} folder and configure setgid
       file:
         path: "{{ proj_root }}"
@@ -62,6 +44,19 @@
         mode: g+rwXs,o-rwx
       when: deployment_environment in ["staging", "devel"]
       tags: always
+
+    - name: create folder and configure setgid
+      file:
+        path: "{{ item }}"
+        group: "{{ ngi_sw_group }}"
+        state: directory
+        recurse: no
+        mode: g+rwXs,o=rX
+      tags: always
+      with_items:
+        - "{{ root_path }}"
+        - "{{ ngi_containers }}"
+        - "{{ igenomes_dir }}"
 
     - name: initiate list of static folders that must be created on the target, after deployment
       set_fact:
@@ -101,6 +96,7 @@
     - { role: delivery, tags: delivery }
     - { role: misc-tools, tags: misc-tools }
     - { role: archive-upload-ws, tags: archive-upload }
+    - { role: archive-verify-ws, tags: archive-verify }
     - { role: nf-core, tags: nf-core }
 
   tasks:
@@ -120,21 +116,16 @@
 
     - name: set correct file permission for everything in the deployment
       file:
-        path: "{{ root_path }}"
+        path: "{{ item }}"
         group: "{{ ngi_sw_group }}"
         state: directory
         recurse: yes
         mode: g+rwX,o=rX
       tags: always
-
-    - name: make containers directory readable by anyone that can access miarka
-      file:
-        path: "{{ ngi_containers }}"
-        group: "{{ ngi_sw_group }}"
-        state: directory
-        recurse: yes
-        mode: g+rwX,o=rX
-      tags: always
+      with_items:
+        - "{{ root_path }}"
+        - "{{ ngi_containers }}"
+        - "{{ igenomes_dir }}"
 
   post_tasks:
 

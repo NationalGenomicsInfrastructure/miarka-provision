@@ -35,5 +35,4 @@
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
     line: "Anaconda: {{ conda_version.stderr }}"
-  when: conda_version.stderr #for some reason saved as stderr
-
+  when: conda_version.stdout

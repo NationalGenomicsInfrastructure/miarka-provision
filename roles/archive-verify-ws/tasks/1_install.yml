@@ -1,0 +1,25 @@
+---
+
+- name: create virtual python env for archive-verify
+  shell: "conda create --name {{ arteria_service_name }} -c conda-forge python={{ archive_verify_python_version }} redis-server={{ archive_verify_redis_server_version }}"
+  args:
+    creates: "{{ arteria_service_env_root }}"
+
+- name: install pipenv
+  pip:
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    name: pipenv
+    state: present
+
+- name: get archive-verify from git
+  git:
+    repo: "{{ archive_verify_repo }}"
+    dest: "{{ arteria_service_src_path }}"
+    version: "{{ archive_verify_version }}"
+
+- name: install archive-verify requirements
+  command: pipenv install --deploy
+  args:
+    chdir: "{{ arteria_service_src_path }}"
+  environment:
+    PATH: "{{ arteria_service_env_root }}/bin:{{ tools_path.PATH }}"

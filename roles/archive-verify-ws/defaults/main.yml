@@ -1,0 +1,16 @@
+---
+
+archive_verify_repo: https://github.com/Molmed/snpseq-archive-verify.git
+archive_verify_version: v1.0.5-rc1
+arteria_service_name: archive-verify-ws
+
+archive_verify_redis_server_version: 7.0.4
+archive_verify_python_version: 3.6
+
+# We want to fake a successful return code for the dsmc subprocess for some certain warnings.
+# Otherwise the Arteria workflow in Stackstorm would be marked as failed when it actually suceeded.
+#
+# ANS1809W = a session with the TSM server has been disconnected: will retry again
+# ANS2042W = a symblic link to a file on other fs has been uploaded: acls/extended attributes might not be backed up
+# ANS2250W = a TSM core file or crash report was found
+archive_verify_whitelisted_warnings: ["ANS1809W", "ANS2042W", "ANS2250W"]
