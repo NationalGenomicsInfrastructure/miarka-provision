@@ -23,10 +23,7 @@ After running the pipeline, Picard CollectHsMetrics was used to evaluate the cov
 │   │   └── snpEff
 │   └── <sample2 name>
 │       └── snpEff
-├── DELIVERY.README.SAREK.WES.txt
-├── multiqc_ngi
-│   ├── <project>_multiqc_report_data.zip
-│   └── <project>_multiqc_report.html
+├── DELIVERY.README.SAREK.WES.md
 ├── pipeline_info
 │   ├── results_description.html
 │   └── software_versions.csv
@@ -49,6 +46,16 @@ After running the pipeline, Picard CollectHsMetrics was used to evaluate the cov
 │           ├── <sample2 name>.md.bam.bai
 │           └── <sample2 name>.recal.table
 ├── Reports
+│   ├── SequenceQC
+│   │   ├── <runfolder 1>
+│   │   │   ├── <runfolder 1>_<project>_multiqc_report_data.zip
+│   │   │   └── <runfolder 1>_<project>_multiqc_report.html
+│   │   └── <runfolder 2>
+│   │       ├── <runfolder 2>_<project>_multiqc_report_data.zip
+│   │       └── <runfolder 2>_<project>_multiqc_report.html
+│   ├── MultiQC
+│   │   ├── <project>_multiqc_report_data.zip
+│   │   └── <project>_multiqc_report.html
 │   ├── <sample1 name>
 │   │   ├── bamQC
 │   │   ├── BCFToolsStats
