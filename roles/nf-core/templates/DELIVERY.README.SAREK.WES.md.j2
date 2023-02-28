@@ -90,6 +90,11 @@ After running the pipeline, Picard CollectHsMetrics was used to evaluate the cov
 
 ```
 
+## FASTQ files
+
+FASTQ files are not included in the delivery, but can be regenerated from the BAM files.
+We recommend using https://github.com/qbic-pipelines/bamtofastq, refer to its documentation for usage.
+
 ## Known issues
 
 - Twist bait intervals are not publicly available and therefore, when running CollectHsMetrics (Picard), the target intervals are used to specify both target and bait. 
