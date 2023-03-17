@@ -8,3 +8,5 @@ arteria_sequencing_report_wrapper: "{{ arteria_service_config_root }}/arteria_se
 
 seqreports_nf_profile: singularity,irma  # Should be updated to uppmax with the next seqreports release
 fastq_ref_genomes_path: /sw/data/fastq_screen_data/20220330/miarka/FastQ_Screen_Genomes
+
+container_dir: "{{ ngi_containers }}/biocontainers"
