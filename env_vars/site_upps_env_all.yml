@@ -36,10 +36,15 @@ tarzan_port: 4444
 
 # arteria-common
 arteria_service_log_dir: "{{ static_ngi_log_path }}/arteria/{{ arteria_service_name }}/{{ deployment_environment }}"
+pdc_archive_servername: ngiu
 
 # arteria archive upload
 archive_upload_path_to_archive_root: "{{ static_ngi_pipeline_nobackup }}/arteria/pdc_archive_links/{{ deployment_environment }}"
 archive_upload_port: 10480
+
+# arteria archive verify
+archive_verify_port: 10490
+archive_verify_path_to_verify_root: "{{ static_ngi_pipeline_nobackup }}/arteria/pdc_archive_dump/{{ deployment_environment }}"
 
 # arteria-checksum
 arteria_checksum_monitored_path: "{{ static_runfolder_path }}"
