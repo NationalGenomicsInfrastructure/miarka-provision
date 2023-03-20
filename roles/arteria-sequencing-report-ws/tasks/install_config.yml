@@ -21,7 +21,7 @@
 
 - name: Deploy arteria-delivery wrapper
   template:
-    src: arteria-sequencing-report_wrapper.sh.j2
+    src: arteria_sequencing_report_wrapper.sh.j2
     dest: "{{ arteria_sequencing_report_wrapper }}"
     mode: o+x
 
