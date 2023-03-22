@@ -13,7 +13,7 @@ nextflow_log_dirs: {{ arteria_service_log_dir }}/nxf_logs
 
 nextflow_config:
     main_workflow_path: {{ arteria_service_src_path }}/seqreports/main.nf
-    nf_config: {{ arteria_service_src_path }}/seqreports/config/nextflow.config
+    nf_config: {{ arteria_service_src_path }}/seqreports/nextflow.config
     nf_profile: {{ seqreports_nf_profile }}
     environment:
         NXF_TEMP: {{ nextflow_env.NXF_TEMP }}
