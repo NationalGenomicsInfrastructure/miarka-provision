@@ -7,8 +7,8 @@ RUN \
   yum update -y && \
   yum -y install python38-devel python38-pip git tar gzip bzip2 rsync apptainer
 
-# needed to run nested Singularity (apptainer), which the `arteria-seqreports`
-# role does
+# needed to run nested Singularity (apptainer), which the
+# `arteria-sequencing-report-ws` role does
 RUN sed -i 's/allow setuid = yes/allow setuid = no/g' /etc/apptainer/apptainer.conf
 
 RUN \
