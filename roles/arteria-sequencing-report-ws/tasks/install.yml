@@ -32,25 +32,9 @@
     suffix: nxf_seqreports
   register: tempfolder
 
-# the nextflow shell script tries at one point to determine the path of itself:
-#   ```
-#   # Determine the path to this file
-#   if [[ $NXF_PACK = all ]]; then
-#       NXF_BIN=$(which "$0" 2>/dev/null)
-#       [ $? -gt 0 -a -f "$0" ] && NXF_BIN="./$0"
-#   fi
-#   ```
-# `which` is not installed in the ansible singularity container. This causes
-# the test to fail and sets `NXF_BIN=.//vulpes/ngi/[ ... ]/nextflow/nextflow`,
-# making it a relative path. Since the working directory is not `/`, this
-# will not work
-# for that reason we define `which` as a short shell function that provides the
-# same functionality
 - name: download seqreports singularity images
   shell: |
-    which() { command -v $@; }; \
-    export -f which; \
-    {{ sw_path }}/nextflow/nextflow -log {{ lookup('env', 'SNIC_TMP') }} run {{ arteria_service_src_path }}/seqreports/main.nf -profile test,singularity;
+    {{ sw_path }}/nextflow/nextflow -log {{ lookup('env', 'SNIC_TMP') }} run {{ arteria_service_src_path }}/seqreports/main.nf -profile test,singularity
   args:
     chdir: "{{ sw_path }}"
   environment: "{{ nf_core_vars | combine({'NXF_TEMP': tempfolder.path }) }}"
