@@ -1,3 +1,4 @@
+---
 
 - name: create virtual python env for sequencing report service
   shell: "conda create --name {{ arteria_service_name }} python=3.8"
@@ -26,11 +27,20 @@
     state: present
     extra_args: "-U"
 
+- name: create temp folder
+  tempfile:
+    state: directory
+    suffix: nxf_seqreports
+  register: tempfolder
+
 - name: download seqreports singularity images
   shell: |
     {{ sw_path }}/nextflow/nextflow -log {{ lookup('env', 'SNIC_TMP') }} run {{ arteria_service_src_path }}/seqreports/main.nf -profile test,singularity
   args:
-    chdir: "{{ lookup('env', 'SNIC_TMP') }}"
+    chdir: "{{ tempfolder.path }}"
   environment:
     NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/seqreports"
-    NXF_HOME: "{{ lookup('env', 'SNIC_TMP') }}"
+    NXF_HOME: "{{ nextflow_dest }}/workfiles"
+    NXF_JAVA_HOME: "{{ nextflow_env.NXF_JAVA_HOME }}"
+    NXF_TEMP: "{{ tempfolder.path }}"
+

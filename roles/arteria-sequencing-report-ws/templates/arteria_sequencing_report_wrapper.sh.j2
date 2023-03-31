@@ -1,5 +1,7 @@
 #! /bin/bash -l
 
-module load bioinfo-tools Nextflow/21.04
+export PATH={{ sw_path }}/nextflow:$PATH
+export NXF_HOME={{ nextflow_dest }}/workfiles
+export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
 
 {{ arteria_service_env_root }}/bin/sequencing-report-service --configroot={{ arteria_service_config_root }} --port={{ seqreport_service_port }}

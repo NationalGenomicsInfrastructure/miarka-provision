@@ -1,3 +1,4 @@
+---
 
 - name: ensure {{ arteria_service_name }} conf dir exists
   file:
@@ -21,9 +22,9 @@
 
 - name: Deploy arteria-delivery wrapper
   template:
-    src: arteria-sequencing-report_wrapper.sh.j2
+    src: arteria_sequencing_report_wrapper.sh.j2
     dest: "{{ arteria_sequencing_report_wrapper }}"
-    mode: o+x
+    mode: "0755"
 
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
   ini_file:
