@@ -1,5 +1,5 @@
 #! /bin/bash -l
 
-module load bioinfo-tools Nextflow/21.04
+export PATH={{ sw_path }}/nextflow:$PATH
 
 {{ arteria_service_env_root }}/bin/sequencing-report-service --configroot={{ arteria_service_config_root }} --port={{ seqreport_service_port }}
