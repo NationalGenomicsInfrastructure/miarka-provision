@@ -1,12 +1,19 @@
 ---
 
+- name: Create Kraken2 directory
+  file:
+    path: "{{ kraken2_dest }}"
+    state: directory
+
 - name: Download Kraken2
   get_url:
     url: "{{ kraken2_download_url }}"
-    dest: "{{ kraken2_dest }}"
+    dest: "{{ kraken2_src }}"
 
 - name: Install Kraken2
-  shell: "gunzip {{ kraken2_file }} && cd kraken2-{{ kraken2_version_tag }} && ./install_kraken2.sh ."
+  shell: "gunzip {{ kraken2_file }} && kraken2-{{ kraken2_version_tag }}/install_kraken2.sh {{ kraken2_dest }}"
+  args:
+    chdir: "/scratch"
 
 - name: Add Kraken2 to $PATH
   lineinfile:
