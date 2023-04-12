@@ -5,8 +5,12 @@ RUN \
   chmod +x /usr/bin/cpanm && \
   yum install -y epel-release && \
   yum update -y && \
-  yum -y install python38-devel python38-pip git tar gzip bzip2 rsync singularity-runtime && \
+  yum -y install python38-devel python38-pip git tar gzip bzip2 rsync apptainer which && \
   yum -y groupinstall "Development Tools"
+
+# needed to run nested Singularity (apptainer), which the
+# `arteria-sequencing-report-ws` role does
+RUN sed -i 's/allow setuid = yes/allow setuid = no/g' /etc/apptainer/apptainer.conf
 
 RUN \
   python3 -m pip install ansible pexpect
