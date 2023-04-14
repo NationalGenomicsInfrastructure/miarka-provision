@@ -11,7 +11,7 @@
     dest: "{{ kraken2_src }}"
 
 - name: Install Kraken2
-  shell: "gunzip {{ kraken2_file }} && kraken2-{{ kraken2_version_tag }}/install_kraken2.sh {{ kraken2_dest }}"
+  shell: "gunzip {{ kraken2_file }} && cd kraken2-{{ kraken2_version_tag }} && ./install_kraken2.sh {{ kraken2_dest }}"
   args:
     chdir: "/scratch"
 
@@ -26,4 +26,4 @@
     dest: "{{ deployed_tool_versions }}"
     line: "{{ NGI_venv_name }}, {{ item.tool_name }}: {{ item.tool_version }}"
   with_items:
-    - { tool_name: "Kraken2", tool_version: "{{ kraken2_version }}" }
+    - { tool_name: "Kraken2", tool_version: "{{ kraken2_version_tag }}" }
