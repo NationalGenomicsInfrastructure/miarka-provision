@@ -5,7 +5,7 @@ RUN \
   chmod +x /usr/bin/cpanm && \
   yum install -y epel-release && \
   yum update -y && \
-  yum -y install python38-devel python38-pip git tar gzip bzip2 rsync apptainer which gcc gcc-c++ kernel-devel
+  yum -y install python38-devel python38-pip git tar gzip bzip2 rsync apptainer which make
 
 # needed to run nested Singularity (apptainer), which the
 # `arteria-sequencing-report-ws` role does
