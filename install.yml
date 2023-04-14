@@ -98,7 +98,6 @@
     - { role: archive-upload-ws, tags: archive-upload }
     - { role: archive-verify-ws, tags: archive-verify }
     - { role: nf-core, tags: nf-core }
-    - { role: seqreports, tags: seqreports,snpseq-only }
     - { role: kraken2, tags: kraken2 }
 
   tasks:
