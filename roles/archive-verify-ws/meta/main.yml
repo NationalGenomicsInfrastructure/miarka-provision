@@ -1,0 +1,5 @@
+---
+
+dependencies:
+  - { role: anaconda, tags: anaconda }
+  - { role: setup_base_config, tags: setup_base_config }
