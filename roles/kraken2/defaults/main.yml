@@ -1,0 +1,5 @@
+kraken2_version_tag: 2.1.2
+kraken2_file: "v{{ kraken2_version_tag }}.tar.gz"
+kraken2_download_url: "https://github.com/DerrickWood/kraken2/archive/refs/tags/{{ kraken2_file }}"
+kraken2_dest: "{{ sw_path }}/kraken2"
+kraken2_src: "/scratch/{{ kraken2_file }}"
