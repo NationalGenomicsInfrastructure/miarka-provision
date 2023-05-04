@@ -4,6 +4,7 @@ log:
 deliver:
     rootpath: "{{ proj_root }}/{{ uppmax_project }}"
     datapath: <ROOTPATH>/incoming
+    stagingpath: <ROOTPATH>/nobackup/NGI/DELIVERY/<PROJECTID>
     stagingpathhard: <ROOTPATH>/nobackup/NGI/DELIVERY_HARD/<PROJECTID>
     operator: "{{ recipient_mail }}"
 {% if "sthlm" == site %}
