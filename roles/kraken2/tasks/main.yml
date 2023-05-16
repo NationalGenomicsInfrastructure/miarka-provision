@@ -1,19 +1,20 @@
 ---
-
 - name: Create Kraken2 directory
   file:
     path: "{{ kraken2_dest }}"
     state: directory
 
-- name: Download Kraken2
-  get_url:
-    url: "{{ kraken2_download_url }}"
-    dest: "{{ kraken2_src }}"
+- name: Download and unarchive Kraken2
+  unarchive:
+    src: "{{ kraken2_download_url }}"
+    dest: "/scratch/"
+    creates: "/scratch/kraken2-{{ kraken2_version_tag }}"
+    remote_src: yes
 
 - name: Install Kraken2
-  shell: "gunzip {{ kraken2_file }} && cd kraken2-{{ kraken2_version_tag }} && ./install_kraken2.sh {{ kraken2_dest }}"
+  command: "/scratch/kraken2-{{ kraken2_version_tag }}/install_kraken2.sh {{ kraken2_dest }}"
   args:
-    chdir: "/scratch"
+    chdir: "/scratch/kraken2-{{ kraken2_version_tag }}"
 
 - name: Add Kraken2 to $PATH
   lineinfile:
