@@ -1,0 +1,30 @@
+---
+- name: Create Kraken2 directory
+  file:
+    path: "{{ kraken2_dest }}"
+    state: directory
+
+- name: Download and unarchive Kraken2
+  unarchive:
+    src: "{{ kraken2_download_url }}"
+    dest: "/scratch/"
+    creates: "/scratch/kraken2-{{ kraken2_version_tag }}"
+    remote_src: yes
+
+- name: Install Kraken2
+  command: "/scratch/kraken2-{{ kraken2_version_tag }}/install_kraken2.sh {{ kraken2_dest }}"
+  args:
+    chdir: "/scratch/kraken2-{{ kraken2_version_tag }}"
+
+- name: Add Kraken2 to $PATH
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"
+    line: "export PATH={{ kraken2_dest }}:$PATH"
+    backup: no
+
+- name: Store Kraken2 tool version in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ NGI_venv_name }}, {{ item.tool_name }}: {{ item.tool_version }}"
+  with_items:
+    - { tool_name: "Kraken2", tool_version: "{{ kraken2_version_tag }}" }
