@@ -1,0 +1,16 @@
+[ req ]
+prompt = no
+distinguished_name = server_distinguished_name
+x509_extensions = v3_req
+
+[ server_distinguished_name ]
+commonName = {{ tarzan_host_name }}
+
+[ v3_req ]
+basicConstraints = CA:TRUE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment,keyCertSign
+subjectAltName = @alternate_names
+
+[ alternate_names ]
+
+DNS.1 = {{ tarzan_host_name }}
