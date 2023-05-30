@@ -1,4 +1,4 @@
 dependencies:
-  - { role: setup_base_config, tags: setup_base_config,
-      role: func_accounts, tags: func_accounts}
+  - { role: setup_base_config, tags: setup_base_config }
+  - { role: func_accounts, tags: func_accounts }
 
