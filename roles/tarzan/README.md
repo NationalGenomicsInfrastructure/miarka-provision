@@ -28,7 +28,7 @@ On the node running Kong, run:
 openssl req -config <tarzan_conf_dir>/tarzan_cert_config.txt -newkey rsa:2048 -nodes -keyout tarzan_key.pem -x509 -days 1460 -out tarzan_cert.pem
 ```
 
-Move the generated certificate and key to the paths defined by `tarzan_cert_file` and `tarzan_key_file` in `env_vars/site_[site]_env_[environment].yml`.
+Move the generated certificate and key to the paths defined by `tarzan_cert_file` and `tarzan_key_file` in `env_vars/site_[site]_env_all.yml`.
 
 # Authentication
 
