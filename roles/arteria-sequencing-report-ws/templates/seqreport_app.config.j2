@@ -28,7 +28,7 @@ nextflow_config:
     parameters:
         run_folder: ${DEFAULT:runfolder_path}
         project: {{ uppmax_project }}
-        config_dir: {{ arteria_service_src_root }}/seqreports/config/tool_config/
+        config_dir: {{ arteria_service_src_path }}/seqreports/config/tool_config/
         fastqscreen_databases: {{ fastq_ref_genomes_path }}
         checkqc_config: {{ arteria_service_config_root }}/checkqc.config
         result_dir: ${DEFAULT:runfolder_path}/seqreports
