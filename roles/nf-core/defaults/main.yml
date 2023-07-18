@@ -1,6 +1,6 @@
 nf_core_env_name: nf-core-env
 nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
-nf_core_version: 2.7.2
+nf_core_version: 2.9
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
