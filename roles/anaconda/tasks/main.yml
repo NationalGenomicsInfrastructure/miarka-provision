@@ -34,5 +34,5 @@
 - name: Store anaconda version in deployment
   lineinfile:
     dest: "{{ deployed_tool_versions }}"
-    line: "Anaconda: {{ conda_version.stderr }}"
+    line: "Anaconda: {{ conda_version.stdout }}"
   when: conda_version.stdout

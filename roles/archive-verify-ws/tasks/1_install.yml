@@ -5,21 +5,16 @@
   args:
     creates: "{{ arteria_service_env_root }}"
 
-- name: install pipenv
-  pip:
-    executable: "{{ arteria_service_env_root }}/bin/pip"
-    name: pipenv
-    state: present
-
 - name: get archive-verify from git
   git:
     repo: "{{ archive_verify_repo }}"
     dest: "{{ arteria_service_src_path }}"
     version: "{{ archive_verify_version }}"
 
-- name: install archive-verify requirements
-  command: pipenv install --deploy
-  args:
+- name: install archive-verify service
+  pip:
+    name: .
     chdir: "{{ arteria_service_src_path }}"
-  environment:
-    PATH: "{{ arteria_service_env_root }}/bin:{{ tools_path.PATH }}"
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    state: present
+    extra_args: "-U"

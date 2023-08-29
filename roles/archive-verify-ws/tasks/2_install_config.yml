@@ -8,65 +8,49 @@
 - name: deploy {{ arteria_service_name }} app config
   template:
     src: archive_verify_app.config.j2
-    dest: "{{ arteria_service_config_root }}/app.config"
+    dest: "{{ arteria_service_config_root }}/app.yaml"
 
 - name: deploy {{ arteria_service_name }} logger config
   template:
     src: archive_verify_logger.config.j2
-    dest: "{{ arteria_service_config_root }}/logger.config"
+    dest: "{{ arteria_service_config_root }}/logger.yaml"
 
-- name: modify uppsala's supervisord conf to set environment
+- name: modify uppsala's supervisord conf to set environment and program commands
   ini_file:
     dest: "{{ supervisord_conf }}"
-    section: supervisord
-    option: environment
-    value: LC_ALL='en_US.UTF-8',LANG='en_US.UTF-8'
+    section: "{{ item.sect }}"
+    option: "{{ item.opt }}"
+    value: "{{ item.val }}"
     backup: no
+  loop:
+    - sect: supervisord
+      opt: environment
+      val: LC_ALL='en_US.UTF-8',LANG='en_US.UTF-8'
+    - sect: program:{{ arteria_service_name }}-{{ deployment_environment }}
+      opt: command
+      val: "{{ arteria_service_env_root }}/bin/archive-verify-ws -c {{ arteria_service_config_root }}"
+    - sect: program:redis-server
+      opt: command
+      val: "{{ arteria_service_env_root }}/bin/redis-server"
+    - sect: program:redis-worker
+      opt: command
+      val: "{{ arteria_service_env_root }}/bin/rq worker"
 
-- name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
-  ini_file: 
-    dest: "{{ supervisord_conf }}"
-    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
-    option: command
-    value: "{{ arteria_service_env_root }}/bin/pipenv run {{ arteria_service_src_path }}/archive-verify-ws --configroot={{ arteria_service_config_root }} --port={{ archive_verify_port }}"
-    backup: no
- 
-- name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
-  ini_file: 
-    dest: "{{ supervisord_conf }}"
-    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
-    option: autorestart
-    value: true
-    backup: no
-
-- name: modify uppsala's supervisord conf to start redis-server
+- name: modify uppsala's supervisord conf to set program autorestart and working directory
   ini_file:
     dest: "{{ supervisord_conf }}"
-    section: program:redis-server
-    option: command
-    value: "{{ arteria_service_env_root }}/bin/redis-server"
+    section: "{{ item[0] }}"
+    option: "{{ item[1].opt }}"
+    value: "{{ item[1].val }}"
     backup: no
-
-- name: modify uppsala's supervisord conf to start redis-server
-  ini_file:
-    dest: "{{ supervisord_conf }}"
-    section: program:redis-server
-    option: autorestart
-    value: true
-    backup: no
-
-- name: modify uppsala's supervisord conf to start redis-worker
-  ini_file:
-    dest: "{{ supervisord_conf }}"
-    section: program:redis-worker
-    option: command
-    value: "{{ arteria_service_env_root }}/bin/pipenv run rq worker"
-    backup: no
-
-- name: modify uppsala's supervisord conf to start redis-worker
-  ini_file:
-    dest: "{{ supervisord_conf }}"
-    section: program:redis-worker
-    option: autorestart
-    value: true
-    backup: no
+  loop: "{{ sections | product(optvals) | list }}"
+  vars:
+    sections:
+      - program:{{ arteria_service_name }}-{{ deployment_environment }}
+      - program:redis-server
+      - program:redis-worker
+    optvals:
+      - opt: autorestart
+        val: true
+      - opt: directory
+        val: "{{ arteria_service_log_dir }}"

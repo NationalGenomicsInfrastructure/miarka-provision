@@ -10,3 +10,6 @@ project_path: "{{ ngi_pipeline_workdir }}/DELIVERY"
 staging_path: "{{ ngi_pipeline_workdir }}/DELIVERY/arteria-staged"
 db_path: "{{ static_ngi_pipeline_path }}/db/arteria/{{ deployment_environment }}"
 delivery_links: "{{ static_ngi_pipeline_nobackup }}/arteria/{{ deployment_environment }}/delivery_project_links"
+
+# tarzan
+tarzan_host_name: miarka1.uppmax.uu.se

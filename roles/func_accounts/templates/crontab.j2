@@ -9,7 +9,7 @@ SHELL=/bin/bash
 {% endif %}
 
 # updates charon with locally stored run info for sarek
-5 * * * * source $HOME/.bashrc &> /dev/null && update_charon_with_local_jobs_status.py -e sarek &> /dev/null
+5 * * * * source $HOME/.bash_profile &> /dev/null && update_charon_with_local_jobs_status.py -e sarek &> /dev/null
 
 # meta crontab: load itself all the time so we do not have to manually load the rules when updated 
 10 * * * * /usr/bin/crontab {{ ngi_pipeline_conf }}/crontab_{{ site }}
