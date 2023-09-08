@@ -19,6 +19,11 @@
     src: "kong.yml.j2"
     dest: "{{ tarzan_entity_conf_file }}"
 
+- name: deploy cert config file for kong
+  template:
+    src: "tarzan_cert_config.txt.j2"
+    dest: "{{ tarzan_cert_conf_file }}"
+
 - name: deploy kong start script
   template:
     src: "start_kong.sh.j2"

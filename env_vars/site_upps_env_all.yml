@@ -36,6 +36,7 @@ tarzan_port: 4444
 
 # arteria-common
 arteria_service_log_dir: "{{ static_ngi_log_path }}/arteria/{{ arteria_service_name }}/{{ deployment_environment }}"
+pdc_archive_servername: ngiu
 
 # arteria archive upload
 archive_upload_path_to_archive_root: "{{ static_ngi_pipeline_nobackup }}/arteria/pdc_archive_links/{{ deployment_environment }}"
