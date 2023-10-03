@@ -1,7 +1,7 @@
 ---
 
 seqreport_service_repo: https://github.com/arteria-project/sequencing-report-service.git
-seqreport_service_version: v1.4.1-rc2
+seqreport_service_version: v1.4.1-rc3
 
 arteria_service_name: arteria-sequencing-report-ws
 arteria_sequencing_report_wrapper: "{{ arteria_service_config_root }}/arteria_sequencing_report_wrapper.sh"
