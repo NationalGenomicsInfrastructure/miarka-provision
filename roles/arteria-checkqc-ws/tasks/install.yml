@@ -1,0 +1,28 @@
+---
+
+- name: create virtual python env for sequencing report service
+  shell: "conda create --name {{ arteria_service_name }} python=3.10"
+  args:
+    creates: "{{ arteria_service_env_root }}"
+
+- name: get CheckQC from git
+  git:
+    repo: "{{ checkqc_repo }}"
+    dest: "{{ arteria_service_src_path }}"
+    version: "{{ checkqc_version }}"
+
+- name: install CheckQC requirements
+  pip:
+    requirements: "{{ arteria_service_src_path }}/requirements/prod"
+    chdir: "{{ arteria_service_src_path }}"
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    state: present
+    extra_args: "-U"
+
+- name: install CheckQC
+  pip:
+    name: .
+    chdir: "{{ arteria_service_src_path }}"
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    state: present
+    extra_args: "-U"
