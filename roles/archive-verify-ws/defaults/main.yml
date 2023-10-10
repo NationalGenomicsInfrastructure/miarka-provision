@@ -1,7 +1,7 @@
 ---
 
 archive_verify_repo: https://github.com/Molmed/snpseq-archive-verify.git
-archive_verify_version: v1.1.0-rc1
+archive_verify_version: v1.1.2
 arteria_service_name: archive-verify-ws
 
 archive_verify_redis_server_version: 7.0.4
