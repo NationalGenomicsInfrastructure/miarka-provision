@@ -11,5 +11,5 @@
   - name: Store {{ arteria_service_name }} tool version in deployment
     lineinfile:
       dest: "{{ deployed_tool_versions }}"
-      line: "{{ arteria_service_name }}: {{ seqreport_service_version }}"
+      line: "{{ arteria_service_name }}: {{ checkqc_version }}"
   when: site in ["upps"]
