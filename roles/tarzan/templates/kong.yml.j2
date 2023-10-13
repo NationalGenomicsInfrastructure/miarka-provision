@@ -42,6 +42,14 @@ services:
       - /seqreports
       strip_path: true
 
+  - name: arteria_checkqc
+    host: localhost
+    port: {{ checkqc_service_port }}
+    routes:
+    - paths:
+      - /checkqc
+      strip_path: true
+
 plugins:
   - name: key-auth
     config:
