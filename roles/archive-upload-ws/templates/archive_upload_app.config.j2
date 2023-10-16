@@ -18,6 +18,9 @@ port: "{{ archive_upload_port }}"
 # Path to the dsmc logs
 log_directory: "{{ arteria_service_log_dir }}" 
 
+dsmc_extra_args:
+  servername: {{ pdc_archive_servername }}
+
 
 # Whitelisted DSMC warnings
 # ANS1809W = a session with the TSM server has been disconnected: will retry again
