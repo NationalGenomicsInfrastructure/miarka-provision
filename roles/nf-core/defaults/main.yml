@@ -20,7 +20,7 @@ pipelines:
     release: "{{ sarek_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
     pipeline_specific_containers:
-      - vep-110.0
+      - vep-108.2
       - snpeff-5.1
     pipeline_genomes:
       - GRCh38
