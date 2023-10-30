@@ -46,7 +46,7 @@ ngi_pipeline_venv_py2: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py2_name }}"
 ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"
 
-sarek_tag: "3.0.2"
+sarek_tag: "3.3.2"
 sarek_dest: "{{ sw_path }}/sarek"
 
 # File with tools/software version in the deployed env
