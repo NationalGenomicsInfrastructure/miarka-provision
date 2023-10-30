@@ -17,8 +17,9 @@ nextflow_config:
     nf_profile: {{ seqreports_nf_profile }}
     environment:
         NXF_TEMP: {{ nextflow_env.NXF_TEMP }}
-        NXF_WORK: {{ nextflow_env.NXF_WORK }}
+        NXF_WORK: ${DEFAULT:runfolder_path}/seqreports/nextflow
         NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/seqreports"
+        NXF_ANSI_LOG: false
     # Note that in the parameters section it is possible to do variable
     # subsitution on the following variables.
     # loading the config.
