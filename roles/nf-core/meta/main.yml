@@ -2,3 +2,4 @@ dependencies:
   - { role: setup_base_config, tags: setup_base_config }
   - { role: anaconda, tags: anaconda }
   - { role: nextflow, tags: nextflow }
+  - { role: taca, tags: taca }
