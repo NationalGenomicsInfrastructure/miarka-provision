@@ -1,6 +1,6 @@
 nf_core_env_name: nf-core-env
 nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
-nf_core_version: 2.4.1
+nf_core_version: 2.7.2
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
@@ -30,25 +30,27 @@ pipelines:
       - CanFam3.1
       - WBcel235
   - name: methylseq
-    release: 1.6.1
+    release: 2.3.0
+    container_dir: "{{ biocontainers_dirname }}"
   - name: ampliseq
-    release: 2.0.0
+    release: 2.5.0
     silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
     silva_zip: Silva_132_release.zip
     container_dir: "{{ biocontainers_dirname }}"
   - name: atacseq
-    release: 1.2.1
+    release: 2.0
+    container_dir: "{{ biocontainers_dirname }}"
   - name: viralrecon
-    release: 2.2
+    release: 2.6.0
     container_dir: "{{ biocontainers_dirname }}"
   - name: rnafusion
-    release: 2.1.0
+    release: 2.3.4
     container_dir: "{{ biocontainers_dirname }}"
   - name: nanoseq
-    release: 3.0.0
+    release: 3.1.0
     container_dir: "{{ biocontainers_dirname }}"
   - name: scrnaseq
-    release: 2.0.0
+    release: 2.3.0
     container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
@@ -61,3 +63,13 @@ nf_core_delivery_readmes:
     - DELIVERY.README.RNASEQ.md
   methylseq:
     - DELIVERY.README.METHYLSEQ.md
+
+awscli_version: 1.27.5
+aws_igenomes_repo: https://github.com/ewels/AWS-iGenomes.git
+aws_igenomes_commit: dda1d928fdb0d018aabbf91ac6ce8e153b699991
+aws_igenomes_dest: "{{ sw_path }}/AWS-iGenomes"
+igenomes:
+  - genome: Homo_sapiens
+    source: GATK
+    build: GRCh38
+    type: gatk

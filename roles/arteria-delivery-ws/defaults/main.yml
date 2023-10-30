@@ -7,7 +7,10 @@
 #
 # This will set corresponding paths and use the appropriate port.
 arteria_delivery_repo: https://github.com/arteria-project/arteria-delivery.git
-arteria_delivery_version: v3.0.0-rc1
+arteria_delivery_version: v3.0.1
+
+arteria_delivery_wrapper: "{{ arteria_service_config_root }}/arteria-delivery_wrapper.sh"
+
 arteria_service_name: arteria-delivery-ws
 
 # These values will be appended with production and staging specific

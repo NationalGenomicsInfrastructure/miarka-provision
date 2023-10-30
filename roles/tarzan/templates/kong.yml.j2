@@ -26,6 +26,22 @@ services:
       - /arteria_archive
       strip_path: true
 
+  - name: arteria_archive_verify
+    host: localhost
+    port: {{ archive_verify_port }}
+    routes:
+    - paths:
+      - /arteria_archive/verify
+      strip_path: true
+
+  - name: arteria_sequencing_reports
+    host: localhost
+    port: {{ seqreport_service_port }}
+    routes:
+    - paths:
+      - /seqreports
+      strip_path: true
+
 plugins:
   - name: key-auth
     config:

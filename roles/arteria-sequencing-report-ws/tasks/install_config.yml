@@ -1,0 +1,43 @@
+---
+
+- name: ensure {{ arteria_service_name }} conf dir exists
+  file:
+    state: directory
+    path: "{{ arteria_service_config_root }}"
+
+- name: deploying {{ arteria_service_name }} app config
+  template:
+    src: seqreport_app.config.j2
+    dest: "{{ arteria_service_config_root }}/app.config"
+
+- name: deploying {{ arteria_service_name }} logger config
+  template:
+    src: seqreport_logger.config.j2
+    dest: "{{ arteria_service_config_root }}/logger.config"
+
+- name: deploying {{ arteria_service_name }} checkqc config
+  copy:
+    src: checkqc.config
+    dest: "{{ arteria_service_config_root }}/checkqc.config"
+
+- name: Deploy arteria-delivery wrapper
+  template:
+    src: arteria_sequencing_report_wrapper.sh.j2
+    dest: "{{ arteria_sequencing_report_wrapper }}"
+    mode: "0755"
+
+- name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
+  ini_file:
+    dest: "{{ supervisord_conf }}"
+    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
+    option: command
+    value: "{{ arteria_sequencing_report_wrapper }}"
+    backup: no
+
+- name: modify uppsala's supervisord conf to autostart {{ arteria_service_name }}
+  ini_file:
+    dest: "{{ supervisord_conf }}"
+    section: program:{{ arteria_service_name }}-{{ deployment_environment }}
+    option: autorestart
+    value: true
+    backup: no

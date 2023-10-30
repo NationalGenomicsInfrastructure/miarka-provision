@@ -23,6 +23,7 @@
           paths:
             - "{{ root_path }}"
             - "{{ ngi_containers }}"
+            - "{{ igenomes_dir }}"
           recurse: yes
           excludes: "{{ exclude_pattern }}"
           file_type: any
@@ -87,7 +88,7 @@
       with_items:
           - "{{ hostvars['deploy']['root_path'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
           - "{{ hostvars['deploy']['ngi_containers'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
-
+          - "{{ hostvars['deploy']['igenomes_dir'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
 
     - name: create or move the latest symlink to {{ deployment_version }}
       file:

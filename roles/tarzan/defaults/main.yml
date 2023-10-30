@@ -9,8 +9,12 @@ tarzan_log_dir:  "{{ tarzan_proj_dir }}/logs"
 
 # Config files
 tarzan_server_conf_file: "{{ tarzan_conf_dir }}/kong.conf"
+tarzan_cert_conf_file: "{{ tarzan_conf_dir }}/tarzan_cert_config.txt"
 tarzan_entity_conf_file: "{{ tarzan_conf_dir }}/kong.yml"
 tarzan_singularity_def_file: "{{ tarzan_conf_dir }}/kong.def"
+
+# Host name (used in cert config)
+tarzan_host_name: "miarka1.uppmax.uu.se"
 
 # Scripts
 tarzan_start_script: "{{ tarzan_conf_dir }}/start_kong.sh"

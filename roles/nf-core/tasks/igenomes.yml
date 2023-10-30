@@ -1,0 +1,27 @@
+
+- name: get AWS-igenomes from git
+  git:
+    repo: "{{ aws_igenomes_repo }}"
+    dest: "{{ aws_igenomes_dest }}"
+    version: "{{ aws_igenomes_commit }}"
+    force: yes
+
+- name: set permissions to the seqreports data path
+  file:
+    path: "{{ aws_igenomes_dest }}/aws-igenomes.sh"
+    mode: +x
+
+- name: download iGenome
+  command: "{{ aws_igenomes_dest }}/aws-igenomes.sh 
+    -g {{ item.genome }}
+    -s {{ item.source }}
+    -b {{ item.build }}
+    {{ ['-t', item.type] | join if item.type else '' }}
+    -q"
+  environment:
+    PATH: "{{ nf_core_env }}/bin"
+  args:
+    chdir: "{{ igenomes_dir }}"
+    creates: "{{ igenomes_dir }}/references/{{ item.genome }}/{{ item.source }}/{{ item.build }}"
+  with_items:
+    - "{{ igenomes }}"
