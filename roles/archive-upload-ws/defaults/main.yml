@@ -1,7 +1,7 @@
 ---
 
 archive_upload_repo: https://github.com/Molmed/snpseq-archive-upload.git
-archive_upload_version: v1.1.0-rc1
+archive_upload_version: v1.1.0
 
 arteria_service_name: archive-upload-ws
 archive_upload_cores_to_use: 2
