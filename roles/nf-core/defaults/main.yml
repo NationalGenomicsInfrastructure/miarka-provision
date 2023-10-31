@@ -1,11 +1,11 @@
 nf_core_env_name: nf-core-env
 nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
-nf_core_version: 2.7.2
+nf_core_version: 2.10
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
-  SINGULARITY_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
-  SINGULARITY_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
+  APPTAINER_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
+  APPTAINER_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
   NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
   NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
   NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
@@ -20,7 +20,7 @@ pipelines:
     release: "{{ sarek_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
     pipeline_specific_containers:
-      - vep-106.1
+      - vep-108.2
       - snpeff-5.1
     pipeline_genomes:
       - GRCh38

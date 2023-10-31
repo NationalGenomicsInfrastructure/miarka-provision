@@ -31,7 +31,7 @@ services:
     port: {{ archive_verify_port }}
     routes:
     - paths:
-      - /arteria_archive/verify
+      - /verify
       strip_path: true
 
   - name: arteria_sequencing_reports
@@ -40,6 +40,14 @@ services:
     routes:
     - paths:
       - /seqreports
+      strip_path: true
+
+  - name: arteria_checkqc
+    host: localhost
+    port: {{ checkqc_service_port }}
+    routes:
+    - paths:
+      - /checkqc
       strip_path: true
 
 plugins:

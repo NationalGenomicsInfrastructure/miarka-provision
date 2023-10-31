@@ -9,8 +9,8 @@
     path: "{{ cachedir }}"
     state: directory
   with_items:
-    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
-    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+    - "{{ nf_core_vars.APPTAINER_CACHEDIR }}"
+    - "{{ nf_core_vars.APPTAINER_TMPDIR }}"
   loop_control:
     loop_var: cachedir
 
@@ -84,8 +84,8 @@
     name: "{{ cachedir }}"
     state: absent
   with_items:
-    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
-    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+    - "{{ nf_core_vars.APPTAINER_CACHEDIR }}"
+    - "{{ nf_core_vars.APPTAINER_TMPDIR }}"
   loop_control:
     loop_var: cachedir
 
