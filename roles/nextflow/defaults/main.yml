@@ -6,6 +6,7 @@ nextflow_local_env:
   NXF_HOME: "{{ nextflow_dest }}/workfiles"
   NXF_OPTS: -Xms1g -Xmx3500m
   NXF_JAVA_HOME: "{{ nextflow_java }}"
+  NXF_PLUGINS_DIR: "{{ nextflow_dest }}/workfiles/plugins"
   PATH: "{{ tools_path.PATH }}"
 nextflow_env:
   NXF_LAUNCHER: "$PWD/work"
@@ -13,8 +14,9 @@ nextflow_env:
   NXF_WORK: "{{ ngi_pipeline_nobackup }}/nextflow/work"
   NXF_OPTS: -Xms1g -Xmx3500m
   NXF_JAVA_HOME: "{{ nextflow_java }}"
+  NXF_PLUGINS_DIR: "{{ nextflow_dest }}/workfiles/plugins"
   NXF_SINGULARITY_HOME_MOUNT: true
   PATH: "{{ tools_path.PATH }}"
 nextflow_plugins:
   - name: nf-validation
-    version: 1.1.0
+    version: 1.1.2

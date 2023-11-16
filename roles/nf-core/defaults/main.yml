@@ -9,6 +9,7 @@ nf_core_vars:
   NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
   NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
   NXF_SINGULARITY_HOME_MOUNT: true
+  NXF_PLUGINS_DIR: "{{ nextflow_local_env.NXF_PLUGINS_DIR }}"
   NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
   JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
   PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
