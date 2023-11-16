@@ -55,6 +55,7 @@
     - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
   # Path to java to be used for nextflow
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
+    - export NXF_SINGULARITY_HOME_MOUNT={{ nextflow_env.NXF_SINGULARITY_HOME_MOUNT }}
 
 - name: Store nextflow version in deployment
   lineinfile:
