@@ -38,6 +38,14 @@
     line: "export PATH={{ nextflow_dest }}:$PATH"
     backup: no
 
+- name: Download Nextflow plugins
+  command: "./nextflow plugin install {{ item.name }}@{{ item.version }}"
+  environment: "{{ nextflow_local_env }}"
+  with_items: "{{ nextflow_plugins }}"
+  args:
+    chdir: "{{ nextflow_dest }}"
+  tags: plugins
+
 - name: Create miarka config
   template:
     src: "nextflow_miarka_site.config.j2"
@@ -55,6 +63,8 @@
     - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
   # Path to java to be used for nextflow
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
+    - export NXF_SINGULARITY_HOME_MOUNT={{ nextflow_env.NXF_SINGULARITY_HOME_MOUNT }}
+    - export NXF_PLUGINS_DIR={{ nextflow_env.NXF_PLUGINS_DIR }}
 
 - name: Store nextflow version in deployment
   lineinfile:
