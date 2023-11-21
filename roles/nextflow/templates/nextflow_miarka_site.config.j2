@@ -16,14 +16,6 @@ tower {
     enabled = true
 }
 
-plugins {
-
-{% for plugin in nextflow_plugins %}
-  id '{{ plugin.name }}@{{ plugin.version }}'
-{% endfor %}
-
-}
-
 {% if site == "sthlm" %}
 process {
     withName: 'multiqc|MultiQC|MULTIQC' {
