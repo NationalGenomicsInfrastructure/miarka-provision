@@ -1,7 +1,7 @@
 java_home: /sw/comp/java/x86_64/OracleJDK_11.0.9
 nextflow_java: "{{ java_home }}"
 nextflow_version_tag: 23.10.0
-nextflow_download_url: https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow-{{ nextflow_version_tag }}-all
+nextflow_download_url: https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow
 nextflow_local_env:
   NXF_HOME: "{{ nextflow_dest }}/workfiles"
   NXF_OPTS: -Xms1g -Xmx3500m

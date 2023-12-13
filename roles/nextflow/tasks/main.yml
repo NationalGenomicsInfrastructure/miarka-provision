@@ -1,5 +1,4 @@
 ---
-
 # The steps within the comments can be effectively replaced by 'module load Nextflow'
 # Currently the module has problems being automatically initialized
 ###
@@ -61,7 +60,7 @@
   with_items:
     - export NXF_LAUNCHER="{{ nextflow_env.NXF_LAUNCHER }}"
     - export NXF_OPTS='{{ nextflow_env.NXF_OPTS }}'
-  # Path to java to be used for nextflow
+    # Path to java to be used for nextflow
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
     - export NXF_SINGULARITY_HOME_MOUNT={{ nextflow_env.NXF_SINGULARITY_HOME_MOUNT }}
     - export NXF_PLUGINS_DIR={{ nextflow_env.NXF_PLUGINS_DIR }}
