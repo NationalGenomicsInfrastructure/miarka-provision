@@ -1,6 +1,6 @@
 java_home: /sw/comp/java/x86_64/OracleJDK_11.0.9
 nextflow_java: "{{ java_home }}"
-nextflow_version_tag: 22.10.6
+nextflow_version_tag: 23.10.0
 nextflow_download_url: https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow-{{ nextflow_version_tag }}-all
 nextflow_local_env:
   NXF_HOME: "{{ nextflow_dest }}/workfiles"
@@ -20,3 +20,5 @@ nextflow_env:
 nextflow_plugins:
   - name: nf-validation
     version: 1.1.2
+  - name: nf-prov
+    version: 1.2.1
