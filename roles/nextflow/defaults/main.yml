@@ -9,6 +9,7 @@ nextflow_local_env:
   NXF_PLUGINS_DIR: "{{ nextflow_dest }}/workfiles/plugins"
   PATH: "{{ tools_path.PATH }}"
 nextflow_env:
+  NXF_HOME: "{{ nextflow_dest }}/workfiles"
   NXF_LAUNCHER: "$PWD/work"
   NXF_TEMP: "{{ ngi_pipeline_nobackup }}/nextflow/temp"
   NXF_WORK: "{{ ngi_pipeline_nobackup }}/nextflow/work"
@@ -22,3 +23,5 @@ nextflow_plugins:
     version: 1.1.2
   - name: nf-prov
     version: 1.2.1
+  - name: nf-tower
+    version: 1.6.3

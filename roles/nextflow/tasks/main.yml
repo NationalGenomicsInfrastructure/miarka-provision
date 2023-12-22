@@ -64,6 +64,7 @@
     - export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
     - export NXF_SINGULARITY_HOME_MOUNT={{ nextflow_env.NXF_SINGULARITY_HOME_MOUNT }}
     - export NXF_PLUGINS_DIR={{ nextflow_env.NXF_PLUGINS_DIR }}
+    - export NXF_HOME={{ nextflow_env.NXF_HOME }}
 
 - name: Store nextflow version in deployment
   lineinfile:
