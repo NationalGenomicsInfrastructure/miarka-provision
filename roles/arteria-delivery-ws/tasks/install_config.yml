@@ -14,6 +14,11 @@
     src: delivery_logger.config.j2
     dest: "{{ arteria_service_config_root }}/logger.config"
 
+- name: ensure {{ arteria_service_name }} README dirs exist
+  file:
+    state: directory
+    path: "{{ readme_directory }}/undetermined/"
+
 - name: deploying {{ arteria_service_name }} README
   copy:
     src: README.md
@@ -22,7 +27,7 @@
 - name: deploying {{ arteria_service_name }} undetermined README
   copy:
     src: README.undetermined.md
-    dest: "{{ readme_directory }}/undetermined/"
+    dest: "{{ readme_directory }}/undetermined/README.md"
 
 - name: Deploy arteria-delivery wrapper
   template:
