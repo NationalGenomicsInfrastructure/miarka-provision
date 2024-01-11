@@ -26,3 +26,4 @@ arteria_service_name: arteria-delivery-ws
 
 alembic_path: "{{ arteria_service_src_path }}/alembic/"
 mover_path: /usr/local/bin/
+readme_directory: "{{ arteria_service_config_root }}/readme"
