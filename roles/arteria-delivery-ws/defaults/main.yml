@@ -7,7 +7,7 @@
 #
 # This will set corresponding paths and use the appropriate port.
 arteria_delivery_repo: https://github.com/arteria-project/arteria-delivery.git
-arteria_delivery_version: v3.0.1
+arteria_delivery_version: 7983064596481a32c6983d29c8d4eb4f74bad967
 
 arteria_delivery_wrapper: "{{ arteria_service_config_root }}/arteria-delivery_wrapper.sh"
 
@@ -26,3 +26,4 @@ arteria_service_name: arteria-delivery-ws
 
 alembic_path: "{{ arteria_service_src_path }}/alembic/"
 mover_path: /usr/local/bin/
+readme_directory: "{{ arteria_service_config_root }}/readme"
