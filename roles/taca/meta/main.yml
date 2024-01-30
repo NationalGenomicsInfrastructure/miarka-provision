@@ -1,2 +1,3 @@
 dependencies:
   - { role: setup_base_config, tags: setup_base_config }
+  - { role: ngi_pipeline, tags: ngi_pipeline }
