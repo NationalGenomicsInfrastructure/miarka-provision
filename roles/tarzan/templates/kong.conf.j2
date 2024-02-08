@@ -10,6 +10,9 @@ proxy_listen = 0.0.0.0:{{ tarzan_singularity_container_port }} ssl
 ssl_cert = {{ tarzan_singularity_container_cert_file }}
 ssl_cert_key = {{ tarzan_singularity_container_key_file }}
 
+# up the upstream timeout from the default 60s to 300s
+upstream_keepalive_idle_timeout = 300
+
 #------------------------------------------------------------------------------
 # DATASTORE
 #------------------------------------------------------------------------------
