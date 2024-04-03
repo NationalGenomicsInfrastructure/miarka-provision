@@ -32,6 +32,11 @@
   with_fileglob:
     - "../templates/pipeline_configs/*.j2"
 
+- name: deploy {{ arteria_service_name }} pipeline config schema
+  copy:
+    src: "{{ arteria_service_src_path }}/config/pipeline_config/schema.json"
+    dest: "{{ arteria_service_pipeline_config_dir }}/schema.json"
+
 - name: ensure {{ arteria_service_nextflow_config_dir }} exists
   file:
     state: directory
