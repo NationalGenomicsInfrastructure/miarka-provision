@@ -28,7 +28,7 @@
 - name: deploying {{ arteria_service_name }} configs for pipelines
   template:
     src: "{{ item }}"
-    dest: "{{ arteria_service_pipeline_config_dir }}/pipeline_configs/{{ item | basename | splitext | first }}"
+    dest: "{{ arteria_service_pipeline_config_dir }}/{{ item | basename | splitext | first }}"
   with_fileglob:
     - "../templates/pipeline_configs/*.j2"
 
@@ -45,7 +45,7 @@
 - name: deploying {{ arteria_service_name }} nextflow configs for pipelines
   template:
     src: "{{ item }}"
-    dest: "{{ arteria_service_nextflow_config_dir }}/nextflow_configs/{{ item | basename }}"
+    dest: "{{ arteria_service_nextflow_config_dir }}/{{ item | basename }}"
   with_fileglob:
     - "../files/nextflow_configs/*.config"
 
