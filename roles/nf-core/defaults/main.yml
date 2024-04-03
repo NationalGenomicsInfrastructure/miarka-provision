@@ -52,7 +52,7 @@ pipelines:
     release: 2.3.0
     container_dir: "{{ biocontainers_dirname }}"
   - name: demultiplex
-    release: 1.4.1
+    release: "{{ demultiplex_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:

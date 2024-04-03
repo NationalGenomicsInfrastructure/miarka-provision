@@ -1,6 +1,6 @@
 ---
 
-main_workflow_path: "{{ sw_path }}/demultiplex/workflow/main.nf"
+main_workflow_path: "{{ sw_path }}/demultiplex/{{ demultiplex_tag | replace('.', '_') }}/main.nf"
 # Note that in the following sections it is possible to do variable subsitution
 # on the following variables:
 # - {runfolder_name}
