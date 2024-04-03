@@ -6,7 +6,7 @@ main_workflow_path: "{{arteria_service_src_path}}/seqreports/main.nf"
 # - {runfolder_name}
 # - {runfolder_path}
 # - {current_year}
-# - {input_samplesheet}
+# - {input_samplesheet_path}
 cwd: "{runfolder_path}"
 nextflow_parameters:
   config: "{{arteria_service_src_path}}/seqreports/nextflow.config"
@@ -15,8 +15,8 @@ environment:
   NXF_TEMP: {{nextflow_env.NXF_TEMP}}
   NXF_WORK: "{runfolder_path}/.nextflow"
   NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/biocontainers"
-  NXF_ANSI_LOG: false
-parameters:
+  NXF_ANSI_LOG: "false"
+pipeline_parameters:
   run_folder: "{runfolder_path}"
   project: {{uppmax_project}}
   config_dir: "{{arteria_service_src_path}}/seqreports/config/tool_config/"
