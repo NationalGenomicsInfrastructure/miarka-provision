@@ -39,7 +39,7 @@
   args:
     chdir: "{{ tempfolder.path }}"
   environment:
-    NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/seqreports"
+    NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/biocontainers"
     NXF_HOME: "{{ nextflow_dest }}/workfiles"
     NXF_JAVA_HOME: "{{ nextflow_env.NXF_JAVA_HOME }}"
     NXF_TEMP: "{{ tempfolder.path }}"

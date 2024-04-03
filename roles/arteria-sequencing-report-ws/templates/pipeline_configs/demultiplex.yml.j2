@@ -13,7 +13,7 @@ nextflow_parameters:
 environment:
   NXF_TEMP: {{nextflow_env.NXF_TEMP}}
   NXF_WORK: "{runfolder_path}/.nextflow"
-  NXF_SINGULARITY_CACHEDIR: {{ ngi_containers }}/demultiplex
+  NXF_SINGULARITY_CACHEDIR: {{ ngi_containers }}/biocontainers
   NXF_ANSI_LOG: false
 parameters:
   input: "{input_samplesheet}"
