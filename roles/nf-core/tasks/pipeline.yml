@@ -15,13 +15,14 @@
     loop_var: cachedir
 
 - name: nf-core download {{ pipeline }} v{{ release }}
-  command: "nf-core -v
+  command: >
+    nf-core -v
     download {{ pipeline }}
     --compress none
     --outdir {{ sw_path }}/{{ pipeline }}
     --revision {{ release }}
-    --container singularity
-    --singularity-cache-only"
+    --container-system singularity
+    --container-cache-utilisation amend
   environment: "{{ nf_core_vars }}"
   ignore_errors: true
   args:

@@ -3,34 +3,10 @@
 
 port: {{ seqreport_service_port }}
 db_connection_string: sqlite:///{{ db_path }}/sequencing_reports.db
-reports_dir: ${DEFAULT:runfolder_path}/seqreports/
+reports_dir: "{runfolder_path}/seqreports/"
 monitored_directories:
     - {{ static_runfolder_path }}
 alembic_scripts: {{ arteria_service_src_path }}/alembic/
 alembic_log_config_path: {{ arteria_service_config_root}}/logger.config
-process_queue_check_interval: 5 # in seconds
 nextflow_log_dirs: {{ arteria_service_log_dir }}/nxf_logs
-
-nextflow_config:
-    main_workflow_path: {{ arteria_service_src_path }}/seqreports/main.nf
-    nf_config: {{ arteria_service_src_path }}/seqreports/nextflow.config
-    nf_profile: {{ seqreports_nf_profile }}
-    environment:
-        NXF_TEMP: {{ nextflow_env.NXF_TEMP }}
-        NXF_WORK: ${DEFAULT:runfolder_path}/seqreports/nextflow
-        NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/seqreports"
-        NXF_ANSI_LOG: false
-    # Note that in the parameters section it is possible to do variable
-    # subsitution on the following variables.
-    # loading the config.
-    # - ${DEFAULT:runfolder_name}
-    # - ${DEFAULT:runfolder_path}
-    # - ${DEFAULT:current_year}
-    parameters:
-        run_folder: ${DEFAULT:runfolder_path}
-        project: {{ uppmax_project }}
-        config_dir: {{ arteria_service_src_path }}/seqreports/config/tool_config/
-        fastqscreen_databases: {{ fastq_ref_genomes_path }}
-        checkqc_config: {{ arteria_service_config_root }}/checkqc.config
-        result_dir: ${DEFAULT:runfolder_path}/seqreports
-        script_dir: {{ arteria_service_src_path }}/seqreports/bin/
+pipeline_config_dir: {{ arteria_service_pipeline_config_dir }}
