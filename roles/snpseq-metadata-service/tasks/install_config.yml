@@ -1,0 +1,32 @@
+---
+
+- name: ensure snpseq-metadata-service conf dir exists
+  file:
+    state: directory
+    path: "{{ snpseq_metadata_service_config_root }}"
+
+- name: deploy snpseq-metadata-service app config
+  template:
+    src: snpseq_metadata_service_app.config.j2
+    dest: "{{ snpseq_metadata_service_config_root }}/app.yaml"
+
+- name: deploy snpseq-metadata-service logger config
+  template:
+    src: snpseq_metadata_service_logger.config.j2
+    dest: "{{ snpseq_metadata_service_config_root }}/logger.yaml"
+
+- name: modify uppsala's supervisord conf to set environment and program commands
+  ini_file:
+    dest: "{{ supervisord_conf }}"
+    section: program:snpseq-metadata-service-{{ deployment_environment }}
+    option: "{{ item.opt }}"
+    value: "{{ item.val }}"
+    backup: no
+  loop:
+    - opt: command
+      val: "{{ snpseq_metadata_env_path}}/bin/metadata-service -c {{ snpseq_metadata_service_config_root }}"
+    - opt: autorestart
+      val: true
+    - opt: directory
+      val: "{{ snpseq_metadata_service_log_dir }}"
+
