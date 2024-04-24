@@ -1,5 +1,6 @@
 
 - block:
+  - include: install_package.yml
   - include: install_service.yml
   - include: install_config.yml
 
@@ -7,8 +8,14 @@
     set_fact:
       static_folders: "{{ static_folders + [snpseq_metadata_runfolder_path, snpseq_metadata_service_log_dir] }}"
 
-  - name: Store snpseq-metadata-service tool version in deployment
+  - name: Store tool versions in deployment
     lineinfile:
       dest: "{{ deployed_tool_versions }}"
-      line: "snpseq-metadata-service: {{ snpseq_metadata_service_version }}"
+      line: "{{ item.tool }}: {{ item.ver }}"
+    loop:
+      - tool: snpseq-metadata-service
+        ver: "{{ snpseq_metadata_service_version }}"
+      - tool: snpseq_metadata
+        ver: "{{ snpseq_metadata_version }}"
+
   when: site in ["upps"]
