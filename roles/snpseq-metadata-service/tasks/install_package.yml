@@ -10,7 +10,7 @@
     dest: "{{ snpseq_metadata_src_path }}"
     version: "{{ snpseq_metadata_version }}"
 
-- name: install arteria-delivery
+- name: install snpseq_metadata
   pip:
     name: .
     chdir: "{{ snpseq_metadata_src_path }}"
