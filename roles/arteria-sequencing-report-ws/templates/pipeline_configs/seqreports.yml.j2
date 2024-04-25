@@ -7,7 +7,6 @@ main_workflow_path: "{{arteria_service_src_path}}/seqreports/main.nf"
 # - {runfolder_path}
 # - {current_year}
 # - {input_samplesheet_path}
-cwd: "{runfolder_path}"
 nextflow_parameters:
   config: "{{arteria_service_src_path}}/seqreports/nextflow.config"
   profile: {{seqreports_nf_profile}}
