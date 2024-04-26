@@ -8,7 +8,7 @@ xml_schema_source_url: ftp://ftp.ebi.ac.uk/pub/databases/ena/doc/xsd/sra_1_5
 snpseq_metadata_src_path: "{{ sw_path }}/metadata/snpseq_metadata"
 
 snpseq_metadata_service_repo: https://github.com/Molmed/snpseq-metadata-service.git
-snpseq_metadata_service_version: 1.1.0
+snpseq_metadata_service_version: 39752ef
 
 snpseq_metadata_service_log_dir: "{{ static_ngi_log_path }}/metadata/snpseq_metadata_service/{{ deployment_environment }}"
 snpseq_metadata_service_src_path: "{{ sw_path }}/metadata/snpseq_metadata_service"

@@ -19,6 +19,8 @@
     extra_args: "-U -e"
 
 - name: download XML schema
-  shell: "{{ snpseq_metadata_env_path }}/bin/generate_python_models.sh {{ snpseq_metadata_env_path }}/bin/xsdata {{ xml_schema_source_url }}"
+  command: "{{ snpseq_metadata_env_path }}/bin/generate_python_models.sh {{ snpseq_metadata_env_path }}/bin/xsdata {{ xml_schema_source_url }}"
+  environment:
+    PATH: "{{ snpseq_metadata_env_path }}/bin"
   args:
     chdir: "{{ snpseq_metadata_src_path }}"
