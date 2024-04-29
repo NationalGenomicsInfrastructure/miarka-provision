@@ -24,7 +24,7 @@ process {
 
 {% elif pipeline == 'ampliseq' %}
 
-params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}'
+params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ extra_parameters.silva_zip }}'
 
 process {
 
