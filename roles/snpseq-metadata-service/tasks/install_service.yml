@@ -1,0 +1,19 @@
+
+- name: create virtual python env, shared with snpseq_metadata
+  shell: "conda create --name {{ snpseq_metadata_env_name }} python={{ python3_version }}"
+  args:
+    creates: "{{ snpseq_metadata_env_path }}"
+
+- name: get snpseq-metadata-service from git
+  git:
+    repo: "{{ snpseq_metadata_service_repo }}"
+    dest: "{{ snpseq_metadata_service_src_path }}"
+    version: "{{ snpseq_metadata_service_version }}"
+
+- name: install snpseq-metadata-service
+  pip:
+    name: .
+    chdir: "{{ snpseq_metadata_service_src_path }}"
+    executable: "{{ snpseq_metadata_env_path }}/bin/pip"
+    state: present
+    extra_args: "-U"

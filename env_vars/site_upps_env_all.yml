@@ -59,3 +59,7 @@ archive_upload_port: 10480
 # arteria archive verify
 archive_verify_port: 10490
 archive_verify_path_to_verify_root: "{{ static_ngi_pipeline_nobackup }}/arteria/pdc_archive_dump/{{ deployment_environment }}"
+
+# snpseq-metadata-service
+snpseq_metadata_service_port: 10555
+snpseq_metadata_runfolder_path: "{{ static_runfolder_path }}"
