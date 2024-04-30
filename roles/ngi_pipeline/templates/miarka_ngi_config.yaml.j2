@@ -75,7 +75,7 @@ analysis:
             analysis_engine: ngi_pipeline.engines.qc_ngi
         RNA-seq:
             analysis_engine: ngi_pipeline.engines.rna_ngi
-            ngi_nf_path: {{ sw_path }}/rnaseq/workflow/
+            ngi_nf_path: {{ rnaseq_dest }}/workflow/
             sthlm_ngi_conf: {{ rna_seq_conf }}
             upps_ngi_conf: {{ rna_seq_conf }}
         wgs_germline:
