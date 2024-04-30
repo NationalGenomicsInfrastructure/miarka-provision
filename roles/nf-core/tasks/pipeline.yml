@@ -18,6 +18,7 @@
   command: >
     nf-core -v
     download {{ pipeline }}
+    -d
     --compress none
     --outdir {{ sw_path }}/{{ pipeline }}
     --revision {{ release }}
