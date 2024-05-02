@@ -15,7 +15,7 @@ nf_core_vars:
 biocontainers_dirname: biocontainers
 pipelines:
   - name: rnaseq
-    release: 3.3
+    release: "{{ rnaseq_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
   - name: sarek
     release: "{{ sarek_tag }}"

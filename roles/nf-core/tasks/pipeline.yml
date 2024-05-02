@@ -18,6 +18,7 @@
   command: >
     nf-core -v
     download {{ pipeline }}
+    -d
     --compress none
     --outdir {{ sw_path }}/{{ pipeline }}
     --revision {{ release }}
@@ -27,7 +28,7 @@
   ignore_errors: true
   args:
     chdir: "{{ sw_path }}"
-    creates: "{{ sw_path }}/{{ pipeline }}"
+    creates: "{{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}"
 
 - name: pull pipeline-specific images for {{ pipeline }} v{{ release }}
   command: "singularity pull --name nfcore-{{ container.0 }}-{{ release }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 }}:{{ release }}.{{ container.1 }}"
@@ -51,7 +52,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/
+          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}/
           -profile uppmax \
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
