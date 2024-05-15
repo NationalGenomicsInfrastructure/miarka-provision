@@ -2,4 +2,4 @@ arteria_service_name: arteria-checkqc-ws
 arteria_checkqc_service_log: "{{ arteria_service_log_dir }}/{{ arteria_service_name }}.log"
 
 checkqc_repo: https://github.com/Molmed/checkQC.git
-checkqc_version: v4.0.0
+checkqc_version: v4.0.2

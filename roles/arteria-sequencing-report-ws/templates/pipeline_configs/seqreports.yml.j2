@@ -1,0 +1,25 @@
+---
+
+main_workflow_path: "{{arteria_service_src_path}}/seqreports/main.nf"
+# Note that in the following sections it is possible to do variable
+# substitution on the following variables:
+# - {runfolder_name}
+# - {runfolder_path}
+# - {current_year}
+# - {input_samplesheet_path}
+nextflow_parameters:
+  config: "{{arteria_service_src_path}}/seqreports/nextflow.config"
+  profile: {{seqreports_nf_profile}}
+environment:
+  NXF_TEMP: {{nextflow_env.NXF_TEMP}}
+  NXF_WORK: "{runfolder_path}/.nextflow"
+  NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/biocontainers"
+  NXF_ANSI_LOG: "false"
+pipeline_parameters:
+  run_folder: "{runfolder_path}"
+  project: {{uppmax_project}}
+  config_dir: "{{arteria_service_src_path}}/seqreports/config/tool_config/"
+  fastqscreen_databases: {{fastq_ref_genomes_path}}
+  checkqc_config: "{{arteria_service_config_root}}/checkqc.config"
+  result_dir: "{runfolder_path}/seqreports"
+  script_dir: "{{arteria_service_src_path}}/seqreports/bin/"

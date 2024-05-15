@@ -1,0 +1,26 @@
+---
+
+main_workflow_path: "{{ sw_path }}/demultiplex/{{ demultiplex_tag | replace('.', '_') }}/main.nf"
+# Note that in the following sections it is possible to do variable subsitution
+# on the following variables:
+# - {runfolder_name}
+# - {runfolder_path}
+# - {current_year}
+# - {input_samplesheet_path}
+nextflow_parameters:
+  config: "{{ arteria_service_nextflow_config_dir }}/demultiplex.config"
+  profile: "singularity,uppmax"
+environment:
+  NXF_TEMP: {{nextflow_env.NXF_TEMP}}
+  NXF_WORK: "{runfolder_path}/.nextflow"
+  NXF_SINGULARITY_CACHEDIR: {{ ngi_containers }}/biocontainers
+  NXF_ANSI_LOG: "false"
+pipeline_parameters:
+  input: "{input_samplesheet_path}"
+  outdir: "{runfolder_path}"
+  project: {{uppmax_project}}
+  demultiplexer: "bcl2fastq"
+  skip_tools: "fastp,falco,multiqc"
+input_samplesheet_content: |
+  id,samplesheet,lane,flowcell
+  {runfolder_name},{runfolder_path}/SampleSheet.csv,,{runfolder_path}

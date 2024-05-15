@@ -50,6 +50,14 @@ services:
       - /checkqc
       strip_path: true
 
+  - name: snpseq_metadata
+    host: localhost
+    port: {{ snpseq_metadata_service_port }}
+    routes:
+    - paths:
+      - /metadata
+      strip_path: true
+
 plugins:
   - name: key-auth
     config:
