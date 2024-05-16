@@ -15,8 +15,7 @@
     release: "{{ item.release }}"
     pipeline_specific_containers: "{{ item.pipeline_specific_containers | default([]) }}"
     pipeline_genomes: "{{ item.pipeline_genomes | default([]) }}"
-    silva_base_url: "{{ item.silva_base_url | default('') }}"
-    silva_zip: "{{ item.silva_zip | default('') }}"
+    extra_parameters: "{{ item.extra_parameters | default({}) }}"
     container_dir: "{{ ngi_containers }}/{{ item.container_dir | default(item.name) }}"
   with_items: "{{ pipelines }}"
   tags: pipelines
