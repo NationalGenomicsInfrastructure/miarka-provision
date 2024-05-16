@@ -33,7 +33,7 @@ piper:
     gatk_key: "{{ ngi_resources }}/piper/{{ gatk_key }}"
 
 sarek:
-    command: {{ sarek_dest }}/workflow/main.nf
+    command: {{ sarek_dest }}/main.nf
     tools:
       - haplotypecaller
       - snpeff
@@ -75,7 +75,7 @@ analysis:
             analysis_engine: ngi_pipeline.engines.qc_ngi
         RNA-seq:
             analysis_engine: ngi_pipeline.engines.rna_ngi
-            ngi_nf_path: {{ sw_path }}/rnaseq/workflow/
+            ngi_nf_path: {{ rnaseq_dest }}/
             sthlm_ngi_conf: {{ rna_seq_conf }}
             upps_ngi_conf: {{ rna_seq_conf }}
         wgs_germline:

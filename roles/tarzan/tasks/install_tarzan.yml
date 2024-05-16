@@ -41,22 +41,11 @@
     dest: "{{ tarzan_singularity_image_file_dest }}"
     checksum: "{{ tarzan_singularity_image_sha1 }}"
 
-# Couldn't get this to work properly with supervisord because
-# it demands that the program under control doesn't daemonize.
 - name: modify crontab to start kong
-  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_{{ site }}"
-              line='# restart kong if it has died for some reason'
-              backup=no
-
-- name: modify crontab to start kong
-  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_{{ site }}"
-              line='@reboot source $HOME/.bash_profile && {{ tarzan_start_script }}'
-              backup=no
-
-- name: modify uppsala's crontab to start kong
-  lineinfile: dest="{{ ngi_pipeline_conf }}/crontab_upps"
-              line='38 * * * *      source $HOME/.bash_profile && {{ tarzan_start_script }} &> /dev/null'
-              backup=no
+  lineinfile:
+    dest: "{{ ngi_pipeline_conf }}/crontab_{{ site }}"
+    line: '@reboot source $HOME/.bash_profile && {{ tarzan_start_script }} &> /dev/null'
+    backup: no
 
 - name: add static folders to be created
   set_fact:

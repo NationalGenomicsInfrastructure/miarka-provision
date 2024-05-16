@@ -47,7 +47,12 @@ ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"
 
 sarek_tag: "3.3.2"
-sarek_dest: "{{ sw_path }}/sarek"
+sarek_dest: "{{ sw_path }}/sarek/{{ sarek_tag | replace('.', '_') }}"
+
+rnaseq_tag: "3.8.1"
+rnaseq_dest: "{{ sw_path }}/rnaseq/{{ rnaseq_tag | replace('.', '_') }}"
+
+demultiplex_tag: "1.4.1"
 
 # File with tools/software version in the deployed env
 deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.{{ site }}.version"

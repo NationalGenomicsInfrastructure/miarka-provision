@@ -20,6 +20,35 @@
     src: checkqc.config
     dest: "{{ arteria_service_config_root }}/checkqc.config"
 
+- name: ensure {{ arteria_service_pipeline_config_dir }} exists
+  file:
+    state: directory
+    path: "{{ arteria_service_pipeline_config_dir }}"
+
+- name: deploying {{ arteria_service_name }} configs for pipelines
+  template:
+    src: "{{ item }}"
+    dest: "{{ arteria_service_pipeline_config_dir }}/{{ item | basename | splitext | first }}"
+  with_fileglob:
+    - "../templates/pipeline_configs/*.j2"
+
+- name: deploy {{ arteria_service_name }} pipeline config schema
+  copy:
+    src: "{{ arteria_service_src_path }}/config/pipeline_config/schema.json"
+    dest: "{{ arteria_service_pipeline_config_dir }}/schema.json"
+
+- name: ensure {{ arteria_service_nextflow_config_dir }} exists
+  file:
+    state: directory
+    path: "{{ arteria_service_nextflow_config_dir }}"
+
+- name: deploying {{ arteria_service_name }} nextflow configs for pipelines
+  template:
+    src: "{{ item }}"
+    dest: "{{ arteria_service_nextflow_config_dir }}/{{ item | basename }}"
+  with_fileglob:
+    - "../files/nextflow_configs/*.config"
+
 - name: Deploy arteria-delivery wrapper
   template:
     src: arteria_sequencing_report_wrapper.sh.j2

@@ -1,0 +1,18 @@
+
+# the service will listen on this port
+port: {{ snpseq_metadata_service_port }}
+
+# the base url preceding the service endpoint
+base_url: /api/1.0
+
+# the location on the server under which runfolders are stored
+# {runfolder} and {host} are substituted at each request to snpseq-metadata-server
+datadir: "{{ snpseq_metadata_runfolder_path }}/{runfolder}"
+
+# the url where the snpseq-data service can be accessed
+# on miarka, it won't be used so let's just point back to kong
+snpseq_data_url: http://localhost:4444
+
+# the path to the snpseq_metadata python package main script
+# will be deployed in the same env as the service
+snpseq_metadata_executable: {{ snpseq_metadata_env_path }}/bin/snpseq_metadata
