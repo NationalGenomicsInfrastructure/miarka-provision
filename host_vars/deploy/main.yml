@@ -16,7 +16,7 @@ tools_path:
 
 # Python versions
 python2_version: 2.7
-python3_version: 3.12
+python3_version: 3.11
 
 #Nextflow defauts
 nextflow_dest: "{{ sw_path }}/nextflow"
