@@ -15,18 +15,20 @@
     loop_var: cachedir
 
 - name: nf-core download {{ pipeline }} v{{ release }}
-  command: "nf-core -v
+  command: >
+    nf-core -v
     download {{ pipeline }}
+    -d
     --compress none
     --outdir {{ sw_path }}/{{ pipeline }}
     --revision {{ release }}
-    --container singularity
-    --singularity-cache-only"
+    --container-system singularity
+    --container-cache-utilisation amend
   environment: "{{ nf_core_vars }}"
   ignore_errors: true
   args:
     chdir: "{{ sw_path }}"
-    creates: "{{ sw_path }}/{{ pipeline }}"
+    creates: "{{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}"
 
 - name: pull pipeline-specific images for {{ pipeline }} v{{ release }}
   command: "singularity pull --name nfcore-{{ container.0 }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 | replace('-', ':', 1) }}.{{ container.1 }}"
@@ -50,7 +52,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/workflow/
+          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}/
           -profile uppmax \
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'

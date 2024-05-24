@@ -1,0 +1,26 @@
+
+- name: create virtual python env, shared with snpseq-metadata-service
+  shell: "conda create --name {{ snpseq_metadata_env_name }} python={{ python3_version }}"
+  args:
+    creates: "{{ snpseq_metadata_env_path }}"
+
+- name: get snpseq_metadata from git
+  git:
+    repo: "{{ snpseq_metadata_repo }}"
+    dest: "{{ snpseq_metadata_src_path }}"
+    version: "{{ snpseq_metadata_version }}"
+
+- name: install snpseq_metadata
+  pip:
+    name: .
+    chdir: "{{ snpseq_metadata_src_path }}"
+    executable: "{{ snpseq_metadata_env_path }}/bin/pip"
+    state: present
+    extra_args: "-U -e"
+
+- name: download XML schema
+  command: "{{ snpseq_metadata_env_path }}/bin/generate_python_models.sh {{ snpseq_metadata_env_path }}/bin/xsdata {{ xml_schema_source_url }}"
+  environment:
+    PATH: "{{ snpseq_metadata_env_path }}/bin"
+  args:
+    chdir: "{{ snpseq_metadata_src_path }}"

@@ -1,10 +1,12 @@
 ---
 
 seqreport_service_repo: https://github.com/arteria-project/sequencing-report-service.git
-seqreport_service_version: v1.4.2
+seqreport_service_version: v1.5.0
 
 arteria_service_name: arteria-sequencing-report-ws
 arteria_sequencing_report_wrapper: "{{ arteria_service_config_root }}/arteria_sequencing_report_wrapper.sh"
+arteria_service_pipeline_config_dir: "{{ arteria_service_config_root }}/pipeline_configs"
+arteria_service_nextflow_config_dir: "{{ arteria_service_config_root }}/nextflow_configs"
 
 seqreports_nf_profile: singularity,uppmax
 fastq_ref_genomes_path: /sw/data/fastq_screen_data/20220330/miarka/FastQ_Screen_Genomes
