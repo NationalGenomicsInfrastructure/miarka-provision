@@ -70,7 +70,7 @@ nf_core_delivery_readmes:
   methylseq:
     - DELIVERY.README.METHYLSEQ.md
 
-awscli_version: 1.27.5
+awscli_version: 2.15.57
 aws_igenomes_repo: https://github.com/ewels/AWS-iGenomes.git
 aws_igenomes_commit: dda1d928fdb0d018aabbf91ac6ce8e153b699991
 aws_igenomes_dest: "{{ sw_path }}/AWS-iGenomes"
