@@ -42,6 +42,9 @@ sarek:
         GRCh38: "{{ reference_data_dir }}/ToolBox/hg38bundle/"
     no_gatk_spark: " "
     generate_gvcf: " "
+    igenomes_ignore: false
+    vep_cache: "/sw/data/vep/110.1/homo_sapiens/110_GRCh38"
+    snpeff_cache: "/sw/data/snpEff_data/5.1/miarka/data/"
 
 nextflow:
     command: {{ nextflow_dest }}/nextflow
