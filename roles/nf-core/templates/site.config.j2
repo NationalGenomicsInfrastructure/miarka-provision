@@ -48,6 +48,15 @@ process {
 
 }
 
+process {
+
+  withName:NFCORE_SAREK:SAREK:FASTQC {
+    cpus = 4
+    memory = 28.GB
+  }
+
+}
+
 {% endif %}
 
 
