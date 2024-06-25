@@ -48,6 +48,15 @@ process {
 
 }
 
+process {
+
+  withName:FASTQC {
+    cpus = 4
+    memory = 28.GB
+  }
+
+}
+
 {% endif %}
 
 
