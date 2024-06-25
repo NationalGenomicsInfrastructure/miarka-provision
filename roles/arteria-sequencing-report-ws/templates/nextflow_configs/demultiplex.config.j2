@@ -10,6 +10,10 @@
 ----------------------------------------------------------------------------------------
 */
 
+plugins {
+    id 'nf-validation@{{ nf_validation_version }}'
+}
+
 process {
 
     withName: BCL2FASTQ {

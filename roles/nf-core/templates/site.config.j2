@@ -48,4 +48,22 @@ process {
 
 }
 
+process {
+
+  withName:FASTQC {
+    cpus = 4
+    memory = 28.GB
+  }
+
+}
+
 {% endif %}
+
+
+plugins {
+
+{% for plugin in nextflow_plugins %}
+  id '{{ plugin.name }}@{{ plugin.version }}'
+{% endfor %}
+
+}

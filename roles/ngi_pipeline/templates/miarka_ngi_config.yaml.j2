@@ -37,11 +37,11 @@ sarek:
     tools:
       - haplotypecaller
       - snpeff
-    genomes_base_paths:
-        GRCh37: "{{ reference_data_dir }}/ToolBox/ReferenceAssemblies/hg38make/bundle/2.8/b37/"
-        GRCh38: "{{ reference_data_dir }}/ToolBox/hg38bundle/"
     no_gatk_spark: " "
     generate_gvcf: " "
+    igenomes_ignore: "false"
+    vep_cache: "/sw/data/vep/110.1/homo_sapiens/110_GRCh38"
+    snpeff_cache: "/sw/data/snpEff_data/5.1/miarka/data/"
 
 nextflow:
     command: {{ nextflow_dest }}/nextflow
