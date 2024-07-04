@@ -13,7 +13,6 @@
   pip:
     executable: "{{ delivery_env_path }}/bin/pip"
     requirements: "{{ delivery_dest }}/requirements.txt"
-    extra_args: "-U"
     state: present
 
 - name: install delivery into venv

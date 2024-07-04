@@ -16,4 +16,3 @@
     chdir: "{{ snpseq_metadata_service_src_path }}"
     executable: "{{ snpseq_metadata_env_path }}/bin/pip"
     state: present
-    extra_args: "-U"
