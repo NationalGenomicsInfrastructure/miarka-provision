@@ -17,4 +17,3 @@
     chdir: "{{ arteria_service_src_path }}"
     executable: "{{ arteria_service_env_root }}/bin/pip"
     state: present
-    extra_args: "-U"
