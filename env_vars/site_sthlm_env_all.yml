@@ -24,6 +24,7 @@ multiqc_options:
   push_statusdb: True
   save_remote: True
   template: ngi
+  output_fn_name: multiqc_report.html
 
 multiqc_swedac_accredited: True
 multiqc_sshkey: /path/to/ssh_key
