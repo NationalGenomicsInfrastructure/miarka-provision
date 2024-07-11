@@ -16,7 +16,7 @@ tools_path:
 
 # Python versions
 python2_version: 2.7
-python3_version: 3.8
+python3_version: 3.11
 
 #Nextflow defauts
 nextflow_dest: "{{ sw_path }}/nextflow"
@@ -46,10 +46,10 @@ ngi_pipeline_venv_py2: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_py2_name }}"
 ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"
 
-sarek_tag: "2.7"
+sarek_tag: "3.4.2"
 sarek_dest: "{{ sw_path }}/sarek/{{ sarek_tag | replace('.', '_') }}"
 
-rnaseq_tag: "3.3"
+rnaseq_tag: "3.8.1"
 rnaseq_dest: "{{ sw_path }}/rnaseq/{{ rnaseq_tag | replace('.', '_') }}"
 
 demultiplex_tag: "1.4.1"

@@ -1,14 +1,16 @@
 nf_core_env_name: nf-core-env
 nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
-nf_core_version: 2.13.1
+nf_core_version: 2.14.1
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
-  SINGULARITY_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
-  SINGULARITY_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
+  APPTAINER_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
+  APPTAINER_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
   NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
   NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
   NXF_SINGULARITY_HOME_MOUNT: true
+  NXF_PLUGINS_DIR: "{{ nextflow_local_env.NXF_PLUGINS_DIR }}"
+  NXF_DISABLE_CHECK_LATEST: true
   NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
   JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
   PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
@@ -21,20 +23,31 @@ pipelines:
     release: "{{ sarek_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
     pipeline_specific_containers:
-      - sarekvep
-      - sareksnpeff
+      - vep-108.2
+      - snpeff-5.1
     pipeline_genomes:
       - GRCh38
       - GRCh37
       - GRCm38
+      - GRCm39
       - CanFam3.1
+      - WBcel235
   - name: methylseq
     release: 2.3.0
     container_dir: "{{ biocontainers_dirname }}"
+    extra_parameters:
+      references:
+        - name: pUC19
+          accession: L09137.2
+          sha1: 059f13457cb9469cbfb35755197170c99ae96a97
+        - name: lambda
+          accession: NC_001416.1
+          sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
   - name: ampliseq
     release: 2.5.0
-    silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
-    silva_zip: Silva_132_release.zip
+    extra_parameters:
+      silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
+      silva_zip: Silva_132_release.zip
     container_dir: "{{ biocontainers_dirname }}"
   - name: atacseq
     release: 2.0
@@ -66,7 +79,7 @@ nf_core_delivery_readmes:
   methylseq:
     - DELIVERY.README.METHYLSEQ.md
 
-awscli_version: 1.27.5
+awscli_version: 2.15.57
 aws_igenomes_repo: https://github.com/ewels/AWS-iGenomes.git
 aws_igenomes_commit: dda1d928fdb0d018aabbf91ac6ce8e153b699991
 aws_igenomes_dest: "{{ sw_path }}/AWS-iGenomes"
@@ -75,3 +88,5 @@ igenomes:
     source: GATK
     build: GRCh38
     type: gatk
+
+ncbi_eutils_url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils

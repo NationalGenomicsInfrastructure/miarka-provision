@@ -45,9 +45,9 @@
 - name: deploying {{ arteria_service_name }} nextflow configs for pipelines
   template:
     src: "{{ item }}"
-    dest: "{{ arteria_service_nextflow_config_dir }}/{{ item | basename }}"
+    dest: "{{ arteria_service_nextflow_config_dir }}/{{ item | basename | splitext | first }}"
   with_fileglob:
-    - "../files/nextflow_configs/*.config"
+    - "../templates/nextflow_configs/*.config.j2"
 
 - name: Deploy arteria-delivery wrapper
   template:

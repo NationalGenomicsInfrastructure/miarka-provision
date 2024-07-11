@@ -9,8 +9,8 @@
     path: "{{ cachedir }}"
     state: directory
   with_items:
-    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
-    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+    - "{{ nf_core_vars.APPTAINER_CACHEDIR }}"
+    - "{{ nf_core_vars.APPTAINER_TMPDIR }}"
   loop_control:
     loop_var: cachedir
 
@@ -31,11 +31,11 @@
     creates: "{{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}"
 
 - name: pull pipeline-specific images for {{ pipeline }} v{{ release }}
-  command: "singularity pull --name nfcore-{{ container.0 }}-{{ release }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 }}:{{ release }}.{{ container.1 }}"
+  command: "singularity pull --name nfcore-{{ container.0 }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 | replace('-', ':', 1) }}.{{ container.1 }}"
   environment: "{{ nf_core_vars }}"
   args:
     chdir: "{{ container_dir }}"
-    creates: "{{ container_dir }}/nfcore-{{ container.0 }}-{{ release }}.{{ container.1 }}.img"
+    creates: "{{ container_dir }}/nfcore-{{ container.0 }}.{{ container.1 }}.img"
   ignore_errors: true
   with_nested:
     - "{{ pipeline_specific_containers }}"
@@ -58,36 +58,26 @@
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
     backup: no
 
-- name: download ampliseq requirements
-  block:
+- name: check if pipeline-specific include exists
+  local_action:
+    module: stat
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
+    path: "{{ role_path }}/tasks/{{ pipeline }}_include.yml"
+  register: include_stat
 
-  - name: create directory for {{ pipeline }}  resources
-    file:
-      path: "{{ ngi_containers }}/{{ pipeline }}"
-      state: directory
-
-  - name: check if SILVA zip exists
-    stat:
-      get_attributes: no
-      get_checksum: no
-      get_mime: no
-      path: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
-    register: silva_stat
-
-  - name: download SILVA classifier data
-    get_url:
-      url: "{{ silva_base_url }}/{{ silva_zip }}"
-      dest: "{{ ngi_containers }}/{{ pipeline }}/{{ silva_zip }}"
-    when: not silva_stat.stat.exists
-  when: pipeline == "ampliseq"
+- name: execute pipeline-specific includes
+  include_tasks: "{{ pipeline }}_include.yml"
+  when: include_stat.stat.exists
 
 - name: Remove singularity cache directories
   file:
     name: "{{ cachedir }}"
     state: absent
   with_items:
-    - "{{ nf_core_vars.SINGULARITY_CACHEDIR }}"
-    - "{{ nf_core_vars.SINGULARITY_TMPDIR }}"
+    - "{{ nf_core_vars.APPTAINER_CACHEDIR }}"
+    - "{{ nf_core_vars.APPTAINER_TMPDIR }}"
   loop_control:
     loop_var: cachedir
 

@@ -16,7 +16,7 @@
     chdir: "{{ snpseq_metadata_src_path }}"
     executable: "{{ snpseq_metadata_env_path }}/bin/pip"
     state: present
-    extra_args: "-U -e"
+    extra_args: "-e"
 
 - name: download XML schema
   command: "{{ snpseq_metadata_env_path }}/bin/generate_python_models.sh {{ snpseq_metadata_env_path }}/bin/xsdata {{ xml_schema_source_url }}"
