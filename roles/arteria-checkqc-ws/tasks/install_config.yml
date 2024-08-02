@@ -21,9 +21,9 @@
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: command
     value: >
-      {{ arteria_service_env_root }}/bin/checkqc-ws
-      --config {{ arteria_service_config_root }}/app.config
-      --log_config {{ arteria_service_config_root }}/logger.config
+      /vulpes/ngi/production/v24.03/sw/anaconda/envs/arteria-checkqc-ws/bin/checkqc-ws
+      --config /vulpes/ngi/production/v24.03/conf/arteria/arteria-checkqc-ws/app.config
+      --log_config /vulpes/ngi/production/v24.03/conf/arteria/arteria-checkqc-ws/logger.config
       --port={{ checkqc_service_port }}
       {{ static_runfolder_path }}
     backup: no
