@@ -1,6 +1,10 @@
 
 cleanup = true
 
+{% if site == "upps" %}
+    cleanup = false
+{% endif %}
+
 params {
 
     project = "{{ uppmax_project }}"
