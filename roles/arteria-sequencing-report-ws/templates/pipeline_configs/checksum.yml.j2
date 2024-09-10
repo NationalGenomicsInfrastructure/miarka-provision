@@ -16,6 +16,6 @@ environment:
   NXF_ANSI_LOG: "false"
 pipeline_parameters:
   input_folder: "{runfolder_path}"
-  include_file: "{{ sis_style_checksums_repo }}/hiseq.rsync"
+  include_file: "{{ arteria_service_config_root }}/hiseq.rsync"
   ignore_cache: "" # Set --ignore_cache
   project: "{{uppmax_project}}"

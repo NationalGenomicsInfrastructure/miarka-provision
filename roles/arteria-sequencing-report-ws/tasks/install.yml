@@ -27,7 +27,7 @@
 - name: copy include file
   copy:
     src: hiseq.rsync
-    dest: "{{ sis_style_checksums_repo }}"
+    dest: "{{ arteria_service_config_root }}"
 
 - name: install sequencing report service
   pip:
