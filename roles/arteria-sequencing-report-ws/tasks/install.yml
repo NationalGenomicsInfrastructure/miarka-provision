@@ -21,7 +21,7 @@
 - name: get checksum pipeline from git
   git:
     repo: "{{ sis_style_checksums_repo }}"
-    dest: "{{ arteria_service_scr_path }}"
+    dest: "{{ arteria_service_src_path }}"
     version: "{{ sis_style_checksums_version }}"
 
 - name: copy include file
