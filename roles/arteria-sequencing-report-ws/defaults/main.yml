@@ -11,3 +11,5 @@ arteria_service_nextflow_config_dir: "{{ arteria_service_config_root }}/nextflow
 seqreports_nf_profile: singularity,uppmax
 fastq_ref_genomes_path: /sw/data/fastq_screen_data/20220330/miarka/FastQ_Screen_Genomes
 
+sis_style_checksums_repo: "https://github.com/Molmed/sis_style_checksums_nextflow"
+sis_style_checksums_version: "1.0.0"

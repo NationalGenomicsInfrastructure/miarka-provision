@@ -1,0 +1,21 @@
+---
+
+main_workflow_path: "{{arteria_service_src_path}}/sis_style_checksums_nextflow/main.nf"
+# Note that in the following sections it is possible to do variable
+# substitution on the following variables:
+# - {runfolder_name}
+# - {runfolder_path}
+# - {current_year}
+# - {input_samplesheet_path}
+nextflow_parameters:
+  config: "{{arteria_service_src_path}}/sis_style_checksums_nextflow/nextflow.config"
+  profile: "uppmax"
+environment:
+  NXF_TEMP: "{{nextflow_env.NXF_TEMP}}"
+  NXF_WORK: "{runfolder_path}/.nextflow"
+  NXF_ANSI_LOG: "false"
+pipeline_parameters:
+  input_folder: "{runfolder_path}"
+  include_file: "{{ sis_style_checksums_repo }}/hiseq.rsync"
+  ignore_cache: "" # Set --ignore_cache
+  project: "{{uppmax_project}}"

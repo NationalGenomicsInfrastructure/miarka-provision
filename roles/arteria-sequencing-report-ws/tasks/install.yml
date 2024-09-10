@@ -18,6 +18,17 @@
     executable: "{{ arteria_service_env_root }}/bin/pip"
     state: present
 
+- name: get checksum pipeline from git
+  git:
+    repo: "{{ sis_style_checksums_repo }}"
+    dest: "{{ arteria_service_scr_path }}"
+    version: "{{ sis_style_checksums_version }}"
+
+- name: copy include file
+  copy:
+    src: hiseq.rsync
+    dest: "{{ sis_style_checksums_repo }}"
+
 - name: install sequencing report service
   pip:
     name: .
