@@ -1,0 +1,59 @@
+# Include all dirs. This is required for anything to work
+# Empty dirs can be excluded with --prune-empty-dirs
+#
+# cd <runfolder>
+# rsync -av --prune-empty-dirs --include-from hiseq.rsync $PWD/ biologin:~/incoming/runfolders/$runfolder > $PWD/rsync.log
+#
+
++ */
+
+# Include some files regardless of location in tree
++ sisyphus*
++ *.sbatch
++ *.yml
++ *.csv
++ *.htm
++ *.xml
++ *.xsl
++ *.sbatch.gz
++ *.yml.gz
++ *.png.gz
++ *.csv.gz
++ *.htm.gz
++ *.xml.gz
++ *.xsl.gz
++ *.qmat*
++ *.fastq*
++ Makefile*
++ nohup*
++ support.txt*
++ SampleSheet.*
++ Log.txt*
++ First_Base_Report.txt*
++ MiSeq_Runfolder.tar.gz
++ bcl2fastq_version
++ *.json
+
+# Exclude all .sentinel files
+- .sentinel
+
+# Include full tree of some subdirs
+# This works if rsync is called with src dest, but not src/ dest
++ /*/Sisyphus/***
++ /*/Unaligned/(?!Reports)/***
++ /*/Unaligned/Stats/***
++ /*/Excluded/***
++ /*/Config/***
++ /*/Diag/***
++ /*/InterOp/***
++ /*/Logs/***
++ /*/Recipe/***
++ /*/Data/RTALogs/***
++ /*/Data/reports/***
++ /*/Data/Status_Files/***
++ /*/slurmlogs/***
++ /*/slurmscripts/***
++ /*/seqreports/***
++ /*/metadata/***
+
+- *
