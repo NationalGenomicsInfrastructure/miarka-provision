@@ -20,6 +20,11 @@
     src: checkqc.config
     dest: "{{ arteria_service_config_root }}/checkqc.config"
 
+- name: copy include file
+  copy:
+    src: hiseq.rsync
+    dest: "{{ arteria_service_config_root }}/hiseq.rsync"
+
 - name: ensure {{ arteria_service_pipeline_config_dir }} exists
   file:
     state: directory
