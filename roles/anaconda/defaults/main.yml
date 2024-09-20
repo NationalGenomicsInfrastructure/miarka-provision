@@ -1,4 +1,5 @@
-anaconda_file: Anaconda3-2021.05-Linux-x86_64.sh
-anaconda_checksum: 2751ab3d678ff0277ae80f9e8a74f218cfc70fe9a9cdc7bb1c137d7e47e33d53
-anaconda_url: "http://repo.anaconda.com/archive/{{ anaconda_file }}"
+anaconda_version: "24.7.1-0"
+anaconda_file: "Miniforge-pypy3-{{ anaconda_version }}-Linux-x86_64.sh"
+anaconda_checksum: 538afb0f656fffcc4b4015b676fbf3905052d3817dd091e3b1043bd7f68f0de6
+anaconda_url: "https://github.com/conda-forge/miniforge/releases/download/{{ anaconda_version }}/{{ anaconda_file }}"
 anaconda_src: "/scratch/{{ anaconda_file }}"

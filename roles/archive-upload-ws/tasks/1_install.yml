@@ -5,6 +5,9 @@
   args: 
     creates: "{{ arteria_service_env_root }}"
 
+- name: make sure pip is up to date
+  shell: "{{ arteria_service_env_root }}/bin/python -m ensurepip --upgrade"
+
 - name: get archive-upload from git
   git:
     repo: "{{ archive_upload_repo }}"
