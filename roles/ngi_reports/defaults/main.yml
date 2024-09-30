@@ -1,7 +1,7 @@
 ---
 ngi_reports_repo: https://github.com/NationalGenomicsInfrastructure/ngi_reports.git
 ngi_reports_dest: "{{ sw_path }}/ngi_reports"
-ngi_reports_version: 27dba522891557173ac6d923d0396616740b83f1
+ngi_reports_version: c29575c375f134a9edc11990d95a0fffb7927902
 ngi_reports_log: "{{ ngi_log_path }}/ngi_reports.log"
 
 ngi_mdx_outline_repo: https://github.com/NationalGenomicsInfrastructure/mdx_outline.git
