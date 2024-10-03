@@ -17,6 +17,9 @@ plugins {
 process {
 
     withName: BCL2FASTQ {
+        time = '32h'
+        cpus = 24
+        memory = '147G'
         ext.args = {[
             params.ext_args ? "${params.ext_args}" : "",
         ].join(" ").trim()}
@@ -40,7 +43,7 @@ process {
             ],
             [
                 // Gather and write InterOp files
-                path: { "${params.outdir}/InterOp" },
+                path: { "${params.outdir}" },
                 mode: "link",
                 pattern: "**.bin",
             ],
