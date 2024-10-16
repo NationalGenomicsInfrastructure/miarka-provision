@@ -17,7 +17,12 @@
     chdir: "{{ arteria_service_src_path }}"
     executable: "{{ arteria_service_env_root }}/bin/pip"
     state: present
-    extra_args: "-U"
+
+- name: get checksum pipeline from git
+  git:
+    repo: "{{ sis_style_checksums_repo }}"
+    dest: "{{ arteria_service_src_path }}/sis_style_checksums_nextflow/"
+    version: "{{ sis_style_checksums_version }}"
 
 - name: install sequencing report service
   pip:
@@ -25,7 +30,6 @@
     chdir: "{{ arteria_service_src_path }}"
     executable: "{{ arteria_service_env_root }}/bin/pip"
     state: present
-    extra_args: "-U"
 
 - name: create temp folder
   tempfile:

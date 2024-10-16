@@ -24,6 +24,7 @@ multiqc_options:
   push_statusdb: True
   save_remote: True
   template: ngi
+  output_fn_name: multiqc_report.html
 
 multiqc_swedac_accredited: True
 multiqc_sshkey: /path/to/ssh_key
@@ -33,6 +34,6 @@ multiqc_port: 22
 megaqc_url: http://megaqc.scilifelab.se/api/upload_parse
 
 # standalone scripts
-standalone_scripts_repo: https://github.com/SciLifeLab/standalone_scripts.git
+standalone_scripts_repo: https://github.com/NationalGenomicsInfrastructure/standalone_scripts.git
 standalone_scripts_version: master
 standalone_scripts_dest: "{{ sw_path }}/standalone_scripts"

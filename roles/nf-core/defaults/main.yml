@@ -35,10 +35,19 @@ pipelines:
   - name: methylseq
     release: 2.3.0
     container_dir: "{{ biocontainers_dirname }}"
+    extra_parameters:
+      references:
+        - name: pUC19
+          accession: L09137.2
+          sha1: 059f13457cb9469cbfb35755197170c99ae96a97
+        - name: lambda
+          accession: NC_001416.1
+          sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
   - name: ampliseq
     release: 2.5.0
-    silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
-    silva_zip: Silva_132_release.zip
+    extra_parameters:
+      silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
+      silva_zip: Silva_132_release.zip
     container_dir: "{{ biocontainers_dirname }}"
   - name: atacseq
     release: 2.0
@@ -79,3 +88,5 @@ igenomes:
     source: GATK
     build: GRCh38
     type: gatk
+
+ncbi_eutils_url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils

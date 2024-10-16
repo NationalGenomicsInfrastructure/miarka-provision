@@ -1,0 +1,20 @@
+
+
+- name: create directory for {{ pipeline }}  resources
+  file:
+    path: "{{ ngi_containers }}/{{ pipeline }}"
+    state: directory
+
+- name: check if SILVA zip exists
+  stat:
+    get_attributes: no
+    get_checksum: no
+    get_mime: no
+    path: "{{ ngi_containers }}/{{ pipeline }}/{{ extra_parameters.silva_zip }}"
+  register: silva_stat
+
+- name: download SILVA classifier data
+  get_url:
+    url: "{{ extra_parameters.silva_base_url }}/{{ extra_parameters.silva_zip }}"
+    dest: "{{ ngi_containers }}/{{ pipeline }}/{{ extra_parameters.silva_zip }}"
+  when: not silva_stat.stat.exists
