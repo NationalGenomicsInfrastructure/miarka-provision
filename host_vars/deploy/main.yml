@@ -39,7 +39,7 @@ static_ngi_log_path: "{{ static_ngi_pipeline_path }}/log"
 ngi_softlinks: "{{ ngi_pipeline_workdir }}/softlinks"
 
 NGI_venv_name: "NGI"
-ngi_pipeline_venv: "{{ sw_path }}/anaconda/envs/{{ NGI_venv_name }}"
+ngi_pipeline_venv: "{{ anaconda_path }}/envs/{{ NGI_venv_name }}"
 
 ngi_pipeline_conf: "{{ root_path }}/conf/"
 ngi_resources: "{{ root_path }}/resources/"
