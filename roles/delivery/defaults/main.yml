@@ -1,6 +1,0 @@
-delivery_env_name: "ugc_delivery_script"
-delivery_env_path: "{{ sw_path }}/anaconda/envs/{{ delivery_env_name }}"
-
-delivery_repo: "http://github.com/molmed/delivery.git"
-delivery_version: "master"
-delivery_dest: "{{ sw_path }}/ugc_delivery_src"

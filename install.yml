@@ -95,7 +95,6 @@
     - { role: arteria-sequencing-report-ws, tags: arteria-sequencing-report }
     - { role: snpseq-metadata-service, tags: snpseq-metadata-service }
     - { role: standalone_scripts, tags: standalone_scripts }
-    - { role: delivery, tags: delivery }
     - { role: misc-tools, tags: misc-tools }
     - { role: archive-upload-ws, tags: archive-upload }
     - { role: archive-verify-ws, tags: archive-verify }
