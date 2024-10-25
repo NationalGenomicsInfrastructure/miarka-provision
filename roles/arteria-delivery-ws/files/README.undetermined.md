@@ -2,7 +2,7 @@
 
 This delivery includes sequencing data in FASTQ format, a summary report created with MultiQC, checksums and a copy of the sample sheet used for demultiplexing.
 
-The FASTQ files named "Undetermined" contains reads that could not be assigned to a sample. Note that in cases where demultiplexing is expected to fail e.g. when inline barcode are used, the Undetermined FASTQs are the main data source. There might be some reads assigned to samples by chance. These can be disregarded. 
+The FASTQ files named "Undetermined" contains reads that could not be assigned to a sample. Note that in cases where demultiplexing is expected to fail e.g. when inline barcode are used, the Undetermined FASTQs are the main data source. There might be some reads assigned to individual sample(s) (i.e. <Sample1 id> ... <SampleN id>) by chance. These can be disregarded.
 
 ## Delivery structure
 ```
@@ -32,7 +32,7 @@ The FASTQ files named "Undetermined" contains reads that could not be assigned t
 ```
 
 ## Verifying file integrity
-It is strongly encouraged to verify file integrity after delivery. It can be done with the following commands:
+It is strongly encouraged to verify file integrity after delivery. Since Undetermined FASTQs are added ad-hoc to normal processing, checksums for those files are stored in a separate file. To verify all files (including Undetermined), execute the following commands:
 ```
 cd <project>
 md5sum -c <runfolder>/checksums.md5
