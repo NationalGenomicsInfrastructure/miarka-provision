@@ -51,7 +51,7 @@ process {
     }
 
     withName: MD5SUM {
-        publishDir = []
+        publishDir enabled:false
     }
 }
 
