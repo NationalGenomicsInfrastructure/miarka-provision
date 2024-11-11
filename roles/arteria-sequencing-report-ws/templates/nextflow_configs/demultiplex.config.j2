@@ -14,10 +14,6 @@ plugins {
     id 'nf-validation@{{ nf_validation_version }}'
 }
 
-params {
-   skip_tools = 'md5sum'
-}
-
 process {
 
     withName: BCL2FASTQ {
