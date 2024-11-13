@@ -49,7 +49,7 @@ ngi_resources: "{{ root_path }}/resources/"
 sarek_tag: "3.4.2"
 sarek_dest: "{{ sw_path }}/sarek/{{ sarek_tag | replace('.', '_') }}"
 
-rnaseq_tag: "3.8.1"
+rnaseq_tag: "3.12.0"
 rnaseq_dest: "{{ sw_path }}/rnaseq/{{ rnaseq_tag | replace('.', '_') }}"
 
 demultiplex_tag: "1.4.1"
