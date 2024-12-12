@@ -73,6 +73,7 @@ nf_core_delivery_readmes:
     - DELIVERY.README.SAREK.txt
     - DELIVERY.README.SAREK.BATCH.txt
     - DELIVERY.README.SAREK.WES.md
+    - DELIVERY.README.SAREK.md.j2
     - apply_recalibration.sh
   rnaseq:
     - DELIVERY.README.RNASEQ.md
