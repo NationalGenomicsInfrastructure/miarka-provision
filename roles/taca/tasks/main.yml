@@ -44,7 +44,7 @@
     - { config_tpl: "taca_cleanup", config_dst: "taca_cleanup", item_type: cleanup, config_site: ["sthlm"] }
     - { config_tpl: "app_specific_delivery", config_dst: "taca_fastq_delivery", item_type: fastq, config_site: ["sthlm"] }
     - { config_tpl: "taca_runfolder_delivery", config_dst: "taca_runfolder_delivery", item_type: runfolder, config_site: ["sthlm"] }
-    - { config_tpl: "taca_ont_delivery", config_dst: "taca_ont_delivery", config_site: ["sthlm"] }
+    - { config_tpl: "taca_organise_and_deliver", config_dst: "taca_organise_and_deliver", config_site: ["sthlm"] }
     - { config_tpl: "app_specific_delivery", config_dst: "taca_rna_delivery", item_type: rna, config_site: ["sthlm"] }
     - { config_tpl: "app_specific_delivery", config_dst: "taca_denovo_delivery", item_type: denovo, config_site: ["sthlm"] }
 
