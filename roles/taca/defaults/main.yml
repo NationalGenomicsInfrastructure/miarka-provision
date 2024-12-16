@@ -9,7 +9,7 @@ flowcell_parser_version: cfe18abb6b758a6389a9d6aa75f1866d517dc36e
 
 taca_repo: https://github.com/SciLifeLab/TACA.git
 taca_dest: "{{ sw_path }}/TACA"
-taca_version: c08d3f3ca4ed2f0f8ef7e669b6d7313b746e33f0
+taca_version: df9915775c4c6c9ed3f9148cc37910bd2d44f37b
 
 ngi_pipeline_analysisdir: "{{ ngi_pipeline_workdir }}/ANALYSIS"
 ngi_pipeline_datadir: "{{ ngi_pipeline_workdir }}/DATA"
