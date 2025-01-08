@@ -17,7 +17,7 @@
 - name: nf-core download {{ pipeline }} v{{ release }}
   command: >
     nf-core -v
-    download {{ pipeline }}
+    pipeline download {{ repository }}
     -d
     --compress none
     --outdir {{ sw_path }}/{{ pipeline }}

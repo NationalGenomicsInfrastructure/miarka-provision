@@ -17,6 +17,7 @@
     pipeline_genomes: "{{ item.pipeline_genomes | default([]) }}"
     extra_parameters: "{{ item.extra_parameters | default({}) }}"
     container_dir: "{{ ngi_containers }}/{{ item.container_dir | default(item.name) }}"
+    repository: "{{ item.repository | default(item.name) }}"
   with_items: "{{ pipelines }}"
   tags: pipelines
 
