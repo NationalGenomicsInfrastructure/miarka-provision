@@ -16,7 +16,7 @@ nf_core_vars:
   PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 biocontainers_dirname: biocontainers
 pipelines:
-  - name: rnaseq
+  - name: NationalGenomicsInfrastructure/nfcore_rnaseq
     release: "{{ rnaseq_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
   - name: sarek
