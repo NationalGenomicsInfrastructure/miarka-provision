@@ -20,7 +20,7 @@ pipeline_parameters:
   outdir: "{runfolder_path}"
   project: {{uppmax_project}}
   demultiplexer: "bcl2fastq"
-  skip_tools: "fastp,falco,multiqc"
+  skip_tools: "samshee,checkqc,fastp,falco,md5sum,kraken,multiqc"
 input_samplesheet_content: |
   id,samplesheet,lane,flowcell
   {runfolder_name},{runfolder_path}/SampleSheet.csv,,{runfolder_path}

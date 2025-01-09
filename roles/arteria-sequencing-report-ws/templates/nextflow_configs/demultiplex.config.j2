@@ -11,7 +11,7 @@
 */
 
 plugins {
-    id 'nf-validation@{{ nf_validation_version }}'
+    id 'nf-schema@{{ nf_schema_version }}'
 }
 
 process {
@@ -26,19 +26,21 @@ process {
         publishDir = [
             [
                 path: { "${params.outdir}/Unaligned/" },
-                pattern: "**_S[1-9]*_*.fastq.gz",
+                pattern: "output/**_S[1-9]*_*.fastq.gz",
                 mode: "link",
+                saveAs: { filename -> filename.minus("output/") }
             ],
             [
                 path: { "${params.outdir}/Unaligned/" },
-                pattern: "Undetermined_S0_*.fastq.gz",
+                pattern: "output/**Undetermined_S0_*.fastq.gz",
                 mode: "link",
+                saveAs: { filename -> filename.minus("output/") }
             ],
             [
                 // Gather and write Reports and Stats
                 path: { "${params.outdir}/Unaligned/" },
                 mode: "link",
-                pattern: "Stats",
+                pattern: "output/{Stats,Reports}",
                 saveAs: {filename -> filename.split("/")[-1] }
             ],
             [
@@ -49,9 +51,4 @@ process {
             ],
         ]
     }
-
-    withName: MD5SUM {
-        publishDir = []
-    }
 }
-
