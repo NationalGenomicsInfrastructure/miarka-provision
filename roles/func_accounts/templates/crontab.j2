@@ -6,6 +6,9 @@ SHELL=/bin/bash
 # restart supervisord if it has died for some reason
 11 * * * *      bash {{ ngi_resources }}/start_supervisord_{{ site }}.sh &> /dev/null
 
+# Check disk usage every Monday
+0 7 * * 1  echo "Disk usage Miarka:" && /vulpes/ngi/production/latest/sw/standalone_scripts/du_miarka.py /proj/ngi2016001
+
 {% endif %}
 
 # updates charon with locally stored run info for sarek

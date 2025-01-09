@@ -2,7 +2,7 @@ java_home: /sw/comp/java/x86_64/OracleJDK_11.0.9
 nextflow_java: "{{ java_home }}"
 nextflow_version_tag: 24.04.1
 nextflow_download_url: https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow
-nf_validation_version: 1.1.2
+nf_schema_version: 2.1.1
 nextflow_local_env:
   NXF_HOME: "{{ nextflow_dest }}/workfiles"
   NXF_OPTS: -Xms1g -Xmx3500m
@@ -21,8 +21,10 @@ nextflow_env:
   PATH: "{{ tools_path.PATH }}"
 nextflow_plugins:
   - name: nf-validation
-    version: "{{ nf_validation_version }}"
+    version: 1.1.2
   - name: nf-prov
     version: 1.2.1
   - name: nf-tower
     version: 1.6.3
+  - name: nf-schema # Will replace nf-validation once we update all our pipelines
+    version: "{{ nf_schema_version }}"

@@ -2,8 +2,11 @@
 
 - name: create virtual python env for arteria-checksum
   shell: "conda create --name {{ arteria_service_name }} python=2.7"
-  args: 
+  args:
     creates: "{{ arteria_service_env_root }}"
+
+- name: make sure pip is up to date
+  shell: "{{ arteria_service_env_root }}/bin/python -m ensurepip --upgrade"
 
 - name: get arteria-checksum from git
   git:

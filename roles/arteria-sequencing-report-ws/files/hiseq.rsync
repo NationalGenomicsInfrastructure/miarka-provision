@@ -5,6 +5,13 @@
 # rsync -av --prune-empty-dirs --include-from hiseq.rsync $PWD/ biologin:~/incoming/runfolders/$runfolder > $PWD/rsync.log
 #
 
+# Exclude all .nextflow directory
+# This works if rsync is called with src dest
+- /*/.nextflow/***
+
+# This works if rsync is called with src/ dest
+- .nextflow
+
 + */
 
 # Include some files regardless of location in tree

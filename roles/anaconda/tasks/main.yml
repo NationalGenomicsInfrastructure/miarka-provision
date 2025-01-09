@@ -11,7 +11,7 @@
     creates: "{{ anaconda_path }}/LICENSE.txt"
 
 - name: Update anaconda
-  shell: "{{ anaconda_path }}/bin/conda update -n base -c defaults conda -y"
+  shell: "{{ anaconda_path }}/bin/mamba update -n base -c conda-forge conda -y"
 
 - name: "Check if {{ conda_tools_env }} virtual env exists"
   shell: "{{ anaconda_path }}/bin/conda env list"
