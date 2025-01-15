@@ -1,6 +1,6 @@
 nf_core_env_name: nf-core-env
 nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
-nf_core_version: 2.14.1
+nf_core_version: 3.0.2
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
   NFCORE_NO_VERSION_CHECK: 1
@@ -19,6 +19,7 @@ pipelines:
   - name: rnaseq
     release: "{{ rnaseq_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
+    repository: NationalGenomicsInfrastructure/nfcore_rnaseq
   - name: sarek
     release: "{{ sarek_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
@@ -44,7 +45,7 @@ pipelines:
           accession: NC_001416.1
           sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
   - name: ampliseq
-    release: 2.5.0
+    release: 2.12.0
     extra_parameters:
       silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
       silva_zip: Silva_132_release.zip

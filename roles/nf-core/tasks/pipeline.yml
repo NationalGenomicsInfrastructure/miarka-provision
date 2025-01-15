@@ -14,23 +14,24 @@
   loop_control:
     loop_var: cachedir
 
-- name: nf-core download {{ pipeline }} v{{ release }}
+- name: nf-core download {{ pipeline }} {{ release }}
   command: >
     nf-core -v
-    download {{ pipeline }}
-    -d
+    pipelines download {{ repository }}
+    --download-configuration yes
     --compress none
     --outdir {{ sw_path }}/{{ pipeline }}
     --revision {{ release }}
     --container-system singularity
     --container-cache-utilisation amend
+    --parallel-downloads 4
   environment: "{{ nf_core_vars }}"
   ignore_errors: true
   args:
     chdir: "{{ sw_path }}"
     creates: "{{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}"
 
-- name: pull pipeline-specific images for {{ pipeline }} v{{ release }}
+- name: pull pipeline-specific images for {{ pipeline }} {{ release }}
   command: "singularity pull --name nfcore-{{ container.0 }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 | replace('-', ':', 1) }}.{{ container.1 }}"
   environment: "{{ nf_core_vars }}"
   args:
@@ -43,12 +44,12 @@
   loop_control:
     loop_var: container
 
-- name: create nf-core {{ pipeline }} v{{ release }} config
+- name: create nf-core {{ pipeline }} {{ release }} config
   template:
     src: "site.config.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config"
 
-- name: set alias for pipeline {{ pipeline }} v{{ release }}
+- name: set alias for pipeline {{ pipeline }} {{ release }}
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
