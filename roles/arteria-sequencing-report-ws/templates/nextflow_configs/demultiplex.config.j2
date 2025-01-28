@@ -14,6 +14,12 @@ plugins {
     id 'nf-schema@{{ nf_schema_version }}'
 }
 
+profiles {
+    uppmax {
+        includeConfig "${projectDir}/../configs/conf/uppmax.config"
+    }
+}
+
 process {
 
     withName: BCL2FASTQ {
