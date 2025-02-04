@@ -1,0 +1,15 @@
+log:
+    file: "{{ ngi_pipeline_path }}/log/taca.log"
+
+organise:
+  incoming_path: "{{ proj_root }}/{{ uppmax_project }}/incoming"
+  nanopore_path: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/ONT_TAR"
+  illumina_path: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/DATA"
+  element_path: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/DATA"
+
+delivery:
+  data_locations:
+    - "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/ONT_TAR"
+    - "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/DATA"
+    - "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/ANALYSIS"
+  staging_path: "{{ proj_root }}/{{ uppmax_project }}/nobackup/NGI/DELIVERY"
