@@ -419,6 +419,23 @@ supervisord─┬─archive-upload-───{archive-upload-}
 Again, ensure that you are working on the correct login node (`miarka1` for production and `miarka2` for staging) and 
 as the user running the services and having the `crontab` installed (probably `funk_004`). 
 
+##### Step by step
+1. Log in to the correct login node (`miarka1` for production and `miarka2` for staging)
+2. Log in as `funk_004`
+3. Run the script `/vulpes/ngi/<production,staging>/latest/resources/stop_supervisord_upps.sh`
+4. Check the services from the previous deployment are no longer running
+```bash
+pgrep -fl vYY.MM
+```
+5. Start the services from the new deployment
+```bash
+/vulpes/ngi/<production,staging>/latest/resources/start_supervisord_upps.sh
+```
+6. Verify that the services are running as expected
+```bash
+pstree -u funk_004
+```
+
 ## Miarka user
 
 In order to automatically have the latest production environment activated upon login, a regular Miarka user should 
