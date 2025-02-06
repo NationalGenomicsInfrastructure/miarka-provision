@@ -34,7 +34,7 @@ pipelines:
       - CanFam3.1
       - WBcel235
   - name: methylseq
-    release: 2.3.0
+    release: 3.0.0
     container_dir: "{{ biocontainers_dirname }}"
     extra_parameters:
       references:
