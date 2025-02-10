@@ -34,7 +34,7 @@ pipelines:
       - CanFam3.1
       - WBcel235
   - name: methylseq
-    release: 2.3.0
+    release: 3.0.0
     container_dir: "{{ biocontainers_dirname }}"
     extra_parameters:
       references:
@@ -74,6 +74,7 @@ nf_core_delivery_readmes:
     - DELIVERY.README.SAREK.txt
     - DELIVERY.README.SAREK.BATCH.txt
     - DELIVERY.README.SAREK.WES.md
+    - DELIVERY.README.SAREK.md
     - apply_recalibration.sh
   rnaseq:
     - DELIVERY.README.RNASEQ.md
