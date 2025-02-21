@@ -29,7 +29,7 @@
   ignore_errors: true
   args:
     chdir: "{{ sw_path }}"
-    creates: "{{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}"
+    creates: "{{ release_path }}"
 
 - name: pull pipeline-specific images for {{ pipeline }} {{ release }}
   command: "singularity pull --name nfcore-{{ container.0 }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 | replace('-', ':', 1) }}.{{ container.1 }}"
@@ -53,7 +53,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias {{ pipeline }}='nextflow run {{ sw_path }}/{{ pipeline }}/{{ release | replace('.', '_') }}/
+          alias {{ pipeline }}='nextflow run {{ release_path }}/
           -profile uppmax \
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config \
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'

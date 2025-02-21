@@ -18,6 +18,9 @@
     extra_parameters: "{{ item.extra_parameters | default({}) }}"
     container_dir: "{{ ngi_containers }}/{{ item.container_dir | default(item.name) }}"
     repository: "{{ item.repository | default(item.name) }}"
+    # `nf-core pipelines download` does this replacement to make the folder names
+    # 'filesystem-safe', so we need to do it too.
+    release_path: "{{ sw_path }}/{{ pipeline }}/{{ item.release | regex_replace('[^0-9a-zA-Z_]+', '_') }}"
   with_items: "{{ pipelines }}"
   tags: pipelines
 
