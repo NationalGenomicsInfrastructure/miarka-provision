@@ -6,6 +6,17 @@ singularity.cacheDir = '{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}'
    if necessary to use the custom location, uncomment this parameter */
 //igenomes_base = '{{ igenomes_dir }}/references'
 
+
+/* This is a patch to address this issue https://github.com/nf-core/tools/issues/3430
+   It won't be necessary after the nf-core template is updated. */
+igenomes_base = {{ igenomes_dir }}
+profiles {
+    uppmax {
+        includeConfig "${projectDir}/../configs/conf/uppmax.config"
+    }
+}
+
+
 {% if pipeline == 'methylseq' %}
 
 process {
