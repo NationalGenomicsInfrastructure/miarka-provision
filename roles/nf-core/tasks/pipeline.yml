@@ -49,7 +49,7 @@
     src: "site.config.j2"
     dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config"
 
-# TODO remove --igenome_base once nf-core/methylseq uses a template version
+# TODO remove --igenome_base once all our pipelines uses a template version
 # that addresses https://github.com/nf-core/tools/issues/3430
 - name: set alias for pipeline {{ pipeline }} {{ release }}
   lineinfile:
@@ -59,7 +59,7 @@
           -profile uppmax
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
-          {{ '--igenome_base "{{ igenomes_dir }}"' if pipeline == "methylseq" else '' }}
+          --igenome_base {{ igenomes_dir }}
     backup: no
 
 - name: check if pipeline-specific include exists
