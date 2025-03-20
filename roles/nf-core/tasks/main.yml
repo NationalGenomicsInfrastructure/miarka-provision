@@ -1,11 +1,19 @@
 ---
 - name: "Check if {{ nf_core_env_name }} virtual env exists"
   shell: "conda env list"
-  register: "nfcore_envs"
+  register: "conda_envs"
 
-- name: Setup {{ nf_core_env_name }} virtual env with python3 and nf-core v{{ nf_core_version }}
-  command: "conda create -n {{ nf_core_env_name }} -c conda-forge -c bioconda python={{ python3_version }} nf-core={{ nf_core_version }} nextflow={{ nextflow_version_tag }} awscli={{ awscli_version }}"
-  when: not nf_core_env_name in nfcore_envs.stdout|split
+- name: >
+    Setup {{ nf_core_env_name }} virtual env
+    with python {{ python3_version }} and nf-core v{{ nf_core_version }}
+  command: >
+    conda create -n {{ nf_core_env_name }}
+    -c conda-forge
+    -c bioconda
+    python={{ python3_version }}
+    nf-core={{ nf_core_version }}
+    nextflow={{ nextflow_version_tag }}
+  when: not nf_core_env_name in conda_envs.stdout|split
 
 # Setup pipelines
 - name: setup nf-core pipelines
