@@ -9,7 +9,6 @@ singularity.cacheDir = '{{ nf_core_vars.NXF_SINGULARITY_CACHEDIR }}'
 
 /* This is a patch to address this issue https://github.com/nf-core/tools/issues/3430
    It won't be necessary after the nf-core template is updated. */
-igenomes_base = {{ igenomes_dir }}
 profiles {
     uppmax {
         includeConfig "${projectDir}/../configs/conf/uppmax.config"
