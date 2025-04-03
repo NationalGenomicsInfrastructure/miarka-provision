@@ -58,8 +58,8 @@
           alias {{ pipeline }}='nextflow run {{ release_path }}/
           -profile uppmax
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config
-          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config'
-          --igenomes_base {{ igenomes_dir }}
+          -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config
+          --igenomes_base {{ igenomes_dir }}'
     backup: no
 
 - name: check if pipeline-specific include exists
