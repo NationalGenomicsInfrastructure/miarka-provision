@@ -51,16 +51,23 @@
 
 # TODO remove --igenome_base and --project once all our pipelines uses a
 # template version that addresses https://github.com/nf-core/tools/issues/3430
+# TODO Parameter validation needs to be turned off for sarek because of
+# https://github.com/nf-core/sarek/issues/1857. When this issue is resolved
+# and sarek is updated, this lane can be removed
 - name: set alias for pipeline {{ pipeline }} {{ release }}
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
-          alias {{ pipeline }}='nextflow run {{ release_path }}/
+          alias {{ pipeline }}='
+          nextflow run {{ release_path }}/
           -profile uppmax
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config
           --project {{ uppmax_project }}
-          --igenomes_base /sw/data/igenomes/'
+          --igenomes_base /sw/data/igenomes/
+          {% if pipeline == "sarek" %}--validate_params false {% endif %}
+          {% if pipeline == "methylseq" %}--run_qualimap {% endif %}
+          '
     backup: no
 
 - name: check if pipeline-specific include exists
