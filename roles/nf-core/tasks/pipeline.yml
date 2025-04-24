@@ -66,6 +66,7 @@
           --project {{ uppmax_project }}
           --igenomes_base /sw/data/igenomes/
           {% if pipeline == "sarek" %}--validate_params false {% endif %}
+          {% if pipeline == "methylseq" %}--run_qualimap {% endif %}
           '
     backup: no
 
