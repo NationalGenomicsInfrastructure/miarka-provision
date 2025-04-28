@@ -1,6 +1,6 @@
 ---
 
-main_workflow_path: "{{ sw_path }}/demultiplex/{{ demultiplex_tag | replace('.', '_') }}/main.nf"
+main_workflow_path: "{{ sw_path }}/demultiplex/{{ demultiplex_tag | regex_replace('[^0-9a-zA-Z_]+', '_') }}/main.nf"
 # Note that in the following sections it is possible to do variable subsitution
 # on the following variables:
 # - {runfolder_name}
