@@ -1,3 +1,19 @@
+---
+- name: "Check if {{ awscli_env_name }} virtual env exists"
+  shell: "conda env list"
+  register: "conda_envs"
+
+- name: >
+    Setup {{ awscli_env_name }} virtual env
+    with python {{ python3_version }} and awscli v{{ awscli_version }}
+  command: >
+    conda create -n {{ nf_core_env_name }}
+    -c conda-forge
+    -c bioconda
+    python={{ python3_version }}
+    awscli={{ awscli_version }}
+  when: not awscli_env_name in conda_envs.stdout|split
+
 
 - name: get AWS-igenomes from git
   git:
@@ -19,7 +35,7 @@
     {{ ['-t', item.type] | join if item.type else '' }}
     -q"
   environment:
-    PATH: "{{ nf_core_env }}/bin"
+    PATH: "{{ awscli_env }}/bin"
   args:
     chdir: "{{ igenomes_dir }}"
     creates: "{{ igenomes_dir }}/references/{{ item.genome }}/{{ item.source }}/{{ item.build }}"
