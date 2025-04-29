@@ -1,7 +1,7 @@
 ---
 taca_ngi_repo: https://github.com/NationalGenomicsInfrastructure/taca-ngi-pipeline.git
 taca_ngi_dest: "{{ sw_path }}/taca-ngi-pipeline"
-taca_ngi_version: 6715a4b4f26bd4a88fd2a04a04a2feb1937a9d76
+taca_ngi_version: 29058df1958ba75a34e268cac79a2f38bef8195b
 
 flowcell_parser_repo: https://github.com/NationalGenomicsInfrastructure/flowcell_parser.git
 flowcell_parser_dest: "{{ sw_path }}/flowcell_parser"
