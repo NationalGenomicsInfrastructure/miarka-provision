@@ -98,6 +98,7 @@ qc:
         load_modules:
             - FastQC/0.11.5
         threads: 16
+        options: ["--nogroup"]
     fastq_screen:
         config_path: "{{ ngi_pipeline_conf }}/fastq_screen.miarka.conf"
         load_modules:
