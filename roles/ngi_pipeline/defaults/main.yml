@@ -1,7 +1,7 @@
 ---
 ngi_pipeline_repo: https://github.com/NationalGenomicsInfrastructure/ngi_pipeline.git
 ngi_pipeline_dest: "{{ sw_path }}/ngi_pipeline"
-ngi_pipeline_version: 9075823fdacad2d8012a471bb0832d82a5af91e7
+ngi_pipeline_version: 88df748fc0df203e5f7a8bbcfac9dd0c054779f9
 
 ngi_pipeline_log: "{{ ngi_log_path }}/ngi_pipeline.log"
 ngi_pipeline_db_path: "{{ ngi_pipeline_path }}/db"
