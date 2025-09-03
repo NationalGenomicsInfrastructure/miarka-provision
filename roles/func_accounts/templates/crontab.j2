@@ -2,7 +2,7 @@ SHELL=/bin/bash
 
 {% if site == "upps" %}
 
-@reboot source $HOME/.bash_profile && supervisord -c {{ supervisord_conf }}
+@reboot source $HOME/.bash_profile && {{ ngi_pipeline_venv }}/bin/supervisord -c {{ supervisord_conf }}
 # restart supervisord if it has died for some reason
 11 * * * *      bash {{ ngi_resources }}/start_supervisord_{{ site }}.sh &> /dev/null
 
