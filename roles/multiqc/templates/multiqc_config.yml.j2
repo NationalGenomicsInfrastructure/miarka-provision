@@ -1,5 +1,6 @@
 ---
 no_version_check: True
+no_ai: true
 
 swedac_location: {{ site_full }}
 swedac_accredited: {{ multiqc_swedac_accredited }}
@@ -7,7 +8,6 @@ swedac_accredited: {{ multiqc_swedac_accredited }}
 #Restrict megaqc to upps for now
 {% if site == "upps" %}
 export_plots: true
-no_ai: true
 megaqc_url: {{ megaqc_url }}
 megaqc_access_token: {{ megaqc_access_token }}
 {% endif %}
@@ -18,7 +18,6 @@ megaqc_access_token: {{ megaqc_access_token }}
 
 {% if site == "sthlm" %}
 export_plots: false
-no_ai: true
 remote_port: {{ multiqc_port }}
 remote_destination: {{ multiqc_destination }}
 {% endif %}
