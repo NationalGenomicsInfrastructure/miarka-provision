@@ -59,4 +59,39 @@ process {
             ],
         ]
     }
+    withName: BCLCONVERT {
+        time = '72h'
+        cpus = 24
+        memory = '147G'
+        ext.args = {[
+            params.ext_args ? "${params.ext_args}" : "",
+        ].join(" ").trim()}
+        publishDir = [
+            [
+                path: { "${params.outdir}/Unaligned/" },
+                pattern: "bclconvert/output/**_S[1-9]*_*.fastq.gz",
+                mode: "link",
+                saveAs: { filename -> filename.minus("bclconvert/output/") }
+            ],
+            [
+                path: { "${params.outdir}/Unaligned/" },
+                pattern: "bclconvert/output/**Undetermined_S0_*.fastq.gz",
+                mode: "link",
+                saveAs: { filename -> filename.minus("bclconvert/output/") }
+            ],
+            [
+                // Gather and write Reports and Stats
+                path: { "${params.outdir}/Unaligned/" },
+                mode: "link",
+                pattern: "bclconvert/output/Reports",
+                saveAs: {filename -> filename.split("/")[-1] }
+            ],
+            [
+                // Gather and write InterOp files
+                path: { "${params.outdir}" },
+                mode: "link",
+                pattern: "**.bin",
+            ],
+        ]
+    }
 }
