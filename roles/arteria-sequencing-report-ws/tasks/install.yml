@@ -1,7 +1,7 @@
 ---
 
 - name: create virtual python env for sequencing report service
-  shell: "conda create --name {{ arteria_service_name }} python=3.8"
+  shell: "conda create --name {{ arteria_service_name }} python=3.13"
   args: 
     creates: "{{ arteria_service_env_root }}"
 

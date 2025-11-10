@@ -7,6 +7,7 @@ main_workflow_path: "{{ sw_path }}/demultiplex/{{ demultiplex_tag | regex_replac
 # - {runfolder_path}
 # - {current_year}
 # - {input_samplesheet_path}
+# - {demultiplexer}
 nextflow_parameters:
   config: "{{ arteria_service_nextflow_config_dir }}/demultiplex.config"
   profile: "singularity,uppmax"
@@ -19,7 +20,7 @@ pipeline_parameters:
   input: "{input_samplesheet_path}"
   outdir: "{runfolder_path}"
   project: {{uppmax_project}}
-  demultiplexer: "bcl2fastq"
+  demultiplexer: "{{demultiplexer}}"
   skip_tools: "samshee,checkqc,fastp,falco,md5sum,kraken,multiqc"
 input_samplesheet_content: |
   id,samplesheet,lane,flowcell
