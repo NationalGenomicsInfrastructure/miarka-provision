@@ -1,8 +1,8 @@
 #!/bin/bash
 
-singularity instance stop -F {{ tarzan_singularity_container_name }} 2>/dev/null || echo "No singularity instance '{{ tarzan_singularity_container_name }}' running... ignoring"
+/usr/bin/singularity instance stop -F {{ tarzan_singularity_container_name }} 2>/dev/null || echo "No singularity instance '{{ tarzan_singularity_container_name }}' running... ignoring"
 
-singularity instance start \
+/usr/bin/singularity instance start \
 --bind "{{ tarzan_server_conf_file }}:{{ tarzan_singularity_container_server_conf_file }}" \
 --bind "{{ tarzan_entity_conf_file }}:{{ tarzan_singularity_container_entity_conf_file }}" \
 --bind "{{ tarzan_cert_file }}:{{ tarzan_singularity_container_cert_file }}" \
@@ -10,4 +10,4 @@ singularity instance start \
 --bind "{{ tarzan_log_dir }}:{{ tarzan_singularity_container_log_dir }}" \
 {{ tarzan_singularity_image_file_dest }} {{ tarzan_singularity_container_name }}
 
-singularity exec instance://{{ tarzan_singularity_container_name }} kong start --conf {{ tarzan_singularity_container_server_conf_file }}
+/usr/bin/singularity exec instance://{{ tarzan_singularity_container_name }} kong start --conf {{ tarzan_singularity_container_server_conf_file }}

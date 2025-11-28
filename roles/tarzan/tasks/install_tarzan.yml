@@ -44,7 +44,7 @@
 - name: modify crontab to start kong
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/crontab_{{ site }}"
-    line: '@reboot source $HOME/.bash_profile && {{ tarzan_start_script }} &> /dev/null'
+    line: '@reboot sleep 60 && source $HOME/.bash_profile && {{ tarzan_start_script }} &> /dev/null'
     backup: no
 
 - name: add static folders to be created

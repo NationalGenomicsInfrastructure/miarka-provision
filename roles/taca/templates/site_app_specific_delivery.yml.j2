@@ -34,6 +34,9 @@ deliver:
 {% elif "fastq" == item.item_type %}
             - {{ ngi_softlinks }}/DELIVERY.README.RAW_DATA.txt
             - <STAGINGPATH>
+{% elif "element" == item.item_type %}
+            - {{ ngi_softlinks }}/DELIVERY.README.ELEMENT_DATA.txt
+            - <STAGINGPATH>
 {% endif %}
         -
             - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt
