@@ -71,6 +71,9 @@ pipelines:
   - name: demultiplex
     release: "{{ demultiplex_tag }}"
     container_dir: "{{ biocontainers_dirname }}"
+  - name: pixelator
+    release: 2.2.0
+    container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
   sarek:
