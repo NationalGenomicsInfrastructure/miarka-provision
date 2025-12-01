@@ -77,7 +77,7 @@
         ssh_connection_multiplexing: yes
         rsync_timeout: 60
         rsync_opts:
-          - --omit-dir-times
+          - --no-times
           - --relative
           - --progress
           - --verbose

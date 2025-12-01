@@ -30,6 +30,14 @@ process {
         time = { 2.d * task.attempt }
   }
 
+
+/* TODO Temporary downgrade of bismark to work around the issue described here:
+   https://github.com/FelixKrueger/Bismark/issues/652#issuecomment-2750781652
+   This workaround should be re-evaluated when upgrading the methylseq pipeline */
+  withName:BISMARK_ALIGN {
+        container = "/vulpes/ngi/containers/biocontainers/quay.io-singularity-bismark-0.24.0--hdfd78af_0.img"
+    }
+
 }
 
 {% elif pipeline == 'ampliseq' %}
