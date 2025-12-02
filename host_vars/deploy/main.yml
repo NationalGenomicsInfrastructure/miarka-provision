@@ -50,7 +50,7 @@ sarek_dest: "{{ sw_path }}/sarek/{{ sarek_tag | regex_replace('[^0-9a-zA-Z_]+', 
 rnaseq_tag: "v3.12.0_ngi_v1-rc1"
 rnaseq_dest: "{{ sw_path }}/rnaseq/{{ rnaseq_tag | regex_replace('[^0-9a-zA-Z_]+', '_')  }}"
 
-demultiplex_tag: "1.5.4"
+demultiplex_tag: "1.7.0"
 
 # File with tools/software version in the deployed env
 deployed_tool_versions: "{{ ngi_resources }}/deployed_tools.{{ site }}.version"

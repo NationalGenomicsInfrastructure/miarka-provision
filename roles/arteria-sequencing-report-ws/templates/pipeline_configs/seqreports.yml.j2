@@ -7,6 +7,7 @@ main_workflow_path: "{{arteria_service_src_path}}/seqreports/main.nf"
 # - {runfolder_path}
 # - {current_year}
 # - {input_samplesheet_path}
+# - {demultiplexer}
 nextflow_parameters:
   config: "{{arteria_service_src_path}}/seqreports/nextflow.config"
   profile: {{seqreports_nf_profile}}
@@ -23,3 +24,4 @@ pipeline_parameters:
   checkqc_config: "{{arteria_service_config_root}}/checkqc.config"
   result_dir: "{runfolder_path}/seqreports"
   script_dir: "{{arteria_service_src_path}}/seqreports/bin/"
+  demultiplexer: "{{demultiplexer}}"
