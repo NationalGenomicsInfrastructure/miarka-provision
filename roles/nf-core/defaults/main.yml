@@ -34,6 +34,9 @@ pipelines:
       - CanFam3.1
       - WBcel235
   - name: methylseq
+    # TODO Evaluate if workaround implemented in
+    # https://github.com/NationalGenomicsInfrastructure/miarka-provision/pull/340
+    # can be removed when upgrading the methylseq pipeline
     release: 3.0.0
     container_dir: "{{ biocontainers_dirname }}"
     extra_parameters:
@@ -67,6 +70,9 @@ pipelines:
     container_dir: "{{ biocontainers_dirname }}"
   - name: demultiplex
     release: "{{ demultiplex_tag }}"
+    container_dir: "{{ biocontainers_dirname }}"
+  - name: pixelator
+    release: 2.2.0
     container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
