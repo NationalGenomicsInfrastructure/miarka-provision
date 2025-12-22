@@ -47,7 +47,7 @@ ngi_resources: "{{ root_path }}/resources/"
 sarek_tag: "3.5.1"
 sarek_dest: "{{ sw_path }}/sarek/{{ sarek_tag | regex_replace('[^0-9a-zA-Z_]+', '_') }}"
 
-rnaseq_tag: "v3.12.0_ngi_v1-rc1"
+rnaseq_tag: "v3.12.0_ngi_v2"
 rnaseq_dest: "{{ sw_path }}/rnaseq/{{ rnaseq_tag | regex_replace('[^0-9a-zA-Z_]+', '_')  }}"
 
 demultiplex_tag: "1.7.0"
