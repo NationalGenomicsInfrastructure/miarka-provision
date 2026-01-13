@@ -11,13 +11,6 @@
     dest: "{{ arteria_service_src_path }}"
     version: "{{ seqreport_service_version }}"
 
-- name: install sequencing report service requirements
-  pip:
-    requirements: "{{ arteria_service_src_path }}/requirements/prod"
-    chdir: "{{ arteria_service_src_path }}"
-    executable: "{{ arteria_service_env_root }}/bin/pip"
-    state: present
-
 - name: get checksum pipeline from git
   git:
     repo: "{{ sis_style_checksums_repo }}"
