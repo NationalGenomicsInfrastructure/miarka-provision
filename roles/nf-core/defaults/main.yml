@@ -37,7 +37,7 @@ pipelines:
     # TODO Evaluate if workaround implemented in
     # https://github.com/NationalGenomicsInfrastructure/miarka-provision/pull/340
     # can be removed when upgrading the methylseq pipeline
-    release: 3.0.0
+    release: 4.2.0
     container_dir: "{{ biocontainers_dirname }}"
     extra_parameters:
       references:
