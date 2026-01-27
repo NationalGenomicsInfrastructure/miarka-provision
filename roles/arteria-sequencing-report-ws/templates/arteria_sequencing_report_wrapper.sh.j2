@@ -1,5 +1,7 @@
 #! /bin/bash -l
 
+source {{ ngi_pipeline_conf }}/sourceme_upps.sh
+
 export PATH={{ sw_path }}/nextflow:$PATH
 export NXF_HOME={{ nextflow_dest }}/workfiles
 export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
