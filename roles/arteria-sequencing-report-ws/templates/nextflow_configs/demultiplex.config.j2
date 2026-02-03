@@ -69,22 +69,22 @@ process {
         publishDir = [
             [
                 path: { "${params.outdir}/Unaligned/" },
-                pattern: "bclconvert/output/**_S[1-9]*_*.fastq.gz",
+                pattern: "output/**_S[1-9]*_*.fastq.gz",
                 mode: "link",
-                saveAs: { filename -> filename.minus("bclconvert/output/") }
+                saveAs: { filename -> filename.minus("output/") }
             ],
             [
                 path: { "${params.outdir}/Unaligned/" },
-                pattern: "bclconvert/output/**Undetermined_S0_*.fastq.gz",
+                pattern: "output/**Undetermined_S0_*.fastq.gz",
                 mode: "link",
-                saveAs: { filename -> filename.minus("bclconvert/output/") }
+                saveAs: { filename -> filename.minus("output/") }
             ],
             [
                 // Gather and write Reports and Stats
                 path: { "${params.outdir}/Unaligned/" },
                 mode: "link",
-                pattern: "bclconvert/output/Reports",
-                saveAs: {filename -> filename.split("/")[-1] }
+                pattern: "output/Reports",
+                saveAs: { filename ->  "Stats/${filename.minus('output/Reports')}" }
             ],
             [
                 // Gather and write InterOp files
