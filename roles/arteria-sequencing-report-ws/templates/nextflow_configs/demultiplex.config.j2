@@ -84,7 +84,7 @@ process {
                 path: { "${params.outdir}/Unaligned/" },
                 mode: "link",
                 pattern: "output/Reports",
-                saveAs: {filename ->  "Stats/${filename.minus('output/Reports')}" }
+                saveAs: { filename ->  "Stats/${filename.minus('output/Reports')}" }
             ],
             [
                 // Gather and write InterOp files
