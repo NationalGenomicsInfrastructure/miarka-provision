@@ -48,6 +48,7 @@
     - { config_tpl: "taca_organise_and_deliver", config_dst: "taca_organise_and_deliver", config_site: ["sthlm"] }
     - { config_tpl: "app_specific_delivery", config_dst: "taca_rna_delivery", item_type: rna, config_site: ["sthlm"] }
     - { config_tpl: "app_specific_delivery", config_dst: "taca_denovo_delivery", item_type: denovo, config_site: ["sthlm"] }
+    - { config_tpl: "app_specific_delivery", config_dst: "taca_10x_delivery", item_type: 10x, config_site: ["sthlm"] }    
 
 - name: Deploy script for softlinking delivery Readmes
   template:
