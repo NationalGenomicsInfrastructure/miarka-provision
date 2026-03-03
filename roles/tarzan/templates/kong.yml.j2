@@ -5,6 +5,9 @@ services:
   - name: arteria_checksum
     host: localhost
     port: {{ arteria_checksum_port }}
+    connect_timeout: 600000
+    read_timeout: 600000
+    write_timeout: 600000
     routes:
     - paths:
       - /arteria_checksum
@@ -24,6 +27,9 @@ services:
   - name: arteria_archive
     host: localhost
     port: {{ archive_upload_port }}
+    connect_timeout: 600000
+    read_timeout: 600000
+    write_timeout: 600000
     routes:
     - paths:
       - /arteria_archive
@@ -32,6 +38,9 @@ services:
   - name: arteria_archive_verify
     host: localhost
     port: {{ archive_verify_port }}
+    connect_timeout: 600000
+    read_timeout: 600000
+    write_timeout: 600000
     routes:
     - paths:
       - /verify
@@ -40,6 +49,9 @@ services:
   - name: arteria_sequencing_reports
     host: localhost
     port: {{ seqreport_service_port }}
+    connect_timeout: 600000
+    read_timeout: 600000
+    write_timeout: 600000
     routes:
     - paths:
       - /seqreports
@@ -48,6 +60,9 @@ services:
   - name: arteria_checkqc
     host: localhost
     port: {{ checkqc_service_port }}
+    connect_timeout: 600000
+    read_timeout: 600000
+    write_timeout: 600000
     routes:
     - paths:
       - /checkqc
