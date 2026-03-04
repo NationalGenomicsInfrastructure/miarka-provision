@@ -1,6 +1,6 @@
 ---
 # Versions
-tarzan_kong_version: "2.6.0"
+tarzan_kong_version: "3.9.1"
 
 # Directories
 tarzan_root_dir: "{{ sw_path }}/tarzan"
@@ -20,10 +20,10 @@ tarzan_host_name: "miarka1.uppmax.uu.se"
 tarzan_start_script: "{{ tarzan_conf_dir }}/start_kong.sh"
 
 # Singularity image
-tarzan_singularity_image_file: "kong-{{ tarzan_kong_version }}-centos.sif"
+tarzan_singularity_image_file: "kong-{{ tarzan_kong_version }}.sif"
 tarzan_singularity_image_file_src: "{{ deployment_static_resources }}/{{ tarzan_singularity_image_file }}"
 tarzan_singularity_image_file_dest: "{{ ngi_containers }}/kong/{{ tarzan_singularity_image_file }}"
-tarzan_singularity_image_sha1: "0a6ff9026711cbd5662af0c37dcdfab0611c5741"
+tarzan_singularity_image_sha1: "7d3dcabc1cb6c9cab50d29d2778c6eca9a4b843c"
 
 # Singularity container
 tarzan_singularity_container_name: "kong-{{ deployment_environment }}"
