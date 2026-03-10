@@ -74,6 +74,9 @@ pipelines:
   - name: pixelator
     release: 2.3.0
     container_dir: "{{ biocontainers_dirname }}"
+  - name: seqinspector
+    release: 1.0.1
+    container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
   sarek:
