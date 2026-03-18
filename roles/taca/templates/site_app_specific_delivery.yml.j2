@@ -37,6 +37,13 @@ deliver:
 {% elif "element" == item.item_type %}
             - {{ ngi_softlinks }}/DELIVERY.README.ELEMENT_DATA.txt
             - <STAGINGPATH>
+{% elif "10x" == item.item_type %}
+            - <ANALYSISPATH>/cellranger/deliver/
+            - <STAGINGPATH>/01-SC-Analysis
+            - required: True
+        -
+            - {{ ngi_softlinks }}/DELIVERY.README.10x_scRNASeq.txt
+            - <STAGINGPATH>
 {% endif %}
         -
             - {{ ngi_softlinks }}/ACKNOWLEDGEMENTS.txt

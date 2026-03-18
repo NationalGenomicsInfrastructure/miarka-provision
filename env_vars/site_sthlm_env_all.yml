@@ -18,6 +18,7 @@ delivery_readmes:
   - DELIVERY.README.MethylSeq.txt
   - DELIVERY.README.RNASeq.txt
   - DELIVERY.README.Sarek.txt
+  - DELIVERY.README.10x_scRNASeq.txt
 
 # multiqc
 multiqc_options:
