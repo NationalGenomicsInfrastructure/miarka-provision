@@ -30,4 +30,6 @@ nextflow_plugins:
     version: "{{ nf_schema_version }}"
   - name: nf-core-utils
     version: 0.4.0
+  - name: nf-fgbio
+    version: 1.0.0
 
