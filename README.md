@@ -29,8 +29,8 @@ miarkaenv
 # cd to the playbook directory and checkout the correct branch/version
 cd /vulpes/ngi/deploy/miarka-provision
 git fetch --tags origin
-git checkout [monthly / bimonthly / tags/vX.Y]
-git pull origin
+git checkout [monthly / bimonthly / vX.Y]
+git pull origin # only needed if checking out a branch (not a tag)
 
 # do deployment to local file system for each site
 ansible-playbook -i inventory.yml install.yml -e deployment_environment=[staging / production] -e site=upps
@@ -54,6 +54,4 @@ ansible-playbook -i inventory.yml sync.yml -e deployment_environment=[staging / 
     * Verify that all services have stopped (read more about this in docs/deployment.md)
     * Start the services with `vulpes/ngi/<deployment_environment>/latest/resources/start_supervisord_[site].sh`
 * Inform about the deployment
-    * Post the deployment id and change log in the [miarka provision Slack channel](https://scilifelab.slack.com/archives/G4WSG4C0G)
-
-
+    * Post the deployment version and change log in the [miarka provision Slack channel](https://scilifelab.slack.com/archives/G4WSG4C0G)
