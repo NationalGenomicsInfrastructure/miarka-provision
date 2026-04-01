@@ -11,9 +11,14 @@ The deployment is intended to be performed in three stages:
 - synchronize the deployment to the shared file system on the cluster
 - create site-specific directories and re-initialize services on the cluster
 
+More in-depth information can be found in [docs](./docs/). Specifically:
+* [Repo layout](./docs/repo_layout.md): Describes the overall layout of the repo, where variables are found etc.
+* [Setup](./docs/setup.md): Describes how to install the development environment on Miarka, as well a user specific setup needed for a deployer.
+* [Deployment](./docs/deployment.md): Describes the deployment process in greater detail than the checklist below. It also describes how to set up a personal development environment.
+
 ## Checklist for deployment
 
-Below are the main tasks and commands to perform for a staging or production deployment once the environment and relevant variables has been set up. For a detailed description and walk-through of the procedures, refer to docs.
+Below are the main tasks and commands to perform for a staging or production deployment once the environment and relevant variables has been set up.
 
 * Create a change log
     * This usually means [comparing main to monthly](https://github.com/NationalGenomicsInfrastructure/miarka-provision/compare/main...monthly) and list all changes that will be introduced. Save this list locally.
