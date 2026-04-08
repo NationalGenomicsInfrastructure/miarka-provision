@@ -11,17 +11,17 @@ This delivery includes sequencing data in FASTQ format, a summary report created
     ├── SampleSheet.csv
     ├── <runfolder>_<project>_multiqc_report_data.zip
     ├── <runfolder>_<project>_multiqc_report.html
-    ├── <Sample1 id>
-        ├── <sample1 name>_<sample number>_R1_001.fastq.gz
-        └── <sample1 name>_<sample number>_R2_001.fastq.gz
-    ├── <Sample2 id>
-        ├── <sample2 name>_<sample number>_R1_001.fastq.gz
-        └── <sample2 name>_<sample number>_R2_001.fastq.gz
+    ├── <sample1 id>
+        ├── <sample1 id/name>_<sample number>_R1_001.fastq.gz
+        └── <sample1 id/name>_<sample number>_R2_001.fastq.gz
+    ├── <sample2 id>
+        ├── <sample2 id/name>_<sample number>_R1_001.fastq.gz
+        └── <sample2 id/name>_<sample number>_R2_001.fastq.gz
      :
      :
-    └── <SampleN id>
-        ├── <sampleN name>_<sample number>_R1_001.fastq.gz
-        └── <sampleN name>_<sample number>_R2_001.fastq.gz
+    └── <sampleN id>
+        ├── <sampleN id/name>_<sample number>_R1_001.fastq.gz
+        └── <sampleN id/name>_<sample number>_R2_001.fastq.gz
 ```
 
 ## Verifying file integrity
