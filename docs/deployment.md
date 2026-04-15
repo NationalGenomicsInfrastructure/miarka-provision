@@ -42,7 +42,7 @@ tower_workspace_id
 
 Typically roles are developed (or at least tested) locally on `miarka3`.
 
-Start by forking the repository https://github.com/NationalGenomicsInfrastructure/miarka-provision to your private Github repo. On Miarka3, create a directory called `/vulpes/ngi/devel-<username>`. Clone you fork to this directory.
+Start by forking the repository https://github.com/NationalGenomicsInfrastructure/miarka-provision to your private Github repo. On Miarka3, create a directory called `/vulpes/ngi/devel-<username>`. Clone your fork to this directory.
 
 There you can develop your own Ansible roles in your private feature branch.
 
