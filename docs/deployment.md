@@ -53,7 +53,7 @@ cp env_vars/site_all_env_devel.yml.example env_vars/site_all_env_devel.yml
 cp env_secrets/site_all_env_all.yml.example env_secrets/site_upps_env_devel.yml
 ```
 
-Tip: The easiest way to get sensible devel vars is to copy them from another users devel env.
+Tip: The easiest way to get sensible devel vars is to copy them from another user's devel env.
 
 If you want to test your roles/playbook, run:
 ```
