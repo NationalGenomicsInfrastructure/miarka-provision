@@ -30,7 +30,7 @@ This will clone the devel branch of this repo under the current working director
 
 ## User prerequisites
 
-Each usser should add the following lines into `~/.bashrc`:
+Each user should add the following lines into `~/.bashrc`:
 
 ```
 alias miarkaenv='source /vulpes/ngi/deploy/bashrc'
