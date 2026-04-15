@@ -12,7 +12,7 @@ If there is already a current singularity image available in `/vulpes/ngi/deploy
 
 The singularity image is built from a Docker image whose definition file is available at `docker/Dockerfile`.
 
-To build the singularity image, clone this repository and run `docker/build_singularity.sh`. This will create a singularity image, `miarka-ansible.<commit hash>.sif` in the working directory. The image itself is not dependent onchanges to the miarka-provision repo, with the exception to changes in the `docker` folder. For clarity, the image will be tagged with the git commit hash of the repo that the image was built from.
+To build the singularity image, clone this repository and run `docker/build_singularity.sh`. This will create a singularity image, `miarka-ansible.<commit hash>.sif` in the working directory. The image itself is not dependent on changes to the miarka-provision repo, with the exception to changes in the `docker` folder. For clarity, the image will be tagged with the git commit hash of the repo that the image was built from.
 
 The singularity image can be then be uploaded to `miarka3` and used for deployment. When you are confident that the image is stable and should be used in production, move it to the `/vulpes/ngi/deploy` folder and move the `miarka-ansible.sif` symlink to point to this image.
 
