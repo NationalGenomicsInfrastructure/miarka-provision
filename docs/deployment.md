@@ -110,7 +110,7 @@ When everything is synced properly then login to the cluster as your personal us
 ```
 For convenience, add this to your personal bash init file `~/.bashrc` on `miarka1` or `miarka2`. This will load the staging environment for your user with the appropriate staging variables set.
 
-You should now skip [down](#reload-services) to the procedures for reloading services.
+You should now skip [down](#create-project-directories-symlinks-and-reload-services) to the procedures for reloading services.
 
 When the staged environment has been verified to work OK, proceed with making a pull request from the staging branch to the master branch of the repository.
 
