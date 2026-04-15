@@ -108,7 +108,7 @@ When everything is synced properly then login to the cluster as your personal us
 ```
     source /vulpes/ngi/staging/latest/conf/sourceme_<site>.sh && source activate NGI
 ```
-For convenience, add this to your personal bash init file `~/.bashrc` on `miarka1` or `miarka2`. This will load thestaging environment for your user with the appropriate staging variables set.
+For convenience, add this to your personal bash init file `~/.bashrc` on `miarka1` or `miarka2`. This will load the staging environment for your user with the appropriate staging variables set.
 
 You should now skip [down](#reload-services) to the procedures for reloading services.
 
