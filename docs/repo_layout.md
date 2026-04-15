@@ -13,7 +13,7 @@ Typically, each software or function has its own role for deployment and these a
 
 ### Variables
 
-In ansible, variables can be defined in a number of different locations depending on context, precedence etc. The location where you should define a variable will thus very depending on the circumstances. Below are a few rules-of-thumb to help you identify where to find or define a variable.
+In ansible, variables can be defined in a number of different locations depending on context, precedence etc. The location where you should define a variable will thus vary depending on the circumstances. Below are a few rules-of-thumb to help you identify where to find or define a variable.
 
 #### `env_vars`
 The conditions this playbook can be run under will mainly be a combination of `deployment_environment` (i.e. one of `devel`, `staging` or `production`) and `site` (i.e. one of `sthlm` and `upps`). Therefore, variables that depend on the specific `deployment_environment` and/or `site` are located in the corresponding variable file (named according to `site_[all | sthlm | upps]_env_[all | devel | staging | production ].yml`) in the `env_vars/` folder. When the playbook is run, the appropriate variable files will automatically be imported.
