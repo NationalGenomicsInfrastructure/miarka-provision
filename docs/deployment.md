@@ -19,8 +19,6 @@ In `env_secrets/site_upps_env_*.yml`:
 ```
 charon_api_token
 megaqc_access_token
-snic_api_password
-snic_api_user
 tarzan_api_key
 tower_workspace_id
 ```
@@ -35,8 +33,6 @@ In `env_secrets/site_sthlm_env_*.yml`:
 charon_api_token
 megaqc_access_token
 orderportal_api_token
-snic_api_password
-snic_api_user
 statusdb_password
 statusdb_username
 tower_workspace_id
