@@ -9,7 +9,7 @@ flowcell_parser_version: 286b54825a83ef5cfed5345752f56b7e93265a1a
 
 taca_repo: https://github.com/NationalGenomicsInfrastructure/TACA.git
 taca_dest: "{{ sw_path }}/TACA"
-taca_version: 356a96c60ac71334914a324568dceab3f9d8244b
+taca_version: 0061d625f2cafb4cd133dec17e2bfd9f0cad1037
 
 ngi_pipeline_analysisdir: "{{ ngi_pipeline_workdir }}/ANALYSIS"
 ngi_pipeline_datadir: "{{ ngi_pipeline_workdir }}/DATA"
