@@ -10,7 +10,7 @@ module load bioinfo-tools dds-cli
 export NGI_CONFIG={{ ngi_pipeline_conf }}/{{ ngi_pipeline_config }}
 export CHARON_API_TOKEN={{ charon_api_token }}
 export DSM_CONFIG={{ tsm_config_file }}
-
+export SITE={{ ngi_pipeline_sequencing_center }}
 
 # alias to get versions for tools installed in the current deployment
 alias deployed_env="cat {{ deployed_tool_versions }}"
