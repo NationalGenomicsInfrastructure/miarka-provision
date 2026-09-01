@@ -1,3 +1,4 @@
+---
 
 - name: create directories for {{ pipeline }} singularity images
   file:
@@ -59,6 +60,7 @@
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
           alias {{ pipeline }}='
+          NXF_VER={{ item.nextflow_version}}
           nextflow run {{ release_path }}/
           -profile uppmax
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config

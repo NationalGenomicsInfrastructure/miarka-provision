@@ -1,0 +1,29 @@
+---
+
+- name: "Create directory for Nextflow {{ nf_version }}"
+  file:
+    path: "{{ nf_version_dest }}"
+    state: directory
+
+- name: "Create workfiles dir for Nextflow {{ nf_version }}"
+  file:
+    path: "{{ nf_version_dest }}/workfiles"
+    state: directory
+
+- name: "Download Nextflow {{ nf_version }}"
+  get_url:
+    url: "{{ nf_version_download_url }}"
+    dest: "{{ nf_version_dest }}/nextflow"
+    mode: u=rwx
+
+- name: "Bootstrap Nextflow {{ nf_version }}"
+  shell: "./nextflow run hello"
+  environment:
+    NXF_HOME: "{{ nf_version_dest }}/workfiles"
+    NXF_OPTS: -Xms1g -Xmx3500m
+    NXF_JAVA_HOME: "{{ nextflow_java }}"
+    NXF_PLUGINS_DIR: "{{ nextflow_plugins_root }}"
+    PATH: "{{ tools_path.PATH }}"
+  args:
+    chdir: "{{ nf_version_dest }}"
+

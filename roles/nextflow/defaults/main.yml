@@ -1,37 +1,52 @@
 java_home: /sw/comp/java/OpenJDK_17+35/miarka/
 nextflow_java: "{{ java_home }}"
-nextflow_version_tag: 25.10.2
-nextflow_download_url: https://github.com/nextflow-io/nextflow/releases/download/v{{ nextflow_version_tag }}/nextflow
-nf_schema_version: 2.6.1
 nextflow_local_env:
-  NXF_HOME: "{{ nextflow_dest }}/workfiles"
+  NXF_HOME: "{{ nextflow_root }}/{{ nextflow_versions | first }}/workfiles"
   NXF_OPTS: -Xms1g -Xmx3500m
   NXF_JAVA_HOME: "{{ nextflow_java }}"
-  NXF_PLUGINS_DIR: "{{ ngi_nextflow_plugins }}"
+  NXF_PLUGINS_DIR: "{{ nextflow_plugins_root }}"
   PATH: "{{ tools_path.PATH }}"
 nextflow_env:
-  NXF_HOME: "{{ nextflow_dest }}/workfiles"
+  NXF_HOME: "{{ nextflow_root }}/{{ nextflow_versions | first }}/workfiles"
   NXF_LAUNCHER: "$PWD/work"
   NXF_TEMP: "{{ ngi_pipeline_nobackup }}/nextflow/temp"
   NXF_WORK: "{{ ngi_pipeline_nobackup }}/nextflow/work"
   NXF_OPTS: -Xms1g -Xmx3500m
   NXF_JAVA_HOME: "{{ nextflow_java }}"
-  NXF_PLUGINS_DIR: "{{ ngi_nextflow_plugins }}"
+  NXF_PLUGINS_DIR: "{{ nextflow_plugins_root }}"
   NXF_SINGULARITY_HOME_MOUNT: true
   PATH: "{{ tools_path.PATH }}"
+# First version in list is set as default
+nextflow_versions:
+  - "26.04.6"
+  - "25.10.4"
+  - "25.10.2"
+  - "25.04.0"
 nextflow_plugins:
-  - name: nf-validation
-    version: 1.1.2
   - name: nf-prov
-    version: 1.2.2
+    version: "1.2.2"
+    nf_version: "25.10.2"
   - name: nf-tower
-    version: 1.6.3
-  - name: nf-schema # Will replace nf-validation once we update all our pipelines
-    version: "{{ nf_schema_version }}"
+    version: "1.6.3"
+    nf_version: "25.10.2"
+  - name: nf-schema
+    version: "2.7.2"
+    nf_version: "25.10.4"
+  - name: nf-schema
+    version: "2.6.1"
+    nf_version: "25.10.2"
+  - name: nf-schema
+    version: "2.5.1"
+    nf_version: "25.04.0"
   - name: nf-core-utils
-    version: 0.4.0
+    version: "0.4.0"
+    nf_version: "25.10.2"
   - name: nf-fgbio
-    version: 1.0.0
+    version: "1.0.0"
+    nf_version: "25.10.2"
   - name: nf-tower
-    version: 1.17.6
-
+    version: "1.17.6"
+    nf_version: "25.10.2"
+  - name: nf-slack
+    version: "0.5.1"
+    nf_version: "25.10.4"

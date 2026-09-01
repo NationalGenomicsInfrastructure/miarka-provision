@@ -5,5 +5,6 @@ source {{ ngi_pipeline_conf }}/sourceme_upps.sh
 export PATH={{ sw_path }}/nextflow:$PATH
 export NXF_HOME={{ nextflow_dest }}/workfiles
 export NXF_JAVA_HOME={{ nextflow_env.NXF_JAVA_HOME }}
+export NXF_VER="25.10.2"
 
 {{ arteria_service_env_root }}/bin/nextflow-runner-service --configroot={{ arteria_service_config_root }} --port={{ nextflow_runner_service_port }}

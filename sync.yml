@@ -23,7 +23,7 @@
           paths:
             - "{{ root_path }}"
             - "{{ ngi_containers }}"
-            - "{{ ngi_nextflow_plugins }}"
+            - "{{ nextflow_root }}"
             - "{{ igenomes_dir }}"
           recurse: yes
           excludes: "{{ exclude_pattern }}"
@@ -89,7 +89,7 @@
       with_items:
           - "{{ hostvars['deploy']['root_path'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
           - "{{ hostvars['deploy']['ngi_containers'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
-          - "{{ hostvars['deploy']['ngi_nextflow_plugins'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
+          - "{{ hostvars['deploy']['nextflow_root'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
           - "{{ hostvars['deploy']['igenomes_dir'] | replace(deployment_remote_path, deployment_remote_path + '/.') }}"
 
     - name: create or move the latest symlink to {{ deployment_version }}
