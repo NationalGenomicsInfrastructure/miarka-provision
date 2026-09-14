@@ -4,6 +4,8 @@
   file:
     path: "{{ nf_version_dest }}"
     state: directory
+    group: "{{ ngi_sw_group }}"
+    mode: g+rwXs,o=rX
 
 - name: "Create workfiles dir for Nextflow {{ nf_version }}"
   file:

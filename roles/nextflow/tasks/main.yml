@@ -1,8 +1,4 @@
 ---
-- name: Create top-level NextFlow directory
-  file:
-    path: "{{ nextflow_root }}"
-    state: directory
 
 - name: Install each Nextflow version
   include_tasks: install_version.yml
@@ -18,7 +14,7 @@
   template:
     src: "nextflow_wrapper.sh.j2"
     dest: "{{ nextflow_root }}/nextflow"
-    mode: u=rwx,g=rx,o=rx
+    mode: u=rwx,g=rwx,o=rx
 
 - name: Add NextFlow to $PATH
   lineinfile:
