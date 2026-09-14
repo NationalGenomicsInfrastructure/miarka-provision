@@ -17,7 +17,8 @@
     mode: u=rwx
 
 - name: "Bootstrap Nextflow {{ nf_version }}"
-  shell: "./nextflow run hello"
+  command: "./nextflow run hello"
+  creates: "{{ nf_version_dest }}/nextflow"
   environment:
     NXF_HOME: "{{ nf_version_dest }}/workfiles"
     NXF_OPTS: -Xms1g -Xmx3500m
