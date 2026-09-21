@@ -61,6 +61,7 @@
   template:
     src: create_ngi_pipeline_deliverables.sh.j2
     dest: "{{ ngi_resources }}/create_ngi_pipeline_deliverables_{{ site }}.sh"
+  when: site == 'sthlm'
 
 - name: add static folders to be created
   set_fact:

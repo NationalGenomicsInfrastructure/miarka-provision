@@ -3,92 +3,92 @@ nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
 nf_core_version: 3.2.0
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
-  NFCORE_NO_VERSION_CHECK: 1
-  APPTAINER_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
-  APPTAINER_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
-  NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
-  NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
-  NXF_SINGULARITY_HOME_MOUNT: true
-  NXF_PLUGINS_DIR: "{{ nextflow_local_env.NXF_PLUGINS_DIR }}"
-  NXF_DISABLE_CHECK_LATEST: true
-  NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
-  JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
-  PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
+    NFCORE_NO_VERSION_CHECK: 1
+    APPTAINER_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
+    APPTAINER_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
+    NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
+    NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
+    NXF_SINGULARITY_HOME_MOUNT: true
+    NXF_PLUGINS_DIR: "{{ nextflow_local_env.NXF_PLUGINS_DIR }}"
+    NXF_DISABLE_CHECK_LATEST: true
+    NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
+    JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
+    PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 biocontainers_dirname: biocontainers
 pipelines:
-  - name: rnaseq
-    release: "{{ rnaseq_tag }}"
-    container_dir: "{{ biocontainers_dirname }}"
-    repository: NationalGenomicsInfrastructure/nfcore_rnaseq
-  - name: sarek
-    release: "{{ sarek_tag }}"
-    container_dir: "{{ biocontainers_dirname }}"
-    pipeline_specific_containers:
-      - vep-108.2
-      - snpeff-5.1
-    pipeline_genomes:
-      - GRCh38
-      - GRCh37
-      - GRCm38
-      - GRCm39
-      - CanFam3.1
-      - WBcel235
-  - name: methylseq
-    # TODO Evaluate if workaround implemented in
-    # https://github.com/NationalGenomicsInfrastructure/miarka-provision/pull/340
-    # can be removed when upgrading the methylseq pipeline
-    release: 4.2.0
-    container_dir: "{{ biocontainers_dirname }}"
-    extra_parameters:
-      references:
-        - name: pUC19
-          accession: L09137.2
-          sha1: 059f13457cb9469cbfb35755197170c99ae96a97
-        - name: lambda
-          accession: NC_001416.1
-          sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
-  - name: ampliseq
-    release: 2.12.0
-    extra_parameters:
-      silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
-      silva_zip: Silva_132_release.zip
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: atacseq
-    release: 2.0
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: viralrecon
-    release: 2.6.0
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: rnafusion
-    release: 2.3.4
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: nanoseq
-    release: 3.1.0
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: scrnaseq
-    release: 2.3.0
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: demultiplex
-    release: "{{ demultiplex_tag }}"
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: pixelator
-    release: 2.3.0
-    container_dir: "{{ biocontainers_dirname }}"
-  - name: seqinspector
-    release: 1.0.1
-    container_dir: "{{ biocontainers_dirname }}"
+    - name: rnaseq
+      release: "{{ rnaseq_tag }}"
+      container_dir: "{{ biocontainers_dirname }}"
+      repository: NationalGenomicsInfrastructure/nfcore_rnaseq
+    - name: sarek
+      release: "{{ sarek_tag }}"
+      container_dir: "{{ biocontainers_dirname }}"
+      pipeline_specific_containers:
+          - vep-108.2
+          - snpeff-5.1
+      pipeline_genomes:
+          - GRCh38
+          - GRCh37
+          - GRCm38
+          - GRCm39
+          - CanFam3.1
+          - WBcel235
+    - name: methylseq
+      # TODO Evaluate if workaround implemented in
+      # https://github.com/NationalGenomicsInfrastructure/miarka-provision/pull/340
+      # can be removed when upgrading the methylseq pipeline
+      release: 4.2.0
+      container_dir: "{{ biocontainers_dirname }}"
+      extra_parameters:
+          references:
+              - name: pUC19
+                accession: L09137.2
+                sha1: 059f13457cb9469cbfb35755197170c99ae96a97
+              - name: lambda
+                accession: NC_001416.1
+                sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
+    - name: ampliseq
+      release: 2.12.0
+      extra_parameters:
+          silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
+          silva_zip: Silva_132_release.zip
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: atacseq
+      release: 2.0
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: viralrecon
+      release: 2.6.0
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: rnafusion
+      release: 2.3.4
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: nanoseq
+      release: 3.1.0
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: scrnaseq
+      release: 2.3.0
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: demultiplex
+      release: "{{ demultiplex_tag }}"
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: pixelator
+      release: 2.3.0
+      container_dir: "{{ biocontainers_dirname }}"
+    - name: seqinspector
+      release: 1.1.1
+      container_dir: "{{ biocontainers_dirname }}"
 
 nf_core_delivery_readmes:
-  sarek:
-    - DELIVERY.README.SAREK.txt
-    - DELIVERY.README.SAREK.BATCH.txt
-    - DELIVERY.README.SAREK.WES.md
-    - DELIVERY.README.SAREK.md
-    - apply_recalibration.sh
-  rnaseq:
-    - DELIVERY.README.RNASEQ.md
-  methylseq:
-    - DELIVERY.README.METHYLSEQ.md
+    sarek:
+        - DELIVERY.README.SAREK.txt
+        - DELIVERY.README.SAREK.BATCH.txt
+        - DELIVERY.README.SAREK.WES.md
+        - DELIVERY.README.SAREK.md
+        - apply_recalibration.sh
+    rnaseq:
+        - DELIVERY.README.RNASEQ.md
+    methylseq:
+        - DELIVERY.README.METHYLSEQ.md
 
 awscli_env_name: awscli-env
 awscli_env: "{{ sw_path }}/anaconda/envs/{{ awscli_env_name }}"
@@ -97,9 +97,9 @@ aws_igenomes_repo: https://github.com/ewels/AWS-iGenomes.git
 aws_igenomes_commit: dda1d928fdb0d018aabbf91ac6ce8e153b699991
 aws_igenomes_dest: "{{ sw_path }}/AWS-iGenomes"
 igenomes:
-  - genome: Homo_sapiens
-    source: GATK
-    build: GRCh38
-    type: gatk
+    - genome: Homo_sapiens
+      source: GATK
+      build: GRCh38
+      type: gatk
 
 ncbi_eutils_url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils
