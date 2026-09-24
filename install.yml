@@ -57,6 +57,7 @@
         - "{{ root_path }}"
         - "{{ ngi_containers }}"
         - "{{ igenomes_dir }}"
+        - "{{ nextflow_root }}"
 
     - name: initiate list of static folders that must be created on the target, after deployment
       set_fact:

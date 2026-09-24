@@ -12,7 +12,7 @@
     -c bioconda
     python={{ python3_version }}
     nf-core={{ nf_core_version }}
-    nextflow={{ nextflow_version_tag }}
+    nextflow={{ nextflow_versions | first }}
   when: not nf_core_env_name in conda_envs.stdout|split
 
 # Setup pipelines

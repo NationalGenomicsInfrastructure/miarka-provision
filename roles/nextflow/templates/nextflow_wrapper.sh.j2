@@ -1,0 +1,21 @@
+#!/bin/bash
+# Nextflow version selector for offline multi-version setup
+# Installed versions: {{ nextflow_versions | join(', ') }}
+
+NXF_VER="${NXF_VER:-{{ nextflow_versions | first }}}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VERSION_DIR="${SCRIPT_DIR}/${NXF_VER}"
+
+if [ ! -x "${VERSION_DIR}/nextflow" ]; then
+    echo "ERROR: Nextflow version ${NXF_VER} is not installed." >&2
+    echo "Available versions: {{ nextflow_versions | join(', ') }}" >&2
+    exit 1
+fi
+
+# Point NXF_HOME and NXF_PLUGINS_DIR to the version-specific directories
+export NXF_HOME="${VERSION_DIR}/workfiles"
+export NXF_OFFLINE='true'
+
+exec "${VERSION_DIR}/nextflow" "$@"
+
