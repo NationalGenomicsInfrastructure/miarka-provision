@@ -74,7 +74,7 @@ pipelines:
     nextflow_version: "25.04.0"
     container_dir: "{{ biocontainers_dirname }}"
   - name: pixelator
-    release: 5.0.1
+    release: 5.0.2
     nextflow_version: "25.10.4"
     container_dir: "{{ biocontainers_dirname }}"
   - name: seqinspector
