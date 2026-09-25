@@ -44,6 +44,7 @@
     - "{{ pipeline_genomes }}"
   loop_control:
     loop_var: container
+  tags: nf-core_pull_containers
 
 - name: create nf-core {{ pipeline }} {{ release }} config
   template:

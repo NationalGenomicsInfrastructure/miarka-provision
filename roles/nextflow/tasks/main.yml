@@ -46,8 +46,6 @@
     src: "nextflow_miarka_site.config.j2"
     dest: "{{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config"
 
-# Change target to {{ ngi_rnaseq_dest }} when using module system
-# NXF_WORK is omitted, which puts them under current directory
 - name: Add Nextflow module vars to sourceme
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_common_script }}"

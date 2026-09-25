@@ -78,10 +78,23 @@ process {
 {% endif %}
 
 
-plugins {
+/* 
 
-{% for plugin in nextflow_plugins %}
-  id '{{ plugin.name }}@{{ plugin.version }}'
+Select the newest compatible version of each plugin based on the
+pipeline's Nextflow version and emit a single plugin declaration.
+
+ */
+plugins {
+{% for plugin_name in nextflow_plugins | map(attribute='name') | unique %}
+{% set compatible = nextflow_plugins
+   | selectattr('name', 'equalto', plugin_name)
+   | selectattr('nf_version', 'version', item.nextflow_version, '<=')
+   | sort(attribute='version')
+   | list %}
+{% if compatible %}
+  id '{{ compatible[-1].name }}@{{ compatible[-1].version }}'
+{% endif %}
 {% endfor %}
+}
 
 }
