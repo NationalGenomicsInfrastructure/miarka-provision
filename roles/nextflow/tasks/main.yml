@@ -38,7 +38,7 @@
     PATH: "{{ tools_path.PATH }}"
   args:
     chdir: "{{ nextflow_root }}/{{ item.nf_version }}"
-  loop: "{{ nextflow_plugins }}"
+  loop: "{{ nextflow_general_plugins }}"
   tags: nextflow_plugins
 
 - name: Create miarka config

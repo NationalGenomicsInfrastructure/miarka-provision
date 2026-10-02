@@ -25,7 +25,9 @@
     pipeline_genomes: "{{ item.pipeline_genomes | default([]) }}"
     extra_parameters: "{{ item.extra_parameters | default({}) }}"
     container_dir: "{{ ngi_containers }}/{{ item.container_dir | default(item.name) }}"
+    nextflow_version: "{{ item.nextflow_version }}"
     repository: "{{ item.repository | default(item.name) }}"
+    nf_plugins: "{{ item.nf_plugins | default([]) }}"
     # `nf-core pipelines download` does this replacement to make the folder names
     # 'filesystem-safe', so we need to do it too.
     release_path: "{{ sw_path }}/{{ pipeline }}/{{ item.release | regex_replace('[^0-9a-zA-Z_]+', '_') }}"
