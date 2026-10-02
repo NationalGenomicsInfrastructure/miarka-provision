@@ -78,12 +78,6 @@ process {
 {% endif %}
 
 
-/* 
-
-Select the newest compatible version of each plugin based on the
-pipeline's Nextflow version and emit a single plugin declaration.
-
- */
 plugins {
 
 {% for plugin in nf_plugins %}
