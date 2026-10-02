@@ -80,8 +80,10 @@ process {
 
 plugins {
 
-{% for plugin in nextflow_plugins %}
+{% for plugin in nf_plugins %}
   id '{{ plugin.name }}@{{ plugin.version }}'
 {% endfor %}
+
+}
 
 }
