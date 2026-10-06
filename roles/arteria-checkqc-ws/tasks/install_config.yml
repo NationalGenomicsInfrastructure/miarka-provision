@@ -5,10 +5,23 @@
     state: directory
     path: "{{ arteria_service_config_root }}"
 
-- name: deploying {{ arteria_service_name }} app config
-  copy:
-    src: checkqc.config
+- name: Download {{ arteria_service_name }} app config
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/Molmed/checkQC/refs/tags/{{ checkqc_version }}/checkQC/default_config/config.yaml"
     dest: "{{ arteria_service_config_root }}/app.config"
+    mode: "0664"
+
+- name: Update bcl2fastq output path
+  ansible.builtin.lineinfile:
+    path: "{{ arteria_service_config_root }}/app.config"
+    regexp: '^bcl2fastq_output_path: Data/Intensities/BaseCalls$'
+    line: 'bcl2fastq_output_path: Unaligned'
+
+- name: Update reports_location:
+  ansible.builtin.lineinfile:
+    path: "{{ arteria_service_config_root }}/app.config"
+    regexp: '^reports_location: Reports$'
+    line: 'resports_location: Unaligned/Stats'
 
 - name: deploy {{ arteria_service_name }} logger config
   template:
