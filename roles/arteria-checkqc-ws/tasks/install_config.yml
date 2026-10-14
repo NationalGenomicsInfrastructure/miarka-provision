@@ -21,7 +21,7 @@
   ansible.builtin.lineinfile:
     path: "{{ arteria_service_config_root }}/app.config"
     regexp: '^reports_location: Reports$'
-    line: 'resports_location: Unaligned/Stats'
+    line: 'reports_location: Unaligned/Stats'
 
 - name: deploy {{ arteria_service_name }} logger config
   template:
