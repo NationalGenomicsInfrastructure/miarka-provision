@@ -33,6 +33,12 @@
     src: restart_supervisord_site.sh.j2
     dest: "{{ ngi_resources }}/restart_supervisord_{{ site }}.sh"
 
+- name: Deploy env version for arteria services script
+  copy:
+    src: check_env_version_for_running_arteria_services.sh
+    dest: "{{ ngi_resources }}/check_env_version_for_running_arteria_services.sh"
+    mode: "u=rwx,g=rwx,o=rx"
+
 - name: add static folders to be created
   set_fact:
     static_folders: "{{ static_folders + [supervisord_log_dest] }}"
