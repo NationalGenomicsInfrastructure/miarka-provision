@@ -17,7 +17,7 @@
     regexp: '^bcl2fastq_output_path: Data/Intensities/BaseCalls$'
     line: 'bcl2fastq_output_path: Unaligned'
 
-- name: Update reports_location:
+- name: Update reports_location
   ansible.builtin.lineinfile:
     path: "{{ arteria_service_config_root }}/app.config"
     regexp: '^reports_location: Reports$'
