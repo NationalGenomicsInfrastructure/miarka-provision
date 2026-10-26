@@ -11,17 +11,19 @@
     dest: "{{ arteria_service_config_root }}/app.config"
     mode: "0664"
 
-- name: Update bcl2fastq output path
-  ansible.builtin.lineinfile:
+- name: change bcl2fastq output path in checkqc config
+  lineinfile:
     path: "{{ arteria_service_config_root }}/app.config"
-    regexp: '^bcl2fastq_output_path: Data/Intensities/BaseCalls$'
-    line: 'bcl2fastq_output_path: Unaligned'
+    regexp: '^([ \t]*bcl2fastq_output_path:)'
+    line: '\1 {{ checkqc_bcl2fastq_output_path }}'
+    backrefs: yes
 
-- name: Update reports_location
-  ansible.builtin.lineinfile:
+- name: change bclconvert reports_location in checkqc config
+  lineinfile:
     path: "{{ arteria_service_config_root }}/app.config"
-    regexp: '^reports_location: Reports$'
-    line: 'reports_location: Unaligned/Stats'
+    regexp: '^([ \t]*reports_location:)'
+    line: '\1 {{ checkqc_bclconvert_output_path }}'
+    backrefs: yes
 
 - name: deploy {{ arteria_service_name }} logger config
   template:
