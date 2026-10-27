@@ -127,8 +127,8 @@ https://github.com/NationalGenomicsInfrastructure/miarka-provision/releases
 To perform the production deployment, use a similar approach as for the staging deployment (see above for details):
 
 ```
-    cd /vulpes/ngi/staging/miarka-provision
-    git checkout master && git fetch --tags && git checkout tags/vX.Y
+    cd /vulpes/ngi/deploy/miarka-provision
+    git checkout main && git fetch --tags && git checkout tags/vX.Y
 ```
 , where "vX.Y" is the production release to deploy.
 
