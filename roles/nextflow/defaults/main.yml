@@ -22,31 +22,8 @@ nextflow_versions:
   - "25.10.4"
   - "25.10.2"
   - "25.04.0"
-nextflow_plugins:
-  - name: nf-prov
-    version: "1.2.2"
-    nf_version: "25.10.2"
+  - "24.04.2"
+nextflow_general_plugins:
   - name: nf-tower
     version: "1.6.3"
     nf_version: "25.10.2"
-  - name: nf-schema
-    version: "2.7.2"
-    nf_version: "25.10.4"
-  - name: nf-schema
-    version: "2.6.1"
-    nf_version: "25.10.2"
-  - name: nf-schema
-    version: "2.5.1"
-    nf_version: "25.04.0"
-  - name: nf-core-utils
-    version: "0.4.0"
-    nf_version: "25.10.2"
-  - name: nf-fgbio
-    version: "1.0.0"
-    nf_version: "25.10.2"
-  - name: nf-tower
-    version: "1.17.6"
-    nf_version: "25.10.2"
-  - name: nf-slack
-    version: "0.5.1"
-    nf_version: "25.10.4"
