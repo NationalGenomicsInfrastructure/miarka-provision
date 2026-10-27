@@ -3,3 +3,6 @@ arteria_checkqc_service_log: "{{ arteria_service_log_dir }}/{{ arteria_service_n
 
 checkqc_repo: https://github.com/Molmed/checkQC.git
 checkqc_version: v4.1.2
+
+checkqc_bcl2fastq_output_path: "Unaligned"
+checkqc_bclconvert_output_path: "Unaligned/Stats"

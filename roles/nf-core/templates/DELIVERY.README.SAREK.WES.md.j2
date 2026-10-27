@@ -3,9 +3,8 @@
 ## Analysis
 Samples were analysed with the Sarek pipeline release {{ release }}. 
 
-The workflow processes raw data from FastQ inputs, aligns the reads, mark duplicates and performs base recalibration.
-SNVs and small indels are called with GATK HaplotypeCaller and DeepVariant. SnpEff annotated calls are reported in 
-separate vcf files for each caller as well as concatenated vcf files with the combined result.
+The workflow processes raw data from FastQ inputs, aligns the reads and marks duplicates.
+SNVs and small indels are called with DeepVariant. SnpEff annotated calls are reported in vcf files.
 In addition to Sarek pipeline analysis, target region coverage was evaluated with Picard CollectHsMetrics.
 
 For information regarding the pipeline, folder structure and how to interpret results, please refer to the Sarek documentation:
@@ -23,15 +22,12 @@ The directory also contains the file checksums.md5, which should be used to veri
 ├── DELIVERY.README.SAREK.WES.md
 └── results
     ├── annotation
-    │   ├── deepvariant
-    │   └── haplotypecaller
+    │   └── deepvariant
     ├── csv
     ├── multiqc
     ├── pipeline_info
     ├── preprocessing
-    │   ├── fastp
-    │   ├── recalibrated
-    │   └── recal_table
+    │   └── markduplicates
     ├── reference
     │   └── intervals
     ├── reports
@@ -45,8 +41,7 @@ The directory also contains the file checksums.md5, which should be used to veri
     │   ├── snpeff
     │   └── vcftools
     └── variant_calling
-        ├── deepvariant
-        └── haplotypecaller
+        └── deepvariant
 
 ```
 
@@ -61,6 +56,5 @@ This will lead to some incorrect entries in the HsMetrics table in the MultiQC-r
 Note that each region in this file was padded with 100 bp upstream and downstream before submitting it to the pipeline (available in results/reference/intervals). 
 - Note that samples that are sequenced on more than one flowcell/lane will be suffixed accordingly for some modules in the MultiQC report.
 A sample that has been sequenced twice will for some metrics be presented as a joint vaule for <sample name>, and with one value per run, i.e. <sample name>_1 and <sample_name>_2.
-- Output from GATK MarkDuplicates have been removed from the results folder.
 Duplicate marked cram files can be requested up to 60 days after delivery.
 

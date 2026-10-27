@@ -9,6 +9,9 @@ SHELL=/bin/bash
 # Check disk usage every Monday
 0 7 * * 1  echo "Disk usage Miarka:" && /vulpes/ngi/production/latest/sw/standalone_scripts/du_miarka.py /proj/ngi2016001
 
+# Check which env version the arteria services is running from
+0 * * * * {{ ngi_resources }}/check_env_version_for_running_arteria_services.sh {{ deployment_environment }} > /proj/ngi2016001/incoming/reports/{{ deployment_environment }}_services.log
+
 {% endif %}
 
 # updates charon with locally stored run info for sarek

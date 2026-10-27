@@ -75,7 +75,7 @@
         compress: yes
         use_ssh_args: yes
         ssh_connection_multiplexing: yes
-        rsync_timeout: 60
+        rsync_timeout: 300
         rsync_opts:
           - --no-times
           - --relative
