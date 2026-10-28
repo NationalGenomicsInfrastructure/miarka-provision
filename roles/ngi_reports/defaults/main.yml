@@ -5,5 +5,5 @@ ngi_reports_version: 735c42ab32570e21e0876518a3140513234daaaf
 ngi_reports_log: "{{ ngi_log_path }}/ngi_reports.log"
 
 ngi_mdx_outline_repo: https://github.com/NationalGenomicsInfrastructure/mdx_outline.git
-ngi_mdx_outline_dest: "{{ sw_path }}//mdx_outline"
-ngi_mdx_outline_version: f850211dca38b75873b7e60a23af24201426b58d
+ngi_mdx_outline_dest: "{{ sw_path }}/mdx_outline"
+ngi_mdx_outline_version: bd383119875993c1973e53b71837918d6f0c4cba
