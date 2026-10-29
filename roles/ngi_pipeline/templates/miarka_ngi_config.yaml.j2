@@ -96,14 +96,14 @@ qc:
         - bioinfo-tools
     fastqc:
         load_modules:
-            - FastQC/0.11.5
+            - FastQC/0.11.9
         threads: 16
         options: ["--nogroup"]
     fastq_screen:
         config_path: "{{ ngi_pipeline_conf }}/fastq_screen.miarka.conf"
         load_modules:
             - bowtie2/2.3.4.1
-            - fastq_screen/0.11.1
+            - fastq_screen/0.15.2
         subsample_reads: 200000
         threads: 1
         make_md5: True

@@ -3,17 +3,17 @@ nf_core_env: "{{ sw_path }}/anaconda/envs/{{ nf_core_env_name }}"
 nf_core_version: 3.2.0
 nf_core_container_repo: docker://nfcore
 nf_core_vars:
-  NFCORE_NO_VERSION_CHECK: 1
-  APPTAINER_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
-  APPTAINER_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
-  NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
-  NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
-  NXF_SINGULARITY_HOME_MOUNT: true
-  NXF_PLUGINS_DIR: "{{ nextflow_local_env.NXF_PLUGINS_DIR }}"
-  NXF_DISABLE_CHECK_LATEST: true
-  NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
-  JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
-  PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
+    NFCORE_NO_VERSION_CHECK: 1
+    APPTAINER_CACHEDIR: /scratch/{{ deployment_version }}/singularity_cache
+    APPTAINER_TMPDIR: /scratch/{{ deployment_version }}/singularity_temp
+    NXF_SINGULARITY_CACHEDIR: "{{ container_dir }}"
+    NXF_SINGULARITY_LIBRARYDIR: "{{ container_dir }}"
+    NXF_SINGULARITY_HOME_MOUNT: true
+    NXF_PLUGINS_DIR: "{{ nextflow_local_env.NXF_PLUGINS_DIR }}"
+    NXF_DISABLE_CHECK_LATEST: true
+    NXF_HOME: "{{ nextflow_local_env.NXF_HOME }}"
+    JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
+    PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 biocontainers_dirname: biocontainers
 
 # The nextflow_version set for the pipelines are in general the
@@ -114,16 +114,16 @@ pipelines:
         version: "0.4.0"
 
 nf_core_delivery_readmes:
-  sarek:
-    - DELIVERY.README.SAREK.txt
-    - DELIVERY.README.SAREK.BATCH.txt
-    - DELIVERY.README.SAREK.WES.md
-    - DELIVERY.README.SAREK.md
-    - apply_recalibration.sh
-  rnaseq:
-    - DELIVERY.README.RNASEQ.md
-  methylseq:
-    - DELIVERY.README.METHYLSEQ.md
+    sarek:
+        - DELIVERY.README.SAREK.txt
+        - DELIVERY.README.SAREK.BATCH.txt
+        - DELIVERY.README.SAREK.WES.md
+        - DELIVERY.README.SAREK.md
+        - apply_recalibration.sh
+    rnaseq:
+        - DELIVERY.README.RNASEQ.md
+    methylseq:
+        - DELIVERY.README.METHYLSEQ.md
 
 awscli_env_name: awscli-env
 awscli_env: "{{ sw_path }}/anaconda/envs/{{ awscli_env_name }}"
@@ -132,9 +132,9 @@ aws_igenomes_repo: https://github.com/ewels/AWS-iGenomes.git
 aws_igenomes_commit: dda1d928fdb0d018aabbf91ac6ce8e153b699991
 aws_igenomes_dest: "{{ sw_path }}/AWS-iGenomes"
 igenomes:
-  - genome: Homo_sapiens
-    source: GATK
-    build: GRCh38
-    type: gatk
+    - genome: Homo_sapiens
+      source: GATK
+      build: GRCh38
+      type: gatk
 
 ncbi_eutils_url: https://eutils.ncbi.nlm.nih.gov/entrez/eutils

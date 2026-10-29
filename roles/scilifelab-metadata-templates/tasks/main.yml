@@ -1,0 +1,20 @@
+
+- name: Fetch scilifelab-metadata-templates from GitHub
+  git:
+    repo: "{{ metadata_templates_repo }}"
+    dest: "{{ metadata_templates_dest }}"
+    version: "{{ metadata_templates_version }}"
+    force: yes
+
+- name: Install scilifelab-metadata-templates
+  pip:
+    name: "scilifelab-metadata-templates[genomics] @ file://{{ metadata_templates_dest }}"
+    executable: "{{ ngi_pipeline_venv }}/bin/pip"
+
+
+- name: Store scilifelab-metadata-templates version and hash in deployment
+  lineinfile:
+    dest: "{{ deployed_tool_versions }}"
+    line: "{{ NGI_venv_name }}, {{ item.tool_name }}: {{ item.tool_version }}"
+  with_items:
+    - { tool_name: "scilifelab-metadata-templates", tool_version: "{{ metadata_templates_version }}" }
