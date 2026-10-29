@@ -15,68 +15,103 @@ nf_core_vars:
     JAVA_HOME: "{{ nextflow_local_env.NXF_JAVA_HOME }}"
     PATH: "{{ nf_core_env }}/bin:{{ tools_path.PATH }}"
 biocontainers_dirname: biocontainers
+
+# The nextflow_version set for the pipelines are in general the
+# oldest supported one, i.e the one specified in their nextflow.config
+# This is to avoid compatability issues with newer versions.
+# In some exceptions to this, e.g:
+# - rnaseq has been verified with 25.10.2
+# - atacseq uses a newer version than 21.10.3 since that version could
+# not be bootstraped due to incompatability with nextflow-oi/hello
+
 pipelines:
-    - name: rnaseq
-      release: "{{ rnaseq_tag }}"
-      container_dir: "{{ biocontainers_dirname }}"
-      repository: NationalGenomicsInfrastructure/nfcore_rnaseq
-    - name: sarek
-      release: "{{ sarek_tag }}"
-      container_dir: "{{ biocontainers_dirname }}"
-      pipeline_specific_containers:
-          - vep-108.2
-          - snpeff-5.1
-      pipeline_genomes:
-          - GRCh38
-          - GRCh37
-          - GRCm38
-          - GRCm39
-          - CanFam3.1
-          - WBcel235
-    - name: methylseq
-      # TODO Evaluate if workaround implemented in
-      # https://github.com/NationalGenomicsInfrastructure/miarka-provision/pull/340
-      # can be removed when upgrading the methylseq pipeline
-      release: 4.2.0
-      container_dir: "{{ biocontainers_dirname }}"
-      extra_parameters:
-          references:
-              - name: pUC19
-                accession: L09137.2
-                sha1: 059f13457cb9469cbfb35755197170c99ae96a97
-              - name: lambda
-                accession: NC_001416.1
-                sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
-    - name: ampliseq
-      release: 2.12.0
-      extra_parameters:
-          silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
-          silva_zip: Silva_132_release.zip
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: atacseq
-      release: 2.0
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: viralrecon
-      release: 2.6.0
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: rnafusion
-      release: 2.3.4
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: nanoseq
-      release: 3.1.0
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: scrnaseq
-      release: 2.3.0
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: demultiplex
-      release: "{{ demultiplex_tag }}"
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: pixelator
-      release: 2.3.0
-      container_dir: "{{ biocontainers_dirname }}"
-    - name: seqinspector
-      release: 1.1.1
-      container_dir: "{{ biocontainers_dirname }}"
+  - name: rnaseq
+    release: "{{ rnaseq_tag }}"
+    nextflow_version: "25.10.4"
+    container_dir: "{{ biocontainers_dirname }}"
+    nf_plugins:
+      - name: "nf-schema"
+        version: "2.7.2"
+  - name: sarek
+    nextflow_version: "25.10.2"
+    release: "{{ sarek_tag }}"
+    container_dir: "{{ biocontainers_dirname }}"
+    nf_plugins:
+      - name: "nf-schema"
+        version: "2.5.1"
+      - name: "nf-core-utils"
+        version: "0.4.0"
+      - name: "nf-fgbio"
+        version: "1.0.0"
+      - name: "nf-prov"
+        version: "1.2.2"
+    pipeline_specific_containers:
+      - vep-108.2
+      - snpeff-5.1
+    pipeline_genomes:
+      - GRCh38
+      - GRCh37
+      - GRCm38
+      - GRCm39
+      - CanFam3.1
+      - WBcel235
+  - name: methylseq
+    # TODO Evaluate if workaround implemented in
+    # https://github.com/NationalGenomicsInfrastructure/miarka-provision/pull/340
+    # can be removed when upgrading the methylseq pipeline
+    release: 4.2.0
+    nextflow_version: "25.04.0"
+    container_dir: "{{ biocontainers_dirname }}"
+    nf_plugins:
+      - name: "nf-schema"
+        version: "2.5.1"
+    extra_parameters:
+      references:
+        - name: pUC19
+          accession: L09137.2
+          sha1: 059f13457cb9469cbfb35755197170c99ae96a97
+        - name: lambda
+          accession: NC_001416.1
+          sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
+  - name: ampliseq
+    release: 2.12.0
+    nextflow_version: "24.04.2"
+    extra_parameters:
+      silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
+      silva_zip: Silva_132_release.zip
+    container_dir: "{{ biocontainers_dirname }}"
+    nf_plugins:
+      - name: "nf-schema"
+        version: "2.1.2"
+  - name: atacseq
+    release: 2.0
+    nextflow_version: "24.04.2"
+    container_dir: "{{ biocontainers_dirname }}"
+  - name: demultiplex
+    release: "{{ demultiplex_tag }}"
+    nextflow_version: "25.04.0"
+    container_dir: "{{ biocontainers_dirname }}"
+    nf_plugins:
+      - name: "nf-schema"
+        version: "2.7.2"
+  - name: pixelator
+    release: 5.0.2
+    nextflow_version: "25.10.4"
+    container_dir: "{{ biocontainers_dirname }}"
+    nf_plugins:
+      - name: "nf-schema"
+        version: "2.7.2"
+      - name: "nf-slack"
+        version: "0.5.1"
+  - name: seqinspector
+    release: 1.1.2
+    nextflow_version: "25.10.4"
+    container_dir: "{{ biocontainers_dirname }}"
+    nf_plugins:
+      - name: "nf-schema"
+        version: "2.6.1"
+      - name: "nf-core-utils"
+        version: "0.4.0"
 
 nf_core_delivery_readmes:
     sarek:

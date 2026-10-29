@@ -1,8 +1,8 @@
 # Default configuration file for the sequencing report service
 ---
 
-port: {{ seqreport_service_port }}
-db_connection_string: sqlite:///{{ db_path }}/sequencing_reports.db
+port: {{ nextflow_runner_service_port }}
+db_connection_string: sqlite:///{{ db_path }}/nextflow_runner.db
 reports_dir: "{runfolder_path}/seqreports/"
 monitored_directories:
     - {{ static_runfolder_path }}

@@ -1,15 +1,20 @@
 ---
 
-- name: create virtual python env for sequencing report service
-  shell: "conda create --name {{ arteria_service_name }} python=3.13"
+- name: create virtual python env for nextflow runner service
+  shell: "conda create --name {{ arteria_service_name }} python=3.14"
   args: 
     creates: "{{ arteria_service_env_root }}"
 
-- name: get sequencing report service from git
+- name: install uv
+  pip:
+    name: uv
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+
+- name: get nextflow runner service from git
   git:
-    repo: "{{ seqreport_service_repo }}"
+    repo: "{{ nextflow_runner_service_repo }}"
     dest: "{{ arteria_service_src_path }}"
-    version: "{{ seqreport_service_version }}"
+    version: "{{ nextflow_runner_service_version }}"
 
 - name: get checksum pipeline from git
   git:
@@ -17,12 +22,23 @@
     dest: "{{ arteria_service_src_path }}/sis_style_checksums_nextflow/"
     version: "{{ sis_style_checksums_version }}"
 
-- name: install sequencing report service
+- name: export nextflow runner service dependencies from lock file
+  shell: |
+    {{ arteria_service_env_root }}/bin/uv export --frozen --no-emit-project > requirements.txt
+  args:
+    chdir: "{{ arteria_service_src_path }}"
+
+- name: install nextflow runner service dependencies
+  pip:
+    requirements: requirements.txt
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    chdir: "{{ arteria_service_src_path }}"
+
+- name: install nextflow runner service
   pip:
     name: .
-    chdir: "{{ arteria_service_src_path }}"
     executable: "{{ arteria_service_env_root }}/bin/pip"
-    state: present
+    chdir: "{{ arteria_service_src_path }}"
 
 - name: create temp folder
   tempfile:

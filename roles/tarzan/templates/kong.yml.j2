@@ -46,9 +46,9 @@ services:
       - /verify
       strip_path: true
 
-  - name: arteria_sequencing_reports
+  - name: arteria_nextflow_runner
     host: localhost
-    port: {{ seqreport_service_port }}
+    port: {{ nextflow_runner_service_port }}
     connect_timeout: 600000
     read_timeout: 600000
     write_timeout: 600000

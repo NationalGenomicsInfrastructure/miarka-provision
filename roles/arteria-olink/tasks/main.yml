@@ -1,0 +1,21 @@
+---
+
+- name: Ensure {{ arteria_service_name }} sw dir exists
+  file:
+    state: directory
+    path: "{{ arteria_service_src_path }}"
+
+- name: Create ngs2counts symlink
+  file:
+    src: "{{ olink_ngs2counts_dir }}/ngs2counts-{{ olink_ngs2counts_default }}"
+    dest: "{{ arteria_service_src_path }}/ngs2counts"
+    state: "link"
+    force: true
+    mode: "0775"
+ 
+- name: Clone ngs2counts nf workflow
+  git:
+    repo: "{{ olink_ngs2counts_nf_workflow }}"
+    dest: "{{ arteria_service_src_path }}/ngs2counts_nextflow"
+    version: "{{ olink_ngs2counts_nf_workflow_version }}"
+
