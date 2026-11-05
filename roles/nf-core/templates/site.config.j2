@@ -75,6 +75,15 @@ process {
 
 }
 
+{% elif pipeline == 'rnaseq' and site == 'upps' %}
+
+process {
+    withName: 'RSEQC_INFEREXPERIMENT' {
+        ext.args = "-s 500000"
+    }
+}
+
+
 {% endif %}
 
 
