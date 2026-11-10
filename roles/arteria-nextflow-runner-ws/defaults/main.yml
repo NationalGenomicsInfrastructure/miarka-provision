@@ -9,6 +9,7 @@ arteria_service_pipeline_config_dir: "{{ arteria_service_config_root }}/pipeline
 arteria_service_nextflow_config_dir: "{{ arteria_service_config_root }}/nextflow_configs"
 
 seqreports_nf_profile: singularity,uppmax
+seqreports_nf_version: "25.10.2"
 fastq_ref_genomes_path: /sw/data/fastq_screen_data/20220330/miarka/FastQ_Screen_Genomes
 
 sis_style_checksums_repo: "https://github.com/Molmed/sis_style_checksums_nextflow"
