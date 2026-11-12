@@ -75,6 +75,24 @@ process {
 
 }
 
+{% elif pipeline == 'demultiplex' and site == 'sthlm' %}
+
+process {
+
+    // Replaces (does not extend) the pipeline's default BCLCONVERT ext.args
+    // from conf/modules.config.
+    withName: BCLCONVERT {
+        ext.args = {[
+            meta.lane ? "--bcl-only-lane ${meta.lane}" : "",
+            "--force",
+            "--strict-mode true",
+            "--bcl-sampleproject-subdirectories true",
+            "--sample-name-column-enabled true",
+        ].join(" ").trim()}
+    }
+
+}
+
 {% endif %}
 
 
