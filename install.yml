@@ -57,6 +57,7 @@
         - "{{ root_path }}"
         - "{{ ngi_containers }}"
         - "{{ igenomes_dir }}"
+        - "{{ nextflow_root }}"
 
     - name: initiate list of static folders that must be created on the target, after deployment
       set_fact:
@@ -92,7 +93,7 @@
     - { role: arteria-checksum-ws, tags: arteria-checksum }
     - { role: arteria-checkqc-ws, tags: arteria-checkqc }
     - { role: arteria-delivery-ws, tags: arteria-delivery }
-    - { role: arteria-sequencing-report-ws, tags: arteria-sequencing-report }
+    - { role: arteria-nextflow-runner-ws, tags: arteria-nextflow-runner }
     - { role: snpseq-metadata-service, tags: snpseq-metadata-service }
     - { role: standalone_scripts, tags: standalone_scripts }
     - { role: misc-tools, tags: misc-tools }
@@ -100,6 +101,7 @@
     - { role: archive-verify-ws, tags: archive-verify }
     - { role: nf-core, tags: nf-core }
     - { role: kraken2, tags: kraken2 }
+    - { role: arteria-olink, tags: arteria-olink }
 
   tasks:
 

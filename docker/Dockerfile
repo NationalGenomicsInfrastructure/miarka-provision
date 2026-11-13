@@ -9,7 +9,7 @@ RUN \
   yum -y groupinstall "Development Tools"
 
 # needed to run nested Singularity (apptainer), which the
-# `arteria-sequencing-report-ws` role does
+# `arteria-nextflow-runner-ws` role does
 RUN sed -i 's/allow setuid = yes/allow setuid = no/g' /etc/apptainer/apptainer.conf
 
 RUN \

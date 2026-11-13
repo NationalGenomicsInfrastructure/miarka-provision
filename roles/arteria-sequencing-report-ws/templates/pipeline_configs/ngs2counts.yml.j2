@@ -1,0 +1,18 @@
+---
+
+main_workflow_path: "{{arteria_service_src_path}}/ngs2counts_nextflow/main.nf"
+# Note that in the following sections it is possible to do variable
+# substitution on the following variables:
+# - {runfolder_path}
+# - {ngs2counts_executable}
+nextflow_parameters:
+  config: "{{arteria_service_src_path}}/ngs2counts_nextflow/nextflow.config"
+  profile: "uppmax"
+environment:
+  NXF_TEMP: "{{nextflow_env.NXF_TEMP}}"
+  NXF_WORK: "{runfolder_path}/.nextflow"
+  NXF_ANSI_LOG: "false"
+pipeline_parameters:
+  input_folder: "{runfolder_path}"
+  ngs2counts_executable: "{ngs2counts_executable}"
+  project: "{{uppmax_project}}"

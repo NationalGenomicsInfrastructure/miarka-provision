@@ -93,12 +93,21 @@ process {
 
 }
 
+{% elif pipeline == 'rnaseq' and site == 'upps' %}
+
+process {
+    withName: 'RSEQC_INFEREXPERIMENT' {
+        ext.args = "-s 500000"
+    }
+}
+
+
 {% endif %}
 
 
 plugins {
 
-{% for plugin in nextflow_plugins %}
+{% for plugin in nf_plugins %}
   id '{{ plugin.name }}@{{ plugin.version }}'
 {% endfor %}
 
