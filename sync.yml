@@ -25,6 +25,7 @@
             - "{{ ngi_containers }}"
             - "{{ nextflow_root }}"
             - "{{ igenomes_dir }}"
+            - "{{ nextflow_root }}"
           recurse: yes
           excludes: "{{ exclude_pattern }}"
           file_type: any
