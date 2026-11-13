@@ -130,6 +130,7 @@
         - "{{ root_path }}"
         - "{{ ngi_containers }}"
         - "{{ igenomes_dir }}"
+        - "{{ nextflow_root }}"
 
   post_tasks:
 
