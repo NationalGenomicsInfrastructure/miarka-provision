@@ -21,6 +21,7 @@
   vars:
     pipeline: "{{ item.name }}"
     release: "{{ item.release }}"
+    nextflow_version: "{{ item.nextflow_version | default(nextflow_version_tag) }}"
     pipeline_specific_containers: "{{ item.pipeline_specific_containers | default([]) }}"
     pipeline_genomes: "{{ item.pipeline_genomes | default([]) }}"
     extra_parameters: "{{ item.extra_parameters | default({}) }}"

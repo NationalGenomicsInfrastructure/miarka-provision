@@ -48,10 +48,18 @@ pipelines:
                 accession: NC_001416.1
                 sha1: 2b03cbf38a8e6816914b172f048a2fe896317df7
     - name: ampliseq
-      release: 2.12.0
+      release: 3.1.0
+      nextflow_version: 26.10.6 # ampliseq 3.x requires Nextflow >=26.04.0
       extra_parameters:
-          silva_base_url: https://www.arb-silva.de/fileadmin/silva_databases/qiime
-          silva_zip: Silva_132_release.zip
+          # DADA2 databases from conf/ref_databases.config of the release above,
+          # downloaded so that --dada_ref_taxonomy <name> uses the local files
+          databases:
+              - name: sbdi-gtdb=R11-RS232-1
+                files:
+                    - url: https://ndownloader.figshare.com/files/64711203
+                      file: sbdi-gtdb-sativa.r11rs232-1.1genome.assignTaxonomy.fna.gz
+                    - url: https://ndownloader.figshare.com/files/64711218
+                      file: sbdi-gtdb-sativa.r11rs232-1.20genomes.addSpecies.fna.gz
       container_dir: "{{ biocontainers_dirname }}"
     - name: atacseq
       release: 2.0
