@@ -60,6 +60,28 @@ pipelines:
                       file: sbdi-gtdb-sativa.r11rs232-1.1genome.assignTaxonomy.fna.gz
                     - url: https://ndownloader.figshare.com/files/64711218
                       file: sbdi-gtdb-sativa.r11rs232-1.20genomes.addSpecies.fna.gz
+              - name: silva=144
+                files:
+                    - url: https://www.arb-silva.de/fileadmin/silva_databases/release_144/DADA2/1.36.0/SSU/silva_nr99_v144_toSpecies_trainset.fa.gz
+                      file: silva_nr99_v144_toSpecies_trainset.fa.gz
+                    - url: https://www.arb-silva.de/fileadmin/silva_databases/release_144/DADA2/1.36.0/SSU/silva_v144_assignSpecies.fa.gz
+                      file: silva_v144_assignSpecies.fa.gz
+              - name: pr2
+                files:
+                    - url: https://github.com/pr2database/pr2database/releases/download/v5.1.0.0/pr2_version_5.1.0_SSU_dada2.fasta.gz
+                      file: pr2_version_5.1.0_SSU_dada2.fasta.gz
+                    - url: https://github.com/pr2database/pr2database/releases/download/v5.1.0.0/pr2_version_5.1.0_SSU_UTAX.fasta.gz
+                      file: pr2_version_5.1.0_SSU_UTAX.fasta.gz
+              - name: unite-alleuk
+                files:
+                    - url: https://s3.hpc.ut.ee/plutof-public/original/1dda2021-4893-4f2f-b50e-87bfea795267.tgz
+                      file: unite-alleuk-10.0.tgz
+              - name: glosed
+                files:
+                    - url: https://zenodo.org/records/17827890/files/GloSED__OTU_sequences.fasta.gz
+                      file: GloSED__OTU_sequences.fasta.gz
+                    - url: https://zenodo.org/records/17827890/files/GloSED__Taxonomy.tsv.zip
+                      file: GloSED__Taxonomy.tsv.zip
       container_dir: "{{ biocontainers_dirname }}"
     - name: atacseq
       release: 2.0
