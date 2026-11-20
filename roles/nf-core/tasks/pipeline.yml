@@ -14,6 +14,12 @@
   loop_control:
     loop_var: cachedir
 
+- name: fetch Nextflow {{ nextflow_version }} for {{ pipeline }}
+  command: "{{ nextflow_dest }}/nextflow info"
+  environment: "{{ nextflow_local_env | combine({'NXF_VER': nextflow_version}) }}"
+  args:
+    creates: "{{ nextflow_local_env.NXF_HOME }}/framework/{{ nextflow_version }}"
+
 - name: nf-core download {{ pipeline }} {{ release }}
   command: >
     nf-core -v
@@ -25,7 +31,7 @@
     --container-system singularity
     --container-cache-utilisation amend
     --parallel-downloads 4
-  environment: "{{ nf_core_vars }}"
+  environment: "{{ nf_core_vars | combine({'NXF_VER': nextflow_version}) }}"
   ignore_errors: true
   args:
     chdir: "{{ sw_path }}"
@@ -59,7 +65,7 @@
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
           alias {{ pipeline }}='
-          nextflow run {{ release_path }}/
+          NXF_VER={{ nextflow_version }} nextflow run {{ release_path }}/
           -profile uppmax
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config

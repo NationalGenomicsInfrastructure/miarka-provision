@@ -28,6 +28,8 @@ nextflow_plugins:
     version: 1.6.3
   - name: nf-schema # Will replace nf-validation once we update all our pipelines
     version: "{{ nf_schema_version }}"
+  - name: nf-schema # ampliseq 3.x
+    version: 2.7.2
   - name: nf-core-utils
     version: 0.4.0
   - name: nf-fgbio

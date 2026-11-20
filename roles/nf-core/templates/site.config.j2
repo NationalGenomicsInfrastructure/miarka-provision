@@ -42,7 +42,13 @@ process {
 
 {% elif pipeline == 'ampliseq' %}
 
-params.reference_database = '{{ ngi_containers }}/{{ pipeline }}/{{ extra_parameters.silva_zip }}'
+params {
+  dada_ref_databases {
+{% for db in extra_parameters.databases %}
+    '{{ db.name }}' { file = [ {% for f in db.files %}'{{ ngi_containers }}/{{ pipeline }}/{{ f.file }}'{{ ', ' if not loop.last }}{% endfor %} ] }
+{% endfor %}
+  }
+}
 
 process {
 
