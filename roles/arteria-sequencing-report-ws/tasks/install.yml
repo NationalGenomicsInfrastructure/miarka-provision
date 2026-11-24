@@ -2,7 +2,7 @@
 
 - name: create virtual python env for sequencing report service
   shell: "conda create --name {{ arteria_service_name }} python=3.13"
-  args: 
+  args:
     creates: "{{ arteria_service_env_root }}"
 
 - name: get sequencing report service from git
@@ -40,4 +40,3 @@
     NXF_HOME: "{{ nextflow_dest }}/workfiles"
     NXF_JAVA_HOME: "{{ nextflow_env.NXF_JAVA_HOME }}"
     NXF_TEMP: "{{ tempfolder.path }}"
-

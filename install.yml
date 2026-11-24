@@ -22,7 +22,7 @@
         msg: "You must specify '-e site=<upps | sthlm>'"
       when: site is not defined or site is not in [ "upps", "sthlm" ]
 
-    - include: tasks/set-paths.yml
+    - import_tasks: tasks/set-paths.yml
       tags: always
 
     - include_vars:

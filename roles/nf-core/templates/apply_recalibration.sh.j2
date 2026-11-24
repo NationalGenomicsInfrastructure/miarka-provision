@@ -8,8 +8,8 @@
 ##
 ## To use the script, pass the BAM file as the first argument to the script,
 ## the recalibration statistics file (output from GATK's BaseRecalibrator) as
-## the second argument and (optionally) the fasta reference as the third argument. 
-## If no fasta reference is supplied, hg38 will be used. The output BAM file name 
+## the second argument and (optionally) the fasta reference as the third argument.
+## If no fasta reference is supplied, hg38 will be used. The output BAM file name
 ## is created by stripping the .bam file extension and replacing it with .recal.bam.
 ##
 ## Example:
@@ -63,4 +63,3 @@ if [ ! -z "$SLURM_JOB_ID" ]
 then
   cp "${BAMOUT}" "`dirname ${BAMIN}`"
 fi
-

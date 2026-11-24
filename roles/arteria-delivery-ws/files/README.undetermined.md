@@ -41,4 +41,3 @@ cd <runfolder>/Undetermined
 md5sum -c checksums.md5
 ```
 If the verification fails, please try to download the data again. If the issue persists, please contact the SNP&SEQ Technology Platform.
-

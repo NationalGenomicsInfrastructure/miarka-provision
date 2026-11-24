@@ -16,15 +16,15 @@
     dest: "{{ arteria_service_config_root }}/logger.config"
 
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
-  ini_file: 
+  ini_file:
     dest: "{{ supervisord_conf }}"
     section: "program:{{ arteria_service_name }}-{{ deployment_environment }}"
     option: command
     value: "{{ arteria_service_env_root }}/bin/archive-upload-ws --configroot={{ arteria_service_config_root }} --port={{ archive_upload_port }}"
     backup: no
- 
+
 - name: modify uppsala's supervisord conf to start {{ arteria_service_name }}
-  ini_file: 
+  ini_file:
     dest: "{{ supervisord_conf }}"
     section: program:{{ arteria_service_name }}-{{ deployment_environment }}
     option: autorestart

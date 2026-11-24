@@ -29,4 +29,3 @@
       val: true
     - opt: directory
       val: "{{ snpseq_metadata_service_log_dir }}"
-

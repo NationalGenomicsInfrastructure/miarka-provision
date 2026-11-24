@@ -19,7 +19,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config"
     line: |
-      params { 
+      params {
         genomes {
     backup: no
 
@@ -27,7 +27,7 @@
   lineinfile:
     dest: "{{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config"
     line: |
-      '{{ reference.name }}' { 
+      '{{ reference.name }}' {
         fasta = "{{ ngi_containers }}/{{ pipeline }}/{{ reference.name }}_{{ reference.accession }}.fa"
       }
     backup: no

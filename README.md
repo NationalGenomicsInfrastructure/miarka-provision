@@ -24,7 +24,7 @@ Below are the main tasks and commands to perform for a staging or production dep
     * This usually means [comparing main to monthly](https://github.com/NationalGenomicsInfrastructure/miarka-provision/compare/main...monthly) and list all changes that will be introduced. Save this list locally.
 *  Create the new release **[Production deployment only]**
     * Create a PR to merge monthly into main (NOTE: Do NOT squash commits before merging persistent branches (monthly/bimonthly/main), this will mess up the deployment flow)
-    * When merged, create a release. The tag should be `v[YY].[MM]`. For example `v26.03` if the deployment is done in March 2026. The tag should point to the current head of the main branch. Add the change log to the release description.
+    * When merged, create a release. The tag should be `v[YY].[MM]`, or `v[YY].[MM].[N]` for a hotfix. For example `v26.03` if the deployment is done in March 2026, then `v26.03.1` for its first hotfix. CI fails on tags that do not follow this scheme. The tag should point to the current head of the main branch. Add the change log to the release description.
 * Deploy
     * Log on to Miarka3 and perform the following commands:
 ```

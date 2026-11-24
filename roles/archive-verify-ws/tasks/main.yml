@@ -1,8 +1,8 @@
 ---
 
 - block:
-  - include: 1_install.yml
-  - include: 2_install_config.yml
+  - import_tasks: 1_install.yml
+  - import_tasks: 2_install_config.yml
 
   - name: add static folders to be created
     set_fact:
