@@ -17,4 +17,3 @@ ansible-playbook install_arteria.yml --tags checksum-ws
 source ~/checksum_venv/bin/activate
 checksum-ws --config ~/checksum_conf/ --port 8080
 ```
-

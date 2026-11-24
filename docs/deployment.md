@@ -156,7 +156,7 @@ Then, as the user running the services needing a reboot, shut down the running i
 
 IMPORTANT: Ensure that you are working on the correct login node (`miarka1` for production and `miarka2` for staging) and as the user running the services and having the `crontab` installed (probably `funk_004`)
 
-Specifically, the Arteria services are under control by `supervisord` and in order to restart these, 
+Specifically, the Arteria services are under control by `supervisord` and in order to restart these,
 it is usually sufficient to restart `supervisord`. This can be done by running `<stop/start>_supervisord_upps.sh` scripts. These scripts are located in `/vulpes/ngi/<deployment_environment>/latest/resources/`.
 
 You can verify that the services are running with this command

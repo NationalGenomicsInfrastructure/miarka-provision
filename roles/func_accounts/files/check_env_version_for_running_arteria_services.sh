@@ -29,4 +29,3 @@ elif [[ ${#versions[@]} -gt 1 ]]; then
 else
     echo "WARNING: no arteria processes found for env ${env}"
 fi
-

@@ -28,7 +28,7 @@
     mode: +x
 
 - name: download iGenome
-  command: "{{ aws_igenomes_dest }}/aws-igenomes.sh 
+  command: "{{ aws_igenomes_dest }}/aws-igenomes.sh
     -g {{ item.genome }}
     -s {{ item.source }}
     -b {{ item.build }}

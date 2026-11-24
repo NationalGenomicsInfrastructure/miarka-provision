@@ -2,7 +2,7 @@
 
 - name: create virtual python env for archive-upload
   shell: "conda create --name {{ arteria_service_name }} python=2.7"
-  args: 
+  args:
     creates: "{{ arteria_service_env_root }}"
 
 - name: make sure pip is up to date

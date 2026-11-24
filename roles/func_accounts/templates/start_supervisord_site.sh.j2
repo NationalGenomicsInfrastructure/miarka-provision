@@ -11,4 +11,3 @@ fi
 source ${HOME}/.bash_profile &> /dev/null
 {{ ngi_pipeline_venv }}/bin/supervisord -c {{ supervisord_conf }} &> /dev/null
 exit $?
-

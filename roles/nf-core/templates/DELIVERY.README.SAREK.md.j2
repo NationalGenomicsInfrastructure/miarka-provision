@@ -1,7 +1,7 @@
 # DELIVERY OF RESULTS FROM WGS ANALYSIS WITH SAREK
 
 ## Analysis
-Samples were analysed with the Sarek pipeline release {{ release }}. 
+Samples were analysed with the Sarek pipeline release {{ release }}.
 
 The workflow processes raw data from FastQ inputs, aligns reads and marks duplicates.
 SNVs and small indels are called with DeepVariant. SnpEff annotated calls are reported in vcf files.
@@ -46,8 +46,7 @@ The directory also contains the file checksums.md5, which should be used to veri
 ## Known issues
 
 
-## Additional information 
+## Additional information
 - Note that samples that are sequenced on more than one flowcell/lane will be suffixed accordingly for some modules in the MultiQC report.
 A sample that has been sequenced twice will for some metrics be presented as a joint vaule for <sample name>, and with one value per run, i.e. <sample name>_1 and <sample_name>_2.
 Duplicate marked cram files can be requested up to 60 days after delivery.
-

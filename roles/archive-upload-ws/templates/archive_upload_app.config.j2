@@ -1,10 +1,10 @@
 ---
 
-# Where to find the runfolders 
+# Where to find the runfolders
 monitored_directory: "{{ archive_upload_monitored_path }}"
 
-# Where to find the archive to upload. 
-# On biotanks this will be the same as monitored_directory, 
+# Where to find the archive to upload.
+# On biotanks this will be the same as monitored_directory,
 # but on Miarka we want to use an other path.
 path_to_archive_root: "{{ archive_upload_path_to_archive_root }}"
 
@@ -12,11 +12,11 @@ path_to_archive_root: "{{ archive_upload_path_to_archive_root }}"
 # used for running dsmc
 number_of_cores: "{{ archive_upload_cores_to_use }}"
 
-# Port to listen to 
+# Port to listen to
 port: "{{ archive_upload_port }}"
 
 # Path to the dsmc logs
-log_directory: "{{ arteria_service_log_dir }}" 
+log_directory: "{{ arteria_service_log_dir }}"
 
 dsmc_extra_args:
   servername: {{ pdc_archive_servername }}
@@ -31,9 +31,9 @@ dsmc_extra_args:
 # various return codes. In this case we do not care that we dropped the connection to PDC, and then
 # restored it and successfully uploaded everything. We do not also care that the file permissions
 # on a symlink couldn't be set perfectly. And we do not want the upload to have failed just because
-# there is some old crash report laying around (as TSM generates those for various reasons). 
+# there is some old crash report laying around (as TSM generates those for various reasons).
 # We're interested in the times when TSM actually DO crash though, but that shouldn't stop other
-# jobs to succeed. 
+# jobs to succeed.
 #
 # See full list at e.g. https://www.ibm.com/support/knowledgecenter/en/SSGSG7_7.1.1/com.ibm.itsm.msgs.client.doc/msgs_client_list_intro.html
 whitelisted_warnings: {{ archive_upload_whitelisted_warnings | to_json }}
