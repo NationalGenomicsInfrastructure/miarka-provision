@@ -1,2 +1,2 @@
-- include: install_tarzan.yml
+- import_tasks: install_tarzan.yml
   when: site in ["upps"]

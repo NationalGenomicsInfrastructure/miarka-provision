@@ -1,0 +1,19 @@
+name: ansible-lint
+
+on:
+  pull_request:
+    branches: [monthly, bimonthly, main]
+
+jobs:
+  ansible-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install ansible-lint==26.11.0 ansible==13.0.0
+
+      - run: ansible-lint

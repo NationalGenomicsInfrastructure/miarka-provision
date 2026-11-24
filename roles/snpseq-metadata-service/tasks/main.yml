@@ -1,8 +1,8 @@
 
 - block:
-  - include: install_package.yml
-  - include: install_service.yml
-  - include: install_config.yml
+  - import_tasks: install_package.yml
+  - import_tasks: install_service.yml
+  - import_tasks: install_config.yml
 
   - name: add static folders to be created
     set_fact:

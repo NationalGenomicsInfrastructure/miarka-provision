@@ -1,5 +1,5 @@
 ---
-- include: dependencies.yml
+- import_tasks: dependencies.yml
 
 - name: Fetch ngi_reports from github
   git:

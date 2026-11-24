@@ -1,4 +1,4 @@
-- include: dependencies.yml
+- import_tasks: dependencies.yml
 
 - name: Fetch TACA-ngi-pipeline from GitHub
   git:

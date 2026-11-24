@@ -4,7 +4,7 @@
   connection: local
 
   tasks:
-    - include: tasks/set-paths.yml
+    - import_tasks: tasks/set-paths.yml
       tags: always
 
     - include_vars:
