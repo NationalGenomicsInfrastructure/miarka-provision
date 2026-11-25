@@ -1,0 +1,58 @@
+---
+
+- name: create virtual python env for nextflow runner service
+  shell: "conda create --name {{ arteria_service_name }} python=3.14"
+  args: 
+    creates: "{{ arteria_service_env_root }}"
+
+- name: install uv
+  pip:
+    name: uv
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+
+- name: get nextflow runner service from git
+  git:
+    repo: "{{ nextflow_runner_service_repo }}"
+    dest: "{{ arteria_service_src_path }}"
+    version: "{{ nextflow_runner_service_version }}"
+
+- name: get checksum pipeline from git
+  git:
+    repo: "{{ sis_style_checksums_repo }}"
+    dest: "{{ arteria_service_src_path }}/sis_style_checksums_nextflow/"
+    version: "{{ sis_style_checksums_version }}"
+
+- name: export nextflow runner service dependencies from lock file
+  shell: |
+    {{ arteria_service_env_root }}/bin/uv export --frozen --no-emit-project > requirements.txt
+  args:
+    chdir: "{{ arteria_service_src_path }}"
+
+- name: install nextflow runner service dependencies
+  pip:
+    requirements: requirements.txt
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    chdir: "{{ arteria_service_src_path }}"
+
+- name: install nextflow runner service
+  pip:
+    name: .
+    executable: "{{ arteria_service_env_root }}/bin/pip"
+    chdir: "{{ arteria_service_src_path }}"
+
+- name: create temp folder
+  tempfile:
+    state: directory
+    suffix: nxf_seqreports
+  register: tempfolder
+
+- name: download seqreports singularity images
+  shell: |
+    {{ nextflow_root }}/nextflow -log {{ lookup('env', 'SNIC_TMP') }} run {{ arteria_service_src_path }}/seqreports/main.nf -profile test,singularity
+  args:
+    chdir: "{{ tempfolder.path }}"
+  environment:
+    NXF_SINGULARITY_CACHEDIR: "{{ ngi_containers }}/biocontainers"
+    NXF_JAVA_HOME: "{{ nextflow_env.NXF_JAVA_HOME }}"
+    NXF_TEMP: "{{ tempfolder.path }}"
+    NXF_VER: "{{ seqreports_nf_version }}"

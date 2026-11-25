@@ -1,3 +1,4 @@
+---
 
 - name: create directories for {{ pipeline }} singularity images
   file:
@@ -14,12 +15,6 @@
   loop_control:
     loop_var: cachedir
 
-- name: fetch Nextflow {{ nextflow_version }} for {{ pipeline }}
-  command: "{{ nextflow_dest }}/nextflow info"
-  environment: "{{ nextflow_local_env | combine({'NXF_VER': nextflow_version}) }}"
-  args:
-    creates: "{{ nextflow_local_env.NXF_HOME }}/framework/{{ nextflow_version }}"
-
 - name: nf-core download {{ pipeline }} {{ release }}
   command: >
     nf-core -v
@@ -31,11 +26,29 @@
     --container-system singularity
     --container-cache-utilisation amend
     --parallel-downloads 4
-  environment: "{{ nf_core_vars | combine({'NXF_VER': nextflow_version}) }}"
+  environment: "{{ nf_core_vars }}"
   ignore_errors: true
   args:
     chdir: "{{ sw_path }}"
     creates: "{{ release_path }}"
+
+- name: Download Nextflow plugins for {{ pipeline }} {{ release }}
+  command: "./nextflow plugin install {{ plugin.name }}@{{ plugin.version }}"
+  environment:
+    NXF_OFFLINE: "false"
+    NXF_HOME: "{{ nextflow_root }}/{{ nextflow_version }}/workfiles"
+    NXF_OPTS: -Xms1g -Xmx3500m
+    NXF_JAVA_HOME: "{{ nextflow_java }}"
+    NXF_PLUGINS_DIR: "{{ nextflow_plugins_root }}"
+    PATH: "{{ tools_path.PATH }}"
+  args:
+    chdir: "{{ nextflow_root }}/{{ nextflow_version }}"
+    creates: "{{ nextflow_plugins_root }}/{{ plugin.name }}-{{ plugin.version }}"
+  loop: "{{ nf_plugins }}"
+  loop_control:
+    loop_var: plugin
+  when: nf_plugins | length > 0
+  tags: nextflow_plugins
 
 - name: pull pipeline-specific images for {{ pipeline }} {{ release }}
   command: "singularity pull --name nfcore-{{ container.0 }}.{{ container.1 }}.img {{ nf_core_container_repo }}/{{ container.0 | replace('-', ':', 1) }}.{{ container.1 }}"
@@ -49,6 +62,7 @@
     - "{{ pipeline_genomes }}"
   loop_control:
     loop_var: container
+  tags: nf-core_pull_containers
 
 - name: create nf-core {{ pipeline }} {{ release }} config
   template:
@@ -65,7 +79,8 @@
     dest: "{{ ngi_pipeline_conf }}/{{ bash_env_script }}"
     line: >
           alias {{ pipeline }}='
-          NXF_VER={{ nextflow_version }} nextflow run {{ release_path }}/
+          NXF_VER={{ item.nextflow_version}}
+          nextflow run {{ release_path }}/
           -profile uppmax
           -c {{ ngi_pipeline_conf }}/nextflow_miarka_{{ site }}.config
           -c {{ ngi_pipeline_conf }}/{{ pipeline }}_{{ site }}.config

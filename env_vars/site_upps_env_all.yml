@@ -46,8 +46,8 @@ arteria_checksum_port: 10420
 runfolder_path: "{{ static_runfolder_path }}"
 arteria_delivery_port: 10440
 
-# sequencing-report-service
-seqreport_service_port: 10460
+# nextflow-runner-service
+nextflow_runner_service_port: 10460
 
 # arteria checkQC
 checkqc_service_port: 10470

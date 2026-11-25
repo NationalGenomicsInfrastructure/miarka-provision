@@ -7,6 +7,8 @@
 
 - name: download DADA2 reference taxonomy databases
   get_url:
-    url: "{{ item.url }}"
-    dest: "{{ ngi_containers }}/{{ pipeline }}/{{ item.file }}"
+    url: "{{ db_file.url }}"
+    dest: "{{ ngi_containers }}/{{ pipeline }}/{{ db_file.file }}"
   loop: "{{ extra_parameters.databases | map(attribute='files') | flatten }}"
+  loop_control:
+    loop_var: db_file
