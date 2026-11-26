@@ -113,7 +113,7 @@ process {
 
 plugins {
 
-{% for plugin in nf_plugins %}
+{% for plugin in nf_plugins + nextflow_general_plugins %}
   id '{{ plugin.name }}@{{ plugin.version }}'
 {% endfor %}
 

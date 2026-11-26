@@ -25,5 +25,5 @@ nextflow_versions:
   - "24.04.2"
 nextflow_general_plugins:
   - name: nf-tower
-    version: "1.6.3"
+    version: "1.17.6"
     nf_version: "25.10.2"

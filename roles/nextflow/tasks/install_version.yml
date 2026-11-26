@@ -21,7 +21,7 @@
 - name: "Bootstrap Nextflow {{ nf_version }}"
   command:
     cmd: "./nextflow run hello"
-    creates: "{{ nf_version_dest }}/nextflow"
+    creates: "{{ nf_version_dest }}/workfiles/framework/{{ nf_version }}/nextflow-{{ nf_version }}-one.jar"
   environment:
     NXF_HOME: "{{ nf_version_dest }}/workfiles"
     NXF_OPTS: -Xms1g -Xmx3500m
