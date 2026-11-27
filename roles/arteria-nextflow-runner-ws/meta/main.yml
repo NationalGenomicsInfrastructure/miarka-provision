@@ -3,3 +3,4 @@ dependencies:
   - { role: setup_base_config, tags: setup_base_config }
   - { role: nextflow, tags: nextflow }
   - { role: nf-core, tags: nf-core }
+  - { role: arteria-olink, tags: arteria-olink}
